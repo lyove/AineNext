@@ -43,7 +43,7 @@ The repository root contains several pieces. **The main application is `ainenext
 ### `ainenext/` at a glance
 
 ```
-ainenext/
+aine/
 ├── app/
 │   ├── Ai/                    # AI agents & tools (Aine Assistant, content generation)
 │   ├── Console/Commands/      # Artisan commands (ExportProjectTemplate, AuthSecurityGateCheck, …)

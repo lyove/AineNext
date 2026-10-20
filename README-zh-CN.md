@@ -43,7 +43,7 @@ AineNext 是一款商业、可自托管的无头 CMS。你可以在现代化的 
 ### `ainenext/` 目录速览
 
 ```
-ainenext/
+aine/
 ├── app/
 │   ├── Ai/                    # AI 智能体与工具（Aine 助手、内容生成）
 │   ├── Console/Commands/      # Artisan 命令（ExportProjectTemplate、AuthSecurityGateCheck 等）
