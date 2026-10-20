@@ -1,0 +1,586 @@
+{
+    "format": "ainenext",
+    "version": 1,
+    "type": "project",
+    "asset_scope": "none",
+    "name": "CMS",
+    "description": "完整的内容管理系统——文章、分类、标签、评论与页面。",
+    "default_locale": "en",
+    "locales": [
+        "en",
+        "zh"
+    ],
+    "public_api": true,
+    "collections": [
+        {
+            "name": "Pages",
+            "slug": "pages",
+            "is_singleton": false,
+            "fields": [
+                {
+                    "type": "text",
+                    "label": "Title",
+                    "name": "title",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                },
+                {
+                    "type": "slug",
+                    "label": "Path",
+                    "name": "slug",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {
+                        "slug": {
+                            "field": "title",
+                            "readonly": true
+                        }
+                    },
+                    "validations": []
+                },
+                {
+                    "type": "richtext",
+                    "label": "Content",
+                    "name": "content",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                },
+                {
+                    "type": "media",
+                    "label": "Image",
+                    "name": "image",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {
+                        "media": {
+                            "type": 1
+                        }
+                    },
+                    "validations": []
+                },
+                {
+                    "type": "text",
+                    "label": "Author",
+                    "name": "author",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                }
+            ]
+        },
+        {
+            "name": "Articles",
+            "slug": "articles",
+            "is_singleton": false,
+            "fields": [
+                {
+                    "type": "text",
+                    "label": "Title",
+                    "name": "title",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                },
+                {
+                    "type": "slug",
+                    "label": "Path",
+                    "name": "slug",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {
+                        "slug": {
+                            "field": "title",
+                            "readonly": true
+                        }
+                    },
+                    "validations": []
+                },
+                {
+                    "type": "longtext",
+                    "label": "Excerpt",
+                    "name": "excerpt",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                },
+                {
+                    "type": "richtext",
+                    "label": "Content",
+                    "name": "content",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                },
+                {
+                    "type": "media",
+                    "label": "Featured Image",
+                    "name": "featured-image",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {
+                        "media": {
+                            "type": 1
+                        }
+                    },
+                    "validations": []
+                },
+                {
+                    "type": "relation",
+                    "label": "Category",
+                    "name": "category",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {
+                        "relation": {
+                            "type": 1,
+                            "collection": "categories"
+                        }
+                    },
+                    "validations": []
+                },
+                {
+                    "type": "text",
+                    "label": "Author",
+                    "name": "author",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                },
+                {
+                    "type": "relation",
+                    "label": "Tags",
+                    "name": "tags",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {
+                        "relation": {
+                            "type": 2,
+                            "collection": "tags"
+                        }
+                    },
+                    "validations": []
+                },
+                {
+                    "type": "boolean",
+                    "label": "Slider",
+                    "name": "slider",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                },
+                {
+                    "type": "boolean",
+                    "label": "Featured",
+                    "name": "featured",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                },
+                {
+                    "type": "boolean",
+                    "label": "Recommended",
+                    "name": "recommended",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                },
+                {
+                    "type": "enumeration",
+                    "label": "Comments Moderation",
+                    "name": "comments_moderation",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {
+                        "enumeration": {
+                            "list": [
+                                "auto",
+                                "approval",
+                                "disabled"
+                            ]
+                        }
+                    },
+                    "validations": []
+                }
+            ]
+        },
+        {
+            "name": "Categories",
+            "slug": "categories",
+            "is_singleton": false,
+            "fields": [
+                {
+                    "type": "text",
+                    "label": "Title",
+                    "name": "title",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                },
+                {
+                    "type": "slug",
+                    "label": "Path",
+                    "name": "slug",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {
+                        "slug": {
+                            "field": "title",
+                            "readonly": true
+                        }
+                    },
+                    "validations": []
+                },
+                {
+                    "type": "media",
+                    "label": "Image",
+                    "name": "image",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {
+                        "media": {
+                            "type": 1
+                        }
+                    },
+                    "validations": []
+                },
+                {
+                    "type": "longtext",
+                    "label": "Description",
+                    "name": "description",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                }
+            ]
+        },
+        {
+            "name": "Tags",
+            "slug": "tags",
+            "is_singleton": false,
+            "fields": [
+                {
+                    "type": "text",
+                    "label": "Tag",
+                    "name": "tag",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                }
+            ]
+        },
+        {
+            "name": "Comments",
+            "slug": "comments",
+            "is_singleton": false,
+            "fields": [
+                {
+                    "type": "text",
+                    "label": "Name",
+                    "name": "name",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                },
+                {
+                    "type": "email",
+                    "label": "E-mail",
+                    "name": "e-mail",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                },
+                {
+                    "type": "longtext",
+                    "label": "Comment",
+                    "name": "comment",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                },
+                {
+                    "type": "relation",
+                    "label": "Article",
+                    "name": "article",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {
+                        "relation": {
+                            "type": 1,
+                            "collection": "articles"
+                        }
+                    },
+                    "validations": []
+                },
+                {
+                    "type": "enumeration",
+                    "label": "Status",
+                    "name": "status",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {
+                        "enumeration": {
+                            "list": [
+                                "pending",
+                                "approved",
+                                "spam",
+                                "trash"
+                            ]
+                        }
+                    },
+                    "validations": []
+                }
+            ]
+        },
+        {
+            "name": "Globals",
+            "slug": "globals",
+            "is_singleton": false,
+            "fields": [
+                {
+                    "type": "slug",
+                    "label": "Label",
+                    "name": "label",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {
+                        "slug": {
+                            "field": null
+                        }
+                    },
+                    "validations": []
+                },
+                {
+                    "type": "text",
+                    "label": "Value",
+                    "name": "value",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                }
+            ]
+        }
+    ],
+    "demo_data": [
+        {
+            "collection": "pages",
+            "entries": [
+                {
+                    "id": "e1",
+                    "locale": "en",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "title": "Home",
+                        "slug": "home",
+                        "content": "<h1>Welcome to Content Management System</h1><p>Articles, categories, tags, comments and pages — every field type and content state is covered.</p>",
+                        "author": "Admin"
+                    }
+                },
+                {
+                    "id": "e2",
+                    "locale": "en",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "title": "About Us",
+                        "slug": "about",
+                        "content": "<h2>About Content Management System</h2><p>This site is powered by AineNext, a self-hosted headless content management framework built with Laravel and Vue.js.</p>",
+                        "author": "Admin"
+                    }
+                },
+                {
+                    "id": "e3",
+                    "locale": "en",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "title": "Contact",
+                        "slug": "contact",
+                        "content": "<h2>Contact Us</h2><p>Reach the team at <strong>hello@cms.example</strong>.</p>",
+                        "author": "Admin"
+                    }
+                }
+            ]
+        },
+        {
+            "collection": "articles",
+            "entries": [
+                {
+                    "id": "e4",
+                    "locale": "en",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "title": "Getting Started with AineNext",
+                        "slug": "getting-started-with-ainenext",
+                        "excerpt": "A gentle introduction to AineNext: install it, create your first project from the CMS Template and serve content through the REST API.",
+                        "content": "<h2>Welcome</h2><p>This article is part of the demo content shipped with AineNext. Create a project, add collections and start publishing content in minutes.</p>",
+                        "author": "Admin",
+                        "slider": true,
+                        "featured": true,
+                        "recommended": true,
+                        "comments_moderation": [
+                            "auto"
+                        ]
+                    }
+                },
+                {
+                    "id": "e5",
+                    "locale": "en",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "title": "Building a Frontend with Vue 3",
+                        "slug": "building-a-frontend-with-vue-3",
+                        "excerpt": "Consume the AineNext content API from a Vue 3 single page app using the domain-whitelist authentication method.",
+                        "content": "<h2>Headless by default</h2><p>AineNext exposes a RESTful API so any framework can fetch content and render it however you like.</p>",
+                        "author": "Admin",
+                        "slider": false,
+                        "featured": false,
+                        "recommended": true,
+                        "comments_moderation": [
+                            "approval"
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "collection": "categories",
+            "entries": [
+                {
+                    "id": "e6",
+                    "locale": "en",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "title": "Tutorials",
+                        "slug": "tutorials",
+                        "description": "Step-by-step learning material."
+                    }
+                },
+                {
+                    "id": "e7",
+                    "locale": "en",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "title": "News",
+                        "slug": "news",
+                        "description": "Project and community news."
+                    }
+                },
+                {
+                    "id": "e8",
+                    "locale": "en",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "title": "Community",
+                        "slug": "community",
+                        "description": "Stories from the community."
+                    }
+                }
+            ]
+        },
+        {
+            "collection": "tags",
+            "entries": [
+                {
+                    "id": "e9",
+                    "locale": "en",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "tag": "Laravel"
+                    }
+                },
+                {
+                    "id": "e10",
+                    "locale": "en",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "tag": "Vue"
+                    }
+                },
+                {
+                    "id": "e11",
+                    "locale": "en",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "tag": "API"
+                    }
+                }
+            ]
+        },
+        {
+            "collection": "comments",
+            "entries": [
+                {
+                    "id": "e12",
+                    "locale": "en",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "name": "Jane Doe",
+                        "e-mail": "jane@example.com",
+                        "comment": "Great article, keep it up!",
+                        "status": [
+                            "approved"
+                        ],
+                        "article": [
+                            "e4"
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "collection": "globals",
+            "entries": [
+                {
+                    "id": "e13",
+                    "locale": "en",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "label": "site_name",
+                        "value": "AineNext"
+                    }
+                },
+                {
+                    "id": "e14",
+                    "locale": "en",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "label": "tagline",
+                        "value": "The API-driven content platform"
+                    }
+                }
+            ]
+        }
+    ],
+    "assets": []
+}
