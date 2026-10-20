@@ -17,25 +17,47 @@ final class InstalledFileManager
     }
 
     /**
-     * Write the install lock file with the same payload shape the previous
-     * standalone installer produced.
+     * Write the install lock file atomically: the payload goes to a temp file
+     * in the same directory first, then gets renamed into place, so a crash
+     * mid-write can never leave a truncated or corrupt marker behind.
+     *
+     * @param  string|null  $dir  Target directory, defaults to storage/app.
      */
-    public static function write(string $appUrl): void
+    public static function write(string $appUrl, ?string $dir = null): void
     {
-        $dir = storage_path('app');
+        $dir ??= storage_path('app');
 
-        if (! is_dir($dir) && ! mkdir($dir, 0755, true) && ! is_dir($dir)) {
-            throw new RuntimeException('Could not create storage/app');
+        if (! is_dir($dir) && ! @mkdir($dir, 0755, true) && ! is_dir($dir)) {
+            throw new RuntimeException('Could not create '.$dir);
         }
 
         $payload = json_encode([
             'installed_at' => gmdate('c'),
             'app_url' => rtrim($appUrl, '/'),
             'installer' => 'ainenext-installer',
-        ], JSON_PRETTY_PRINT);
+        ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
-        if (file_put_contents($dir.'/installed', $payload === false ? 'installed' : $payload) === false) {
-            throw new RuntimeException('Could not write storage/app/installed');
+        if ($payload === false) {
+            throw new RuntimeException('Could not encode install lock payload.');
+        }
+
+        $target = $dir.'/installed';
+        $temp = $dir.'/.installed-'.bin2hex(random_bytes(4)).'.tmp';
+
+        if (@file_put_contents($temp, $payload) === false) {
+            @unlink($temp);
+            throw new RuntimeException('Could not write install lock to '.$temp);
+        }
+
+        @chmod($temp, 0644);
+
+        if (! @rename($temp, $target)) {
+            @unlink($temp);
+            throw new RuntimeException('Could not finalize install lock at '.$target);
+        }
+
+        if (! is_file($target)) {
+            throw new RuntimeException('Install lock is missing after write: '.$target);
         }
     }
 }

@@ -54,8 +54,7 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/",
-            "AineNext\\Installer\\": "installer/src/",
-            "AineNext\\\\Installer\\\\": "installer/src/"
+            "AineNext\\Installer\\": "installer/src/"
         }
     },
     "autoload-dev": {
