@@ -22,7 +22,7 @@ return new class extends Migration
             $table->json('sources');
             $table->boolean('payload')->default(true);
             $table->boolean('status')->default(true);
-            $table->foreignId('created_by')->constrained('users');
+            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();
         });
     }
