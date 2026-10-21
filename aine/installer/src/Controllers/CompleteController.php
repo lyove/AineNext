@@ -4,65 +4,48 @@ declare(strict_types=1);
 
 namespace AineNext\Installer\Controllers;
 
-use AineNext\Installer\Services\EnvironmentManager;
-use AineNext\Installer\Services\InstalledFileManager;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\View\View;
-use Throwable;
 
 final class CompleteController
 {
-    public function __construct(private readonly EnvironmentManager $environment) {}
+    /**
+     * GET /install/complete — show the installation completion page.
+     * 
+     * This route is accessible even after the lock file is written, so the user
+     * can see the final summary. Data is read from a temporary file to avoid
+     * session driver switching issues.
+     */
     public function show(): View|RedirectResponse
     {
-        $done = (array) session('_installer_done', []);
+        $completionFile = storage_path('framework/cache/installer_completion.json');
+        $done = [];
+
+        if (is_file($completionFile)) {
+            $content = file_get_contents($completionFile);
+            if ($content !== false) {
+                $data = json_decode($content, true);
+                if (is_array($data)) {
+                    $done = $data;
+                }
+            }
+            // Delete the temporary file after reading
+            @unlink($completionFile);
+        }
 
         if ($done === []) {
-            if (InstalledFileManager::installed()) {
-                return view('installer::locked', [
-                    'basePath' => base_path(),
-                    'appUrl' => request()->getSchemeAndHttpHost(),
-                ]);
+            // No completion data, redirect to login or welcome
+            if (file_exists(storage_path('app/installed'))) {
+                $appUrl = config('app.url', request()->getSchemeAndHttpHost());
+                return redirect()->away(rtrim($appUrl, '/').'/login');
             }
 
-            return redirect()->route('install.requirements');
+            return redirect()->route('install.welcome');
         }
 
         return view('installer::complete', [
             'done' => $done,
-            'log' => (array) session('_installer_log', []),
+            'log' => $done['log'] ?? [],
         ]);
-    }
-
-    public function finish(Request $request): RedirectResponse
-    {
-        $appUrl = (string) session('_installer_done.app_url', $request->getSchemeAndHttpHost());
-
-        // The lock and the session/queue/cache driver flip are deferred to here
-        // (not InstallerService::run) so the completion page can still read the
-        // file-backed session that holds the wizard state. Only finalize when
-        // this session actually ran the installer.
-        if (session()->has('_installer_done')) {
-            $this->environment->finalizeDrivers();
-            InstalledFileManager::write($appUrl);
-
-            try {
-                Artisan::call('config:clear');
-                Artisan::call('route:clear');
-                Artisan::call('view:clear');
-            } catch (Throwable) {
-                // Non-fatal
-            }
-        }
-
-        session()->forget('_installer_done');
-        session()->forget('_installer_log');
-        session()->forget('_installer_config');
-
-        // In the package layout there is nothing to delete from public/ — the
-        // CanInstall middleware already turns every /install route into a 404.
-        return redirect()->away(rtrim($appUrl, '/').'/login');
     }
 }

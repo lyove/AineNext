@@ -23,17 +23,10 @@ final class RedirectIfNotInstalled
 
         $installed = file_exists(storage_path('app/installed'));
 
-        // Installed + installer route: reject at the outermost layer, before
-        // any database-dependent middleware (e.g. Inertia) gets a chance to
-        // run. CanInstall remains as defence in depth on the route group.
-        // The completion page and its "finish" action stay reachable so the
-        // user can see the final summary right after the lock is written.
-        // Note: as a global prepended middleware this runs before route
-        // matching, so $request->route() is not available yet — match on path.
         if ($installed && $request->is('install*')) {
             $path = $request->path();
 
-            if (! in_array($path, ['install/complete', 'install/finish'], true)) {
+            if ($path !== 'install/complete') {
                 abort(404);
             }
         }

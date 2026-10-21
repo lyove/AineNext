@@ -19,6 +19,7 @@
 
     <form id="install-form" method="post" action="{{ route('install.run.post') }}">
         @csrf
+        <input type="hidden" name="_installer_token" value="{{ session('_installer_token') }}">
     </form>
 
     <script>

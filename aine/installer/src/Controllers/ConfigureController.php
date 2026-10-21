@@ -86,6 +86,7 @@ final class ConfigureController
         }
 
         session()->put('_installer_config', $input);
+        session()->put('_installer_token', bin2hex(random_bytes(16)));
 
         return redirect()->route('install.run');
     }

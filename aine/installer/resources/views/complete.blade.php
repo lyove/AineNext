@@ -12,7 +12,7 @@
     </ul>
 
     <h1>Installation complete</h1>
-    <p class="lede">AineNext is ready. Add the cron job below, then finish.</p>
+    <p class="lede">AineNext is ready. Add the cron job below, then continue to login.</p>
 
     <div class="alert alert-ok">
         Sign in with <strong>{{ $done['admin_email'] }}</strong>
@@ -34,13 +34,9 @@
         </ul>
     @endif
 
-    <form method="post" action="{{ route('install.finish') }}">
-        @csrf
-        <div class="actions">
-            <a class="btn btn-secondary" href="{{ rtrim($done['app_url'], '/').'/login' }}" target="_blank" rel="noopener">Open login</a>
-            <button class="btn btn-primary" type="submit">Finish</button>
-        </div>
-    </form>
+    <div class="actions">
+        <a class="btn btn-primary" href="{{ rtrim($done['app_url'], '/').'/login' }}">Continue to login</a>
+    </div>
 
     <p class="meta">
         The installer is now locked: every <code>/install</code> route returns 404

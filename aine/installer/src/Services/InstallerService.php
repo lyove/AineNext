@@ -15,8 +15,8 @@ final class InstallerService
     public function __construct(private readonly EnvironmentManager $environment) {}
 
     /**
-     * Run migrations, seeders, apply the admin account, finalize the .env
-     * drivers and write the install lock.
+     * Run migrations, seeders, apply the admin account and write the install
+     * lock. The .env driver finalization is handled by InstallController::run.
      *
      * @param  array<string, string>  $config
      * @return list<string>
@@ -56,21 +56,8 @@ final class InstallerService
         $user->save();
         $log[] = 'Updated admin account ('.$config['admin_email'].')';
 
-        // finalizeDrivers() and the install lock are deliberately deferred to
-        // the "finish" action (CompleteController::finish). Writing the lock or
-        // flipping session/queue/cache to their database drivers here would make
-        // the very next request (GET /install/complete) switch away from the
-        // file session that holds the wizard's state, losing _installer_done.
-        $log[] = 'Awaiting finish (drivers + lock)';
-
-        try {
-            Artisan::call('config:clear');
-            Artisan::call('route:clear');
-            Artisan::call('view:clear');
-            $log[] = 'Cleared caches';
-        } catch (Throwable) {
-            // Non-fatal
-        }
+        InstalledFileManager::write($config['app_url']);
+        $log[] = 'Wrote install lock';
 
         return $log;
     }
