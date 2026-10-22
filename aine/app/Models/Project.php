@@ -111,4 +111,9 @@ class Project extends Model
     {
         return $this->hasMany(ProjectAuthEmailVerificationToken::class);
     }
+
+    public function origins(): HasMany
+    {
+        return $this->hasMany(ProjectOrigin::class);
+    }
 }

@@ -63,6 +63,7 @@ class ProjectSettingsController extends Controller
         return Inertia::render('admin/Projects/Settings/APIAccess', [
             'project' => $project,
             'tokens' => $project->tokens()->select('id', 'name', 'abilities', 'last_used_at', 'created_at')->orderBy('created_at', 'desc')->get(),
+            'whitelist' => $project->origins()->orderBy('created_at', 'desc')->get(),
         ]);
     }
 

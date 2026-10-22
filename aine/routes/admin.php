@@ -204,6 +204,15 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
                 // Toggle public API
                 Route::post('/toggle-public', [ProjectSettingsController::class, 'togglePublicApi'])->name('toggle-public')->middleware('permission:access_api_access_settings');
 
+                // Domain whitelist
+                Route::prefix('whitelist')->name('whitelist.')->middleware('permission:access_api_access_settings')->group(function () {
+                    Route::get('/api', [\App\Http\Controllers\ProjectDomainWhitelistController::class, 'index'])->name('index');
+                    Route::post('/api', [\App\Http\Controllers\ProjectDomainWhitelistController::class, 'store'])->name('store');
+                    Route::put('/api/{origin}', [\App\Http\Controllers\ProjectDomainWhitelistController::class, 'update'])->name('update');
+                    Route::delete('/api/{origin}', [\App\Http\Controllers\ProjectDomainWhitelistController::class, 'destroy'])->name('destroy');
+                    Route::post('/api/{origin}/toggle', [\App\Http\Controllers\ProjectDomainWhitelistController::class, 'toggle'])->name('toggle');
+                });
+
                 // Project Auth (End-User Authentication) settings
                 Route::prefix('auth')->name('auth.')->middleware('permission:access_auth_settings')->group(function () {
                     Route::get('/', [ProjectAuthSettingsController::class, 'index'])->name('index');

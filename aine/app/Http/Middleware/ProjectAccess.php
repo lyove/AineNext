@@ -83,6 +83,24 @@ class ProjectAccess
             }
         }
 
+        // Origin-based domain whitelist
+        $origin = $request->header('Origin');
+
+        if ($origin) {
+            $normalizedOrigin = $this->normalizeOrigin($origin);
+            $projectOrigin = $project->origins()
+                ->where('origin', $normalizedOrigin)
+                ->where('is_active', true)
+                ->first();
+
+            if ($projectOrigin) {
+                $request->attributes->set('api_principal_type', 'origin');
+                $request->attributes->set('origin_abilities', $projectOrigin->abilities);
+
+                return $next($request);
+            }
+        }
+
         if (! $project->public_api) {
             return response()->json(['message' => 'Unauthenticated.'], 401);
         }
@@ -101,5 +119,24 @@ class ProjectAccess
             'api.auth.verify_email.resend',
             'api.auth.verify_email.confirm',
         ]);
+    }
+
+    /**
+     * Normalize origin URL: lowercase scheme/host, remove trailing slash.
+     * Must match ProjectDomainWhitelistController::normalizeOrigin().
+     */
+    protected function normalizeOrigin(string $origin): string
+    {
+        $parsed = parse_url($origin);
+
+        if (! $parsed || ! isset($parsed['scheme'], $parsed['host'])) {
+            return rtrim($origin, '/');
+        }
+
+        $scheme = strtolower($parsed['scheme']);
+        $host = strtolower($parsed['host']);
+        $port = isset($parsed['port']) ? ':' . $parsed['port'] : '';
+
+        return "{$scheme}://{$host}{$port}";
     }
 }

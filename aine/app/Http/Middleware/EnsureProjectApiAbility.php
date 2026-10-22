@@ -41,6 +41,17 @@ class EnsureProjectApiAbility
             return response()->json(['message' => 'Forbidden.'], 403);
         }
 
+        // Origin-based domain whitelist: check configured abilities
+        if ($principalType === 'origin') {
+            $abilities = $request->attributes->get('origin_abilities', []);
+
+            if (in_array($ability, $abilities) || in_array('*', $abilities)) {
+                return $next($request);
+            }
+
+            return response()->json(['message' => 'Forbidden.'], 403);
+        }
+
         // Project Auth JWTs are identity-only; CMS API access uses Sanctum project tokens
         // (and later per-user API keys). Keep public_api reads above.
         if ($principalType === 'project_auth_user') {

@@ -1,10 +1,10 @@
 import { LucideIcon } from 'lucide-react';
 import type { Config } from 'ziggy';
 import type { User, Role, Permission } from './user';
-import type { Project, Asset, Field, Collection } from './project';
+import type { Project, Asset, Field, Collection, ProjectOrigin } from './project';
 import type { ContentEntry, ColumnDef } from './content';
 
-export type { User, Role, Permission, Project, Asset, Field, Collection, ContentEntry, ColumnDef };
+export type { User, Role, Permission, Project, Asset, Field, Collection, ProjectOrigin, ContentEntry, ColumnDef };
 
 export interface Auth {
     user: User;

@@ -96,6 +96,17 @@ export interface Field {
     updated_at: string;
 }
 
+export interface ProjectOrigin {
+    id: number;
+    project_id: number;
+    origin: string;
+    abilities: string[];
+    is_active: boolean;
+    description: string | null;
+    created_at: string;
+    updated_at: string;
+}
+
 export interface AssetMetadata {
     width?: number;
     height?: number;
