@@ -119,17 +119,17 @@ AineNext 是一个 Headless CMS，通过 RESTful API 对外提供内容管理能
 #### 资产管理
 | 方法 | 路径 | 权限 | 说明 |
 |------|------|------|------|
-| GET | [/api/files](#b2-资产管理-12-个接口) | read | 列出资产 |
-| GET | [/api/files/{identifier}](#b2-资产管理-12-个接口) | read | 按 ID 获取 |
-| GET | [/api/files/name/{filename}](#b2-资产管理-12-个接口) | read | 按文件名获取 |
-| POST | [/api/files](#b2-资产管理-12-个接口) | create | 上传资产 |
-| POST | [/api/files/bulk/upload](#b2-资产管理-12-个接口) | create | 批量上传 |
-| PATCH | [/api/files/bulk/metadata](#b2-资产管理-12-个接口) | update | 批量更新元数据 |
-| POST | [/api/files/upload-url](#b2-资产管理-12-个接口) | create | 发起直接上传 |
-| POST | [/api/files/upload-finalize](#b2-资产管理-12-个接口) | create | 完成直接上传 |
-| POST | [/api/files/multipart/initiate](#b2-资产管理-12-个接口) | create | 发起多部分上传 |
-| POST | [/api/files/multipart/part-url](#b2-资产管理-12-个接口) | create | 获取分片 URL |
-| POST | [/api/files/multipart/complete](#b2-资产管理-12-个接口) | create | 完成多部分上传 |
+| GET | [/api/files](#b21-列出资产) | read | 列出资产 |
+| GET | [/api/files/{identifier}](#b22-按-id-获取资产) | read | 按 ID 获取 |
+| GET | [/api/files/name/{filename}](#b23-按文件名获取资产) | read | 按文件名获取 |
+| POST | [/api/files](#b24-上传单个资产) | create | 上传资产 |
+| POST | [/api/files/bulk/upload](#b25-批量上传资产) | create | 批量上传 |
+| PATCH | [/api/files/bulk/metadata](#b26-批量更新资产元数据) | update | 批量更新元数据 |
+| POST | [/api/files/upload-url](#b27-发起直接上传预签名-url) | create | 发起直接上传 |
+| POST | [/api/files/upload-finalize](#b28-完成直接上传) | create | 完成直接上传 |
+| POST | [/api/files/multipart/initiate](#b29-发起多部分上传) | create | 发起多部分上传 |
+| POST | [/api/files/multipart/part-url](#b210-获取多部分上传分片-url) | create | 获取分片 URL |
+| POST | [/api/files/multipart/complete](#b211-完成多部分上传) | create | 完成多部分上传 |
 | DELETE | /api/files/{identifier} | - | **不可用**（需 Token） |
 
 #### 集合管理
@@ -161,6 +161,905 @@ AineNext 是一个 Headless CMS，通过 RESTful API 对外提供内容管理能
 | GET | [/api/{collection}/{uuid}/versions/{version}](#b62-获取版本详情) | read | 获取版本详情 |
 | POST | [/api/{collection}/{uuid}/versions/{version}/revert](#b63-回滚到指定版本) | update | 回滚版本 |
 | PATCH | [/api/{collection}/{uuid}/versions/{version}](#b64-更新版本标签) | update | 更新版本标签 |
+
+---
+
+### 方式 B：域名白名单（纯前端调用） - 详细使用
+
+> **注意：** 方式 B 的接口与方式 A 完全相同，区别仅在于认证方式。方式 B 通过域名白名单自动认证，无需 `Authorization` 头，但仍需 `project-id` 头。以下仅列出关键差异，详细参数和响应格式请参考方式 A 对应章节。
+
+#### B.1 项目信息
+
+##### B.1.1 获取项目信息
+
+**接口：** `GET /api`  
+**权限：** `read`  
+**作用：** 获取项目基本信息。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `with` | Query | string | 否 | 关联加载，可选值：`collections`, `fields` |
+
+**出参：** 同 A.1.1
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/?with=collections,fields', {
+    method: 'GET',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+    },
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+#### B.2 资产管理
+
+##### B.2.1 列出资产
+
+**接口：** `GET /api/files`  
+**权限：** `read`  
+**作用：** 列出项目下的所有资产文件。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `search` | Query | string | 否 | 搜索关键词 |
+| `type` | Query | string | 否 | 文件类型过滤 |
+| `page` | Query | integer | 否 | 页码 |
+| `per_page` | Query | integer | 否 | 每页数量 |
+
+**出参：** 同 A.3.1
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/files?type=image&per_page=10', {
+    method: 'GET',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+    },
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+##### B.2.2 按 ID 获取资产
+
+**接口：** `GET /api/files/{identifier}`  
+**权限：** `read`  
+**作用：** 通过 UUID 或 ID 获取单个资产。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `identifier` | Path | string | 是 | 资产 UUID 或数字 ID |
+
+**出参：** 同 A.3.2
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/files/asset-uuid-1', {
+    method: 'GET',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+    },
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+##### B.2.3 按文件名获取资产
+
+**接口：** `GET /api/files/name/{filename}`  
+**权限：** `read`  
+**作用：** 通过原始文件名获取资产信息。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `filename` | Path | string | 是 | 原始文件名（含扩展名） |
+
+**出参：** 同 A.3.3
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/files/name/cover-photo.jpg', {
+    method: 'GET',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+    },
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+##### B.2.4 上传单个资产
+
+**接口：** `POST /api/files`  
+**权限：** `create`  
+**作用：** 上传单个文件。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `file` | Body (FormData) | File | 是 | 上传的文件 |
+
+**出参：** 同 A.3.4
+
+**调用示例：**
+
+```javascript
+const formData = new FormData();
+formData.append('file', fileInput.files[0]);
+
+const response = await fetch('/api/files', {
+    method: 'POST',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+    },
+    body: formData,
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+##### B.2.5 批量上传资产
+
+**接口：** `POST /api/files/bulk/upload`  
+**权限：** `create`  
+**作用：** 批量上传多个文件。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `files[]` | Body (FormData) | File[] | 是 | 文件数组（1-20 个） |
+
+**出参：** 同 A.3.5
+
+**调用示例：**
+
+```javascript
+const formData = new FormData();
+formData.append('files[]', file1);
+formData.append('files[]', file2);
+
+const response = await fetch('/api/files/bulk/upload', {
+    method: 'POST',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+    },
+    body: formData,
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+##### B.2.6 批量更新资产元数据
+
+**接口：** `PATCH /api/files/bulk/metadata`  
+**权限：** `update`  
+**作用：** 批量更新多个资产的元数据信息。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `items` | Body | array | 是 | 更新项数组（1-50 个） |
+
+**出参：** 同 A.3.6
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/files/bulk/metadata', {
+    method: 'PATCH',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        items: [
+            { uuid: 'asset-uuid-1', alt_text: 'Updated' },
+        ],
+    }),
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+##### B.2.7 发起直接上传（预签名 URL）
+
+**接口：** `POST /api/files/upload-url`  
+**权限：** `create`  
+**作用：** 获取预签名 URL，用于客户端直传大文件。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `original_filename` | Body | string | 是 | 原始文件名 |
+| `byte_size` | Body | integer | 是 | 文件大小（字节） |
+
+**出参：** 同 A.3.7
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/files/upload-url', {
+    method: 'POST',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        original_filename: 'large-video.mp4',
+        byte_size: 52428800,
+    }),
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+##### B.2.8 完成直接上传
+
+**接口：** `POST /api/files/upload-finalize`  
+**权限：** `create`  
+**作用：** 通知服务器预签名 URL 上传完成。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `asset_uuid` | Body | string | 是 | 预分配的资产 UUID |
+
+**出参：** 同 A.3.8
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/files/upload-finalize', {
+    method: 'POST',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        asset_uuid: 'pre-assigned-uuid',
+    }),
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+##### B.2.9 发起多部分上传
+
+**接口：** `POST /api/files/multipart/initiate`  
+**权限：** `create`  
+**作用：** 发起多部分上传，获取上传 ID。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `original_filename` | Body | string | 是 | 原始文件名 |
+| `mime_type` | Body | string | 是 | MIME 类型 |
+| `byte_size` | Body | integer | 是 | 文件大小（字节） |
+
+**出参：** 同 A.3.9
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/files/multipart/initiate', {
+    method: 'POST',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        original_filename: 'large-video.mp4',
+        mime_type: 'video/mp4',
+        byte_size: 104857600,
+    }),
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+##### B.2.10 获取多部分上传分片 URL
+
+**接口：** `POST /api/files/multipart/part-url`  
+**权限：** `create`  
+**作用：** 获取多部分上传的分片预签名 URL。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `upload_id` | Body | string | 是 | 上传 ID |
+| `part_number` | Body | integer | 是 | 分片序号（1-10000） |
+
+**出参：** 同 A.3.10
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/files/multipart/part-url', {
+    method: 'POST',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        upload_id: 'upload-id-xxx',
+        part_number: 1,
+    }),
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+##### B.2.11 完成多部分上传
+
+**接口：** `POST /api/files/multipart/complete`  
+**权限：** `create`  
+**作用：** 完成多部分上传。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `upload_id` | Body | string | 是 | 上传 ID |
+| `parts` | Body | array | 是 | 分片信息数组 |
+
+**出参：** 同 A.3.11
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/files/multipart/complete', {
+    method: 'POST',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        upload_id: 'upload-id-xxx',
+        parts: [
+            { part_number: 1, etag: '"etag1"' },
+            { part_number: 2, etag: '"etag2"' },
+        ],
+    }),
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+#### B.3 集合管理
+
+##### B.3.1 列出所有集合
+
+**接口：** `GET /api/collections`  
+**权限：** `read`  
+**作用：** 列出项目下的所有集合。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+
+**出参：** 同 A.4.1
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/collections', {
+    method: 'GET',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+    },
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+##### B.3.2 获取集合详情
+
+**接口：** `GET /api/collections/{collection}`  
+**权限：** `read`  
+**作用：** 获取单个集合的详细信息。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `collection` | Path | string | 是 | 集合 UUID 或 slug |
+
+**出参：** 同 A.4.2
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/collections/posts', {
+    method: 'GET',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+    },
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+#### B.4 内容条目管理
+
+##### B.4.1 列出内容条目
+
+**接口：** `GET /api/{collection}`  
+**权限：** `read`  
+**作用：** 列出集合下的所有内容条目。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `collection` | Path | string | 是 | 集合 UUID 或 slug |
+| `page` | Query | integer | 否 | 页码 |
+| `per_page` | Query | integer | 否 | 每页数量 |
+| `locale` | Query | string | 否 | 语言代码 |
+
+**出参：** 同 A.6.1
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/posts?page=1&per_page=10&locale=zh', {
+    method: 'GET',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+    },
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+##### B.4.2 获取单条内容
+
+**接口：** `GET /api/{collection}/{uuid}`  
+**权限：** `read`  
+**作用：** 获取单条内容条目的详细信息。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `collection` | Path | string | 是 | 集合 UUID 或 slug |
+| `uuid` | Path | string | 是 | 内容条目 UUID |
+| `locale` | Query | string | 否 | 语言代码 |
+
+**出参：** 同 A.6.2
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/posts/entry-uuid-1?locale=zh', {
+    method: 'GET',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+    },
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+##### B.4.3 创建内容条目
+
+**接口：** `POST /api/{collection}`  
+**权限：** `create`  
+**作用：** 在集合下创建新的内容条目。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `collection` | Path | string | 是 | 集合 UUID 或 slug |
+| `locale` | Body | string | 否 | 语言代码 |
+| `fields` | Body | object | 是 | 字段数据 |
+
+**出参：** 同 A.6.3
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/posts', {
+    method: 'POST',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        locale: 'zh',
+        fields: {
+            title: '新文章',
+            content: '文章内容...',
+        },
+    }),
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+##### B.4.4 更新内容条目
+
+**接口：** `PUT/PATCH /api/{collection}/{uuid}`  
+**权限：** `update`  
+**作用：** 更新内容条目。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `collection` | Path | string | 是 | 集合 UUID 或 slug |
+| `uuid` | Path | string | 是 | 内容条目 UUID |
+| `fields` | Body | object | 是 | 字段数据 |
+
+**出参：** 同 A.6.4
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/posts/entry-uuid-1', {
+    method: 'PATCH',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        fields: {
+            title: '更新后的标题',
+        },
+    }),
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+##### B.4.5 发布内容
+
+**接口：** `POST /api/{collection}/{uuid}/publish`  
+**权限：** `update`  
+**作用：** 发布内容条目。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `collection` | Path | string | 是 | 集合 UUID 或 slug |
+| `uuid` | Path | string | 是 | 内容条目 UUID |
+
+**出参：** 同 A.6.6
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/posts/entry-uuid-1/publish', {
+    method: 'POST',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+    },
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+##### B.4.6 取消发布
+
+**接口：** `POST /api/{collection}/{uuid}/unpublish`  
+**权限：** `update`  
+**作用：** 取消发布内容条目。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `collection` | Path | string | 是 | 集合 UUID 或 slug |
+| `uuid` | Path | string | 是 | 内容条目 UUID |
+
+**出参：** 同 A.6.7
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/posts/entry-uuid-1/unpublish', {
+    method: 'POST',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+    },
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+#### B.5 批量操作
+
+##### B.5.1 批量创建内容
+
+**接口：** `POST /api/bulk/{collection}/entries`  
+**权限：** `create`  
+**作用：** 批量创建内容条目。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `collection` | Path | string | 是 | 集合 UUID 或 slug |
+| `entries` | Body | array | 是 | 内容条目数组 |
+
+**出参：** 同 A.7.1
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/bulk/posts/entries', {
+    method: 'POST',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        entries: [
+            { locale: 'zh', fields: { title: '文章1' } },
+            { locale: 'zh', fields: { title: '文章2' } },
+        ],
+    }),
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+##### B.5.2 批量更新内容
+
+**接口：** `PATCH /api/bulk/{collection}/entries`  
+**权限：** `update`  
+**作用：** 批量更新内容条目。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `collection` | Path | string | 是 | 集合 UUID 或 slug |
+| `entries` | Body | array | 是 | 更新项数组 |
+
+**出参：** 同 A.7.2
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/bulk/posts/entries', {
+    method: 'PATCH',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        entries: [
+            { uuid: 'entry-uuid-1', fields: { title: '更新标题1' } },
+            { uuid: 'entry-uuid-2', fields: { title: '更新标题2' } },
+        ],
+    }),
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+#### B.6 内容版本管理
+
+##### B.6.1 列出版本
+
+**接口：** `GET /api/{collection}/{uuid}/versions`  
+**权限：** `read`  
+**作用：** 列出内容条目的所有版本。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `collection` | Path | string | 是 | 集合 UUID 或 slug |
+| `uuid` | Path | string | 是 | 内容条目 UUID |
+
+**出参：** 同 A.8.1
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/posts/entry-uuid-1/versions', {
+    method: 'GET',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+    },
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+##### B.6.2 获取版本详情
+
+**接口：** `GET /api/{collection}/{uuid}/versions/{version}`  
+**权限：** `read`  
+**作用：** 获取指定版本的详细内容。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `collection` | Path | string | 是 | 集合 UUID 或 slug |
+| `uuid` | Path | string | 是 | 内容条目 UUID |
+| `version` | Path | integer | 是 | 版本号 |
+
+**出参：** 同 A.8.2
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/posts/entry-uuid-1/versions/2', {
+    method: 'GET',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+    },
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+##### B.6.3 回滚到指定版本
+
+**接口：** `POST /api/{collection}/{uuid}/versions/{version}/revert`  
+**权限：** `update`  
+**作用：** 将内容回滚到指定版本。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `collection` | Path | string | 是 | 集合 UUID 或 slug |
+| `uuid` | Path | string | 是 | 内容条目 UUID |
+| `version` | Path | integer | 是 | 目标版本号 |
+
+**出参：** 同 A.8.3
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/posts/entry-uuid-1/versions/2/revert', {
+    method: 'POST',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+    },
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+##### B.6.4 更新版本标签
+
+**接口：** `PATCH /api/{collection}/{uuid}/versions/{version}`  
+**权限：** `update`  
+**作用：** 更新版本的标签信息。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `collection` | Path | string | 是 | 集合 UUID 或 slug |
+| `uuid` | Path | string | 是 | 内容条目 UUID |
+| `version` | Path | integer | 是 | 版本号 |
+| `label` | Body | string | 否 | 版本标签 |
+
+**出参：** 同 A.8.4
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/posts/entry-uuid-1/versions/2', {
+    method: 'PATCH',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        label: '重要版本',
+    }),
+});
+const result = await response.json();
+console.log(result);
+```
 
 ---
 
@@ -771,6 +1670,1962 @@ console.log(result);
 | `Authorization` | Header | string | 是 | Bearer Tok
 ... [ACP display truncated; original 66193 bytes] ...
 改密码
+
+**接口：** `POST /api/auth/change-password`  
+**权限：** JWT  
+**作用：** 修改当前用户密码。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `Authorization` | Header | string | 是 | `Bearer <jwt_access_token>` |
+| `current_password` | Body | string | 是 | 当前密码 |
+| `password` | Body | string | 是 | 新密码 |
+| `password_confirmation` | Body | string | 是 | 确认新密码 |
+
+**出参：**
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `message` | string | 操作结果消息 |
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/auth/change-password', {
+    method: 'POST',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGc...',
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        current_password: 'oldpass',
+        password: 'newpass123',
+        password_confirmation: 'newpass123',
+    }),
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+#### A.3.9 发起多部分上传
+
+**接口：** `POST /api/files/multipart/initiate`  
+**权限：** `create`  
+**作用：** 发起多部分上传，获取上传 ID。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `Authorization` | Header | string | 是 | Bearer Token |
+| `original_filename` | Body | string | 是 | 原始文件名 |
+| `mime_type` | Body | string | 是 | MIME 类型 |
+| `byte_size` | Body | integer | 是 | 文件大小（字节） |
+
+**出参：**
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `upload_id` | string | 上传 ID |
+| `asset_uuid` | string | 预分配的资产 UUID |
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/files/multipart/initiate', {
+    method: 'POST',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Authorization': 'Bearer 1|abcDefGhIjK...',
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        original_filename: 'large-video.mp4',
+        mime_type: 'video/mp4',
+        byte_size: 104857600,
+    }),
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+#### A.3.10 获取多部分上传分片 URL
+
+**接口：** `POST /api/files/multipart/part-url`  
+**权限：** `create`  
+**作用：** 获取多部分上传的分片预签名 URL。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `Authorization` | Header | string | 是 | Bearer Token |
+| `upload_id` | Body | string | 是 | 上传 ID |
+| `part_number` | Body | integer | 是 | 分片序号（1-10000） |
+
+**出参：**
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `upload_url` | string | 预签名上传 URL |
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/files/multipart/part-url', {
+    method: 'POST',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Authorization': 'Bearer 1|abcDefGhIjK...',
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        upload_id: 'upload-id-xxx',
+        part_number: 1,
+    }),
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+#### A.3.11 完成多部分上传
+
+**接口：** `POST /api/files/multipart/complete`  
+**权限：** `create`  
+**作用：** 完成多部分上传。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `Authorization` | Header | string | 是 | Bearer Token |
+| `upload_id` | Body | string | 是 | 上传 ID |
+| `parts` | Body | array | 是 | 分片信息数组 |
+
+**出参：**
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `data.uuid` | string | 资产 UUID |
+| `data.filename` | string | 文件名 |
+| `data.url` | string | 访问 URL |
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/files/multipart/complete', {
+    method: 'POST',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Authorization': 'Bearer 1|abcDefGhIjK...',
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        upload_id: 'upload-id-xxx',
+        parts: [
+            { part_number: 1, etag: '"etag1"' },
+            { part_number: 2, etag: '"etag2"' },
+        ],
+    }),
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+#### A.3.12 删除资产
+
+**接口：** `DELETE /api/files/{identifier}`  
+**权限：** `delete`  
+**作用：** 删除指定资产。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `Authorization` | Header | string | 是 | Bearer Token（需 delete 权限） |
+| `identifier` | Path | string | 是 | 资产 UUID 或数字 ID |
+
+**出参：**
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `message` | string | 操作结果消息 |
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/files/asset-uuid-1', {
+    method: 'DELETE',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Authorization': 'Bearer 1|abcDefGhIjK...',
+    },
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+### A.4 集合管理
+
+#### A.4.1 列出所有集合
+
+**接口：** `GET /api/collections`  
+**权限：** `read`  
+**作用：** 列出项目下的所有集合。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `Authorization` | Header | string | 是 | Bearer Token |
+
+**出参：**
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `data` | array | 集合列表 |
+| `data[].uuid` | string | 集合 UUID |
+| `data[].name` | string | 集合名称 |
+| `data[].slug` | string | 集合 slug |
+| `data[].is_singleton` | boolean | 是否为单例集合 |
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/collections', {
+    method: 'GET',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Authorization': 'Bearer 1|abcDefGhIjK...',
+    },
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+#### A.4.2 获取集合详情
+
+**接口：** `GET /api/collections/{collection}`  
+**权限：** `read`  
+**作用：** 获取单个集合的详细信息。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `Authorization` | Header | string | 是 | Bearer Token |
+| `collection` | Path | string | 是 | 集合 UUID 或 slug |
+
+**出参：** 同 A.4.1 中的 `data[]` 单个对象
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/collections/posts', {
+    method: 'GET',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Authoriz
+... [ACP display truncated; original 49758 bytes] ...
+0',
+        'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGc...',
+    },
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+#### A.4.3 创建集合
+
+**接口：** `POST /api/collections`  
+**权限：** `admin`  
+**作用：** 创建新的集合。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `Authorization` | Header | string | 是 | Bearer Token（需 admin 权限） |
+| `name` | Body | string | 是 | 集合名称 |
+| `slug` | Body | string | 是 | 集合 slug |
+| `is_singleton` | Body | boolean | 否 | 是否为单例集合 |
+
+**出参：** 同 A.4.1
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/collections', {
+    method: 'POST',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Authorization': 'Bearer 1|abcDefGhIjK...',
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        name: 'Posts',
+        slug: 'posts',
+        is_singleton: false,
+    }),
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+#### A.4.4 更新集合
+
+**接口：** `PUT /api/collections/{collection}`  
+**权限：** `admin`  
+**作用：** 更新集合信息。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `Authorization` | Header | string | 是 | Bearer Token（需 admin 权限） |
+| `collection` | Path | string | 是 | 集合 UUID 或 slug |
+| `name` | Body | string | 否 | 集合名称 |
+| `slug` | Body | string | 否 | 集合 slug |
+
+**出参：** 同 A.4.1
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/collections/posts', {
+    method: 'PUT',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Authorization': 'Bearer 1|abcDefGhIjK...',
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        name: 'Blog Posts',
+    }),
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+#### A.4.5 删除集合
+
+**接口：** `DELETE /api/collections/{collection}`  
+**权限：** `admin`  
+**作用：** 删除集合及其所有内容。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `Authorization` | Header | string | 是 | Bearer Token（需 admin 权限） |
+| `collection` | Path | string | 是 | 集合 UUID 或 slug |
+
+**出参：**
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `message` | string | 操作结果消息 |
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/collections/posts', {
+    method: 'DELETE',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Authorization': 'Bearer 1|abcDefGhIjK...',
+    },
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+#### A.4.6 重排集合顺序
+
+**接口：** `POST /api/collections/reorder`  
+**权限：** `admin`  
+**作用：** 重排集合的显示顺序。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `Authorization` | Header | string | 是 | Bearer Token（需 admin 权限） |
+| `order` | Body | array | 是 | 集合 UUID 数组（按顺序） |
+
+**出参：**
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `message` | string | 操作结果消息 |
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/collections/reorder', {
+    method: 'POST',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Authorization': 'Bearer 1|abcDefGhIjK...',
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        order: ['col-uuid-1', 'col-uuid-2', 'col-uuid-3'],
+    }),
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+### A.5 字段管理
+
+#### A.5.1 创建字段
+
+**接口：** `POST /api/collections/{collection}/fields`  
+**权限：** `admin`  
+**作用：** 在集合下创建新字段。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `Authorization` | Header | string | 是 | Bearer Token（需 admin 权限） |
+| `collection` | Path | string | 是 | 集合 UUID 或 slug |
+| `name` | Body | string | 是 | 字段名称 |
+| `label` | Body | string | 是 | 字段标签 |
+| `type` | Body | string | 是 | 字段类型 |
+| `required` | Body | boolean | 否 | 是否必填 |
+
+**出参：**
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `data.uuid` | string | 字段 UUID |
+| `data.name` | string | 字段名称 |
+| `data.type` | string | 字段类型 |
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/collections/posts/fields', {
+    method: 'POST',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Authorization': 'Bearer 1|abcDefGhIjK...',
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        name: 'title',
+        label: 'Title',
+        type: 'text',
+        required: true,
+    }),
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+#### A.5.2 更新字段
+
+**接口：** `PUT /api/collections/{collection}/fields/{field}`  
+**权限：** `admin`  
+**作用：** 更新字段信息。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `Authorization` | Header | string | 是 | Bearer Token（需 admin 权限） |
+| `collection` | Path | string | 是 | 集合 UUID 或 slug |
+| `field` | Path | string | 是 | 字段 UUID |
+| `label` | Body | string | 否 | 字段标签 |
+| `required` | Body | boolean | 否 | 是否必填 |
+
+**出参：** 同 A.5.1
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/collections/posts/fields/field-uuid-1', {
+    method: 'PUT',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+    
+... [ACP display truncated; original 37203 bytes] ...
+t-id` | Header | string | 是 | 项目 UUID |
+| `Authorization` | Header | string | 是 | Bearer Token |
+
+**出参：**
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `data.valid` | boolean | 密钥是否有效 |
+| `data.abilities` | array | 密钥权限列表 |
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/auth/api-keys/introspect', {
+    method: 'POST',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Authorization': 'Bearer 1|abcDefGhIjK...',
+    },
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+#### A.5.3 删除字段
+
+**接口：** `DELETE /api/collections/{collection}/fields/{field}`  
+**权限：** `admin`  
+**作用：** 删除字段及其数据。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `Authorization` | Header | string | 是 | Bearer Token（需 admin 权限） |
+| `collection` | Path | string | 是 | 集合 UUID 或 slug |
+| `field` | Path | string | 是 | 字段 UUID |
+
+**出参：**
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `message` | string | 操作结果消息 |
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/collections/posts/fields/field-uuid-1', {
+    method: 'DELETE',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Authorization': 'Bearer 1|abcDefGhIjK...',
+    },
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+#### A.5.4 重排字段顺序
+
+**接口：** `POST /api/collections/{collection}/fields/reorder`  
+**权限：** `admin`  
+**作用：** 重排字段的显示顺序。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `Authorization` | Header | string | 是 | Bearer Token（需 admin 权限） |
+| `collection` | Path | string | 是 | 集合 UUID 或 slug |
+| `order` | Body | array | 是 | 字段 UUID 数组（按顺序） |
+
+**出参：**
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `message` | string | 操作结果消息 |
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/collections/posts/fields/reorder', {
+    method: 'POST',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Authorization': 'Bearer 1|abcDefGhIjK...',
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        order: ['field-uuid-1', 'field-uuid-2', 'field-uuid-3'],
+    }),
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+### A.6 内容条目管理
+
+#### A.6.1 列出内容条目
+
+**接口：** `GET /api/{collection}`  
+**权限：** `read`  
+**作用：** 列出集合下的所有内容条目。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `Authorization` | Header | string | 是 | Bearer Token |
+| `collection` | Path | string | 是 | 集合 UUID 或 slug |
+| `page` | Query | integer | 否 | 页码 |
+| `per_page` | Query | integer | 否 | 每页数量 |
+| `locale` | Query | string | 否 | 语言代码 |
+
+**出参：**
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `data` | array | 内容条目列表 |
+| `data[].uuid` | string | 条目 UUID |
+| `data[].locale` | string | 语言代码 |
+| `data[].fields` | object | 字段数据 |
+| `data[].status` | string | 状态（draft/published） |
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/posts?page=1&per_page=10&locale=zh', {
+    method: 'GET',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Authorization': 'Bearer 1|abcDefGhIjK...',
+    },
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+#### A.6.2 获取单条内容
+
+**接口：** `GET /api/{collection}/{uuid}`  
+**权限：** `read`  
+**作用：** 获取单条内容条目的详细信息。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `Authorization` | Header | string | 是 | Bearer Token |
+| `collection` | Path | string | 是 | 集合 UUID 或 slug |
+| `uuid` | Path | string | 是 | 内容条目 UUID |
+| `locale` | Query | string | 否 | 语言代码 |
+
+**出参：** 同 A.6.1 中的 `data[]` 单个对象
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/posts/entry-uuid-1?locale=zh', {
+    method: 'GET',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Authorization': 'Bearer 1|abcDefGhIjK...',
+    },
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+#### A.6.3 创建内容条目
+
+**接口：** `POST /api/{collection}`  
+**权限：** `create`  
+**作用：** 在集合下创建新的内容条目。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `Authorization` | Header | string | 是 | Bearer Token |
+| `collection` | Path | string | 是 | 集合 UUID 或 slug |
+| `locale` | Body | string | 否 | 语言代码 |
+| `fields` | Body | object | 是 | 字段数据 |
+
+**出参：** 同 A.6.1
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/posts', {
+    method: 'POST',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Authorization': 'Bearer 1|abcDefGhIjK...',
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        locale: 'zh',
+        fields: {
+            title: '新文章',
+            content: '文章内容...',
+        },
+    }),
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+#### A.6.4 更新内容条目
+
+**接口：** `PUT/PATCH /api/{collection}/{uuid}`  
+**权限：** `update`  
+**作用：** 更新内容条目。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `Authorization` | Header | string | 是 | Bearer Token |
+| `collection` | Path | string | 是 | 集合 UUID 或 slug |
+| `uuid` | Path | string | 是 | 内容条目 UUID |
+| `fields` | Body | object | 是 | 字段数据 |
+
+**出参：** 同 A.6.1
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/posts/entry-uuid-1', {
+    method: 'PATCH',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Authorization': 'Bearer 1|abcDefGhIjK...',
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        fields: {
+            title: '更新后的标题',
+        },
+    }),
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+#### A.6.5 删除内容条目
+
+**接口：** `DELETE /api/{collection}/{uuid}`  
+**权限：** `delete`  
+**作用：** 删除内容条目。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `Authorization` | Header | string | 是 | Bearer Token（需 delete 权限） |
+| `collection` | Path | string | 是 | 集合 UUID 或 slug |
+| `uuid` | Path | string | 是 | 内容条目 UUID |
+
+**出参：**
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `message` | string | 操作结果消息 |
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/posts/entry-uuid-1', {
+    method: 'DELETE',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Authorization': 'Bearer 1|abcDefGhIjK...',
+    },
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+#### A.6.6 发布内容
+
+**接口：** `POST /api/{collection}/{uuid}/publish`  
+**权限：** `update`  
+**作用：** 发布内容条目。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `Authorization` | Header | string | 是 | Bearer Token |
+| `collection` | Path | string | 是 | 集合 UUID 或 slug |
+| `uuid` | Path | string | 是 | 内容条目 UUID |
+
+**出参：**
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `message` | string | 操作结果消息 |
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/posts/entry-uuid-1/publish', {
+    method: 'POST',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Authorization': 'Bearer 1|abcDefGhIjK...',
+    },
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+#### A.6.7 取消发布
+
+**接口：** `POST /api/{collection}/{uuid}/unpublish`  
+**权限：** `update`  
+**作用：** 取消发布内容条目。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `Authorization` | Header | string | 是 | Bearer Token |
+| `collection` | Path | string | 是 | 集合 UUID 或 slug |
+| `uuid` | Path | string | 是 | 内容条目 UUID |
+
+**出参：**
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `message` | string | 操作结果消息 |
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/posts/entry-uuid-1/unpublish', {
+    method: 'POST',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Authorization': 'Bearer 1|abcDefGhIjK...',
+    },
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+#### A.6.8 丢弃草稿
+
+**接口：** `POST /api/{collection}/{uuid}/discard-draft`  
+**权限：** `update`  
+**作用：** 丢弃内容条目的草稿版本。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `Authorization` | Header | string | 是 | Bearer Token |
+| `collection` | Path | string | 是 | 集合 UUID 或 slug |
+| `uuid` | Path | string | 是 | 内容条目 UUID |
+
+**出参：**
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `message` | string | 操作结果消息 |
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/posts/entry-uuid-1/discard-draft', {
+    method: 'POST',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Authorization': 'Bearer 1|abcDefGhIjK...',
+    },
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+#### A.6.9 关联翻译
+
+**接口：** `POST /api/{collection}/{uuid}/link-translation`  
+**权限：** `update`  
+**作用：** 将内容条目与其他语言的版本关联。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `Authorization` | Header | string | 是 | Bearer Token |
+| `collection` | Path | string | 是 | 集合 UUID 或 slug |
+| `uuid` | Path | string | 是 | 内容条目 UUID |
+| `translation_uuid` | Body | string | 是 | 翻译条目 UUID |
+
+**出参：**
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `message` | string | 操作结果消息 |
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/posts/entry-uuid-1/link-translation', {
+    method: 'POST',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Authorization': 'Bearer 1|abcDefGhIjK...',
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        translation_uuid: 'entry-uuid-2',
+    }),
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+### A.7 批量操作
+
+#### A.7.1 批量创建内容
+
+**接口：** `POST /api/bulk/{collection}/entries`  
+**权限：** `create`  
+**作用：** 批量创建内容条目。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `Authorization` | Header | string | 是 | Bearer Token |
+| `collection` | Path | string | 是 | 集合 UUID 或 slug |
+| `entries` | Body | array | 是 | 内容条目数组 |
+
+**出参：**
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `data` | array | 创建成功的条目列表 |
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/bulk/posts/entries', {
+    method: 'POST',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Authorization': 'Bearer 1|abcDefGhIjK...',
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        entries: [
+            { locale: 'zh', fields: { title: '文章1' } },
+            { locale: 'zh', fields: { title: '文章2' } },
+        ],
+    }),
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+#### A.7.2 批量更新内容
+
+**接口：** `PATCH /api/bulk/{collection}/entries`  
+**权限：** `update`  
+**作用：** 批量更新内容条目。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `Authorization` | Header | string | 是 | Bearer Token |
+| `collection` | Path | string | 是 | 集合 UUID 或 slug |
+| `entries` | Body | array | 是 | 更新项数组 |
+
+**出参：**
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `data` | array | 更新成功的条目列表 |
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/bulk/posts/entries', {
+    method: 'PATCH',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Authorization': 'Bearer 1|abcDefGhIjK...',
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        entries: [
+            { uuid: 'entry-uuid-1', fields: { title: '更新标题1' } },
+            { uuid: 'entry-uuid-2', fields: { title: '更新标题2' } },
+        ],
+    }),
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+#### A.7.3 批量删除内容
+
+**接口：** `DELETE /api/bulk/{collection}/entries`  
+**权限：** `delete`  
+**作用：** 批量删除内容条目。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `Authorization` | Header | string | 是 | Bearer Token（需 delete 权限） |
+| `collection` | Path | string | 是 | 集合 UUID 或 slug |
+| `uuids` | Body | array | 是 | 条目 UUID 数组 |
+
+**出参：**
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `message` | string | 操作结果消息 |
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/bulk/posts/entries', {
+    method: 'DELETE',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Authorization': 'Bearer 1|abcDefGhIjK...',
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        uuids: ['entry-uuid-1', 'entry-uuid-2'],
+    }),
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+### A.8 内容版本管理
+
+#### A.8.1 列出版本
+
+**接口：** `GET /api/{collection}/{uuid}/versions`  
+**权限：** `read`  
+**作用：** 列出内容条目的所有版本。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `Authorization` | Header | string | 是 | Bearer Token |
+| `collection` | Path | string | 是 | 集合 UUID 或 slug |
+| `uuid` | Path | string | 是 | 内容条目 UUID |
+
+**出参：**
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `data` | array | 版本列表 |
+| `data[].version` | integer | 版本号 |
+| `data[].label` | string | 版本标签 |
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/posts/entry-uuid-1/versions', {
+    method: 'GET',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Authorization': 'Bearer 1|abcDefGhIjK...',
+    },
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+#### A.8.2 获取版本详情
+
+**接口：** `GET /api/{collection}/{uuid}/versions/{version}`  
+**权限：** `read`  
+**作用：** 获取指定版本的详细内容。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `Authorization` | Header | string | 是 | Bearer Token |
+| `collection` | Path | string | 是 | 集合 UUID 或 slug |
+| `uuid` | Path | string | 是 | 内容条目 UUID |
+| `version` | Path | integer | 是 | 版本号 |
+
+**出参：**
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `data.version` | integer | 版本号 |
+| `data.fields` | object | 字段数据 |
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/posts/entry-uuid-1/versions/2', {
+    method: 'GET',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Authorization': 'Bearer 1|abcDefGhIjK...',
+    },
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+#### A.8.3 回滚到指定版本
+
+**接口：** `POST /api/{collection}/{uuid}/versions/{version}/revert`  
+**权限：** `update`  
+**作用：** 将内容回滚到指定版本。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `Authorization` | Header | string | 是 | Bearer Token |
+| `collection` | Path | string | 是 | 集合 UUID 或 slug |
+| `uuid` | Path | string | 是 | 内容条目 UUID |
+| `version` | Path | integer | 是 | 目标版本号 |
+
+**出参：**
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `message` | string | 操作结果消息 |
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/posts/entry-uuid-1/versions/2/revert', {
+    method: 'POST',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Authorization': 'Bearer 1|abcDefGhIjK...',
+    },
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+#### A.8.4 更新版本标签
+
+**接口：** `PATCH /api/{collection}/{uuid}/versions/{version}`  
+**权限：** `update`  
+**作用：** 更新版本的标签信息。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `Authorization` | Header | string | 是 | Bearer Token |
+| `collection` | Path | string | 是 | 集合 UUID 或 slug |
+| `uuid` | Path | string | 是 | 内容条目 UUID |
+| `version` | Path | integer | 是 | 版本号 |
+| `label` | Body | string | 否 | 版本标签 |
+
+**出参：**
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `message` | string | 操作结果消息 |
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/posts/entry-uuid-1/versions/2', {
+    method: 'PATCH',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Authorization': 'Bearer 1|abcDefGhIjK...',
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        label: '重要版本',
+    }),
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+### A.9 Webhook 管理
+
+#### A.9.1 列出 Webhook
+
+**接口：** `GET /api/webhooks`  
+**权限：** `admin`  
+**作用：** 列出项目下的所有 Webhook。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `Authorization` | Header | string | 是 | Bearer Token（需 admin 权限） |
+
+**出参：**
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `data` | array | Webhook 列表 |
+| `data[].uuid` | string | Webhook UUID |
+| `data[].url` | string | 回调 URL |
+| `data[].events` | array | 监听的事件列表 |
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/webhooks', {
+    method: 'GET',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Authorization': 'Bearer 1|abcDefGhIjK...',
+    },
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+#### A.9.2 创建 Webhook
+
+**接口：** `POST /api/webhooks`  
+**权限：** `admin`  
+**作用：** 创建新的 Webhook。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `Authorization` | Header | string | 是 | Bearer Token（需 admin 权限） |
+| `url` | Body | string | 是 | 回调 URL |
+| `events` | Body | array | 是 | 监听的事件列表 |
+
+**出参：** 同 A.9.1
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/webhooks', {
+    method: 'POST',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Authorization': 'Bearer 1|abcDefGhIjK...',
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        url: 'https://mysite.com/webhook',
+        events: ['entry.created', 'entry.updated'],
+    }),
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+#### A.9.3 获取 Webhook 详情
+
+**接口：** `GET /api/webhooks/{uuid}`  
+**权限：** `admin`  
+**作用：** 获取单个 Webhook 的详细信息。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `Authorization` | Header | string | 是 | Bearer Token（需 admin 权限） |
+| `uuid` | Path | string | 是 | Webhook UUID |
+
+**出参：** 同 A.9.1
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/webhooks/webhook-uuid-1', {
+    method: 'GET',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Authorization': 'Bearer 1|abcDefGhIjK...',
+    },
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+#### A.9.4 获取 Webhook 日志
+
+**接口：** `GET /api/webhooks/{uuid}/logs`  
+**权限：** `admin`  
+**作用：** 获取 Webhook 的触发日志。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `Authorization` | Header | string | 是 | Bearer Token（需 admin 权限） |
+| `uuid` | Path | string | 是 | Webhook UUID |
+
+**出参：**
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `data` | array | 日志列表 |
+| `data[].event` | string | 触发事件 |
+| `data[].status_code` | integer | HTTP 状态码 |
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/webhooks/webhook-uuid-1/logs', {
+    method: 'GET',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Authorization': 'Bearer 1|abcDefGhIjK...',
+    },
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+#### A.9.5 更新 Webhook
+
+**接口：** `PUT /api/webhooks/{uuid}`  
+**权限：** `admin`  
+**作用：** 更新 Webhook 配置。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `Authorization` | Header | string | 是 | Bearer Token（需 admin 权限） |
+| `uuid` | Path | string | 是 | Webhook UUID |
+| `url` | Body | string | 否 | 回调 URL |
+| `events` | Body | array | 否 | 监听的事件列表 |
+
+**出参：** 同 A.9.1
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/webhooks/webhook-uuid-1', {
+    method: 'PUT',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Authorization': 'Bearer 1|abcDefGhIjK...',
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        url: 'https://mysite.com/new-webhook',
+    }),
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+#### A.9.6 删除 Webhook
+
+**接口：** `DELETE /api/webhooks/{uuid}`  
+**权限：** `admin`  
+**作用：** 删除 Webhook。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `Authorization` | Header | string | 是 | Bearer Token（需 admin 权限） |
+| `uuid` | Path | string | 是 | Webhook UUID |
+
+**出参：**
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `message` | string | 操作结果消息 |
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/webhooks/webhook-uuid-1', {
+    method: 'DELETE',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Authorization': 'Bearer 1|abcDefGhIjK...',
+    },
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+### A.10 API 密钥管理
+
+#### A.10.1 内省 API 密钥
+
+**接口：** `POST /api/auth/api-keys/introspect`  
+**权限：** `introspect`  
+**作用：** 验证 API 密钥的有效性并获取其权限信息。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `Authorization` | Header | string | 是 | Bearer Token |
+
+**出参：**
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `data.valid` | boolean | 密钥是否有效 |
+| `data.abilities` | array | 密钥权限列表 |
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/auth/api-keys/introspect', {
+    method: 'POST',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Authorization': 'Bearer 1|abcDefGhIjK...',
+    },
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+### 方式 C：JWT 认证（终端用户） - 详细使用
+
+#### C.1 用户注册登录
+
+##### C.1.1 用户注册
+
+**接口：** `POST /api/auth/signup`  
+**权限：** 公开  
+**作用：** 注册新用户。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `name` | Body | string | 是 | 用户名称 |
+| `email` | Body | string | 是 | 邮箱地址 |
+| `password` | Body | string | 是 | 密码 |
+| `password_confirmation` | Body | string | 是 | 确认密码 |
+
+**出参：**
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `data.user` | object | 用户信息 |
+| `data.access_token` | string | JWT 访问令牌 |
+| `data.refresh_token` | string | 刷新令牌 |
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/auth/signup', {
+    method: 'POST',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        name: 'John Doe',
+        email: 'john@example.com',
+        password: 'password123',
+        password_confirmation: 'password123',
+    }),
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+##### C.1.2 用户登录
+
+**接口：** `POST /api/auth/login`  
+**权限：** 公开  
+**作用：** 用户登录获取 JWT。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `email` | Body | string | 是 | 邮箱地址 |
+| `password` | Body | string | 是 | 密码 |
+
+**出参：** 同 C.1.1
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/auth/login', {
+    method: 'POST',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        email: 'john@example.com',
+        password: 'password123',
+    }),
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+##### C.1.3 刷新令牌
+
+**接口：** `POST /api/auth/refresh`  
+**权限：** 公开  
+**作用：** 使用刷新令牌获取新的访问令牌。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `refresh_token` | Body | string | 是 | 刷新令牌 |
+
+**出参：** 同 C.1.1
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/auth/refresh', {
+    method: 'POST',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        refresh_token: 'eyJ0eXAiOiJKV1QiLCJhbGc...',
+    }),
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+##### C.1.4 重发验证邮件
+
+**接口：** `POST /api/auth/verify-email/resend`  
+**权限：** 公开  
+**作用：** 重新发送邮箱验证邮件。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `email` | Body | string | 是 | 邮箱地址 |
+
+**出参：**
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `message` | string | 操作结果消息 |
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/auth/verify-email/resend', {
+    method: 'POST',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        email: 'john@example.com',
+    }),
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+##### C.1.5 确认验证邮件
+
+**接口：** `POST /api/auth/verify-email/confirm`  
+**权限：** 公开  
+**作用：** 确认邮箱验证。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `token` | Body | string | 是 | 验证令牌 |
+
+**出参：**
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `message` | string | 操作结果消息 |
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/auth/verify-email/confirm', {
+    method: 'POST',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        token: 'verification-token-xxx',
+    }),
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+#### C.2 会话管理
+
+##### C.2.1 获取当前用户信息
+
+**接口：** `GET /api/auth/me`  
+**权限：** JWT  
+**作用：** 获取当前登录用户的信息。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `Authorization` | Header | string | 是 | `Bearer <jwt_access_token>` |
+
+**出参：**
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `data.id` | integer | 用户 ID |
+| `data.name` | string | 用户名称 |
+| `data.email` | string | 邮箱地址 |
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/auth/me', {
+    method: 'GET',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGc...',
+    },
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+##### C.2.2 登出当前会话
+
+**接口：** `POST /api/auth/logout`  
+**权限：** JWT  
+**作用：** 登出当前会话。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `Authorization` | Header | string | 是 | `Bearer <jwt_access_token>` |
+
+**出参：**
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `message` | string | 操作结果消息 |
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/auth/logout', {
+    method: 'POST',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGc...',
+    },
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+##### C.2.3 登出所有会话
+
+**接口：** `POST /api/auth/logout-all`  
+**权限：** JWT  
+**作用：** 登出所有会话。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `Authorization` | Header | string | 是 | `Bearer <jwt_access_token>` |
+
+**出参：**
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `message` | string | 操作结果消息 |
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/auth/logout-all', {
+    method: 'POST',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGc...',
+    },
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+#### C.3 API 密钥管理
+
+##### C.3.1 列出 API 密钥
+
+**接口：** `GET /api/auth/api-keys`  
+**权限：** JWT  
+**作用：** 列出当前用户的所有 API 密钥。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `Authorization` | Header | string | 是 | `Bearer <jwt_access_token>` |
+
+**出参：**
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `data` | array | API 密钥列表 |
+| `data[].id` | integer | 密钥 ID |
+| `data[].name` | string | 密钥名称 |
+| `data[].abilities` | array | 权限列表 |
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/auth/api-keys', {
+    method: 'GET',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGc...',
+    },
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+##### C.3.2 创建 API 密钥
+
+**接口：** `POST /api/auth/api-keys`  
+**权限：** JWT  
+**作用：** 创建新的 API 密钥。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `Authorization` | Header | string | 是 | `Bearer <jwt_access_token>` |
+| `name` | Body | string | 是 | 密钥名称 |
+| `abilities` | Body | array | 是 | 权限列表 |
+
+**出参：**
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `data.id` | integer | 密钥 ID |
+| `data.name` | string | 密钥名称 |
+| `data.abilities` | array | 权限列表 |
+| `data.plain_text_token` | string | API 密钥（仅显示一次） |
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/auth/api-keys', {
+    method: 'POST',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGc...',
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        name: 'My API Key',
+        abilities: ['read', 'create'],
+    }),
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+##### C.3.3 撤销 API 密钥
+
+**接口：** `POST /api/auth/api-keys/{keyId}/revoke`  
+**权限：** JWT  
+**作用：** 撤销（删除）API 密钥。
+
+**入参：**
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `project-id` | Header | string | 是 | 项目 UUID |
+| `Authorization` | Header | string | 是 | `Bearer <jwt_access_token>` |
+| `keyId` | Path | integer | 是 | API 密钥 ID |
+
+**出参：**
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `message` | string | 操作结果消息 |
+
+**调用示例：**
+
+```javascript
+const response = await fetch('/api/auth/api-keys/1/revoke', {
+    method: 'POST',
+    headers: {
+        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGc...',
+    },
+});
+const result = await response.json();
+console.log(result);
+```
+
+---
+
+##### C.3.4 修改密码
 
 **接口：** `POST /api/auth/change-password`  
 **权限：** JWT  
