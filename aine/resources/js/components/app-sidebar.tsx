@@ -3,9 +3,9 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarGroup, SidebarGroupLabel } from '@/components/ui/sidebar';
 import { type NavItem, SharedData, Project, UserCan } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { LayoutGrid, Settings, Image, Users, Folder, Sparkles } from 'lucide-react';
-import AppLogo from './app-logo';
+import { LayoutGrid, Settings, Image, Folder, Sparkles } from 'lucide-react';
 import { Separator } from '@radix-ui/react-separator';
+import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
     {
@@ -111,6 +111,24 @@ export function AppSidebar() {
             </SidebarContent>
 
             <SidebarFooter>
+
+                <SidebarGroup className="px-2 py-0">
+                    <SidebarMenu>
+                        <SidebarMenuItem>
+                            <SidebarMenuButton  
+                                asChild
+                                isActive={isUrlActive(page.url, '/admin/settings/app')}
+                                tooltip={{ children: 'App Settings' }}
+                            >
+                                <Link href={'/admin/settings/app'}>
+                                    <Settings />
+                                    App Settings
+                                </Link>
+                            </SidebarMenuButton>
+                        </SidebarMenuItem>
+                    </SidebarMenu>
+                </SidebarGroup>
+                
                 <SidebarGroup className="px-2 py-0">
                     <SidebarMenu>
                         <SidebarMenuItem>
@@ -127,25 +145,6 @@ export function AppSidebar() {
                         </SidebarMenuItem>
                     </SidebarMenu>
                 </SidebarGroup>
-
-                {(can.access_users || can.access_roles || can.access_permissions) && (
-                    <SidebarGroup className="px-2 py-0">
-                        <SidebarMenu>
-                            <SidebarMenuItem>
-                            <SidebarMenuButton  
-                                asChild
-                                isActive={isUrlActive(page.url, '/admin/user-management/users') || isUrlActive(page.url, '/admin/user-management/roles') || isUrlActive(page.url, '/admin/user-management/permissions')}
-                                tooltip={{ children: 'Users & Roles' }}
-                            >
-                                <Link href={'/admin/user-management/' + (can.access_users ? 'users' : can.access_roles ? 'roles' : 'permissions')} >
-                                    <Users />
-                                    <span>Users & Roles</span>
-                                </Link>
-                            </SidebarMenuButton>
-                            </SidebarMenuItem>
-                        </SidebarMenu>
-                    </SidebarGroup>
-                )}
 
                 <Separator className="my-2 border-t" />
 

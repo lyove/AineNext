@@ -1,9 +1,9 @@
 import { DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
 import { UserInfo } from '@/components/user-info';
 import { useMobileNavigation } from '@/hooks/use-mobile-navigation';
-import { type User } from '@/types';
-import { Link, router } from '@inertiajs/react';
-import { LogOut, Settings, User as UserIcon } from 'lucide-react';
+import { type User, UserCan } from '@/types';
+import { Link, router, usePage } from '@inertiajs/react';
+import { LogOut, User as UserIcon, Users as UsersIcon } from 'lucide-react';
 import AppearanceTabs from './appearance-tabs';
 
 interface UserMenuContentProps {
@@ -11,6 +11,8 @@ interface UserMenuContentProps {
 }
 
 export function UserMenuContent({ user }: UserMenuContentProps) {
+    const can = usePage().props.userCan as UserCan;
+
     const cleanup = useMobileNavigation();
 
     const handleLogout = () => {
@@ -47,14 +49,21 @@ export function UserMenuContent({ user }: UserMenuContentProps) {
 
             <DropdownMenuSeparator />
             
-            <DropdownMenuGroup>
-                <DropdownMenuItem asChild>
-                    <Link className="block w-full" href={route('settings.app.edit')} as="button" onClick={cleanup}>
-                        <Settings className="mr-2" />
-                        App Settings
-                    </Link>
-                </DropdownMenuItem>
-            </DropdownMenuGroup>
+            {(can.access_users || can.access_roles || can.access_permissions) && 
+                (<DropdownMenuGroup>
+                    <DropdownMenuItem asChild>
+                        <Link 
+                            className="block w-full" 
+                            href={route(`user-management.${can.access_users ? 'users' : can.access_roles ? 'roles' : 'permissions'}.index`)} 
+                            as="button" 
+                            onClick={cleanup}
+                        >
+                            <UsersIcon className="mr-2" />
+                            <span>Users & Roles</span>
+                        </Link>
+                    </DropdownMenuItem>
+                </DropdownMenuGroup>
+            )}
 
             <DropdownMenuSeparator />
 
