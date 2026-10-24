@@ -4,23 +4,24 @@ import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
+import { Lock, Palette, User } from 'lucide-react';
 import { type PropsWithChildren } from 'react';
 
 const sidebarNavItems: NavItem[] = [
     {
         title: 'Profile',
         href: '/admin/account/profile',
-        icon: null,
+        icon: User,
     },
     {
         title: 'Password',
         href: '/admin/account/password',
-        icon: null,
+        icon: Lock,
     },
     {
         title: 'Appearance',
         href: '/admin/account/appearance',
-        icon: null,
+        icon: Palette,
     },
 ];
 
@@ -51,7 +52,8 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
                                     [sidebarItemActiveClass]: currentPath === item.href,
                                 })}
                             >
-                                <Link href={item.href}>
+                                <Link href={item.href} className="flex items-center gap-2">
+                                    {item.icon && <item.icon className="h-4 w-4 shrink-0" />}
                                     {item.title}
                                 </Link>
                             </Button>
