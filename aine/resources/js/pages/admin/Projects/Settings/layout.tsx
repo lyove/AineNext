@@ -77,7 +77,10 @@ export default function ProjectSettingsLayout({ project, children }: ProjectSett
                                                         'bg-sidebar-accent text-sidebar-accent-foreground': currentPath === subItem.href,
                                                     })}
                                                 >
-                                                    <Link href={subItem.href}>{subItem.title}</Link>
+                                                    <Link href={subItem.href}>
+                                                        {subItem.icon && <subItem.icon className="mr-2 h-4 w-4" />}
+                                                        {subItem.title}
+                                                    </Link>
                                                 </Button>
                                             ))}
                                         </div>
