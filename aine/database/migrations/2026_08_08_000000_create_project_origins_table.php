@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('project_origins', function (Blueprint $table) {
             $table->id();
             $table->foreignId('project_id')->constrained()->cascadeOnDelete();
-            $table->string('origin', 2048);
+            $table->string('origin', 255);
             $table->json('abilities');
             $table->boolean('is_active')->default(true);
             $table->string('description')->nullable();

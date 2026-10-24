@@ -28,7 +28,7 @@ class ProjectDomainWhitelistController extends Controller
     public function store(Request $request, Project $project): JsonResponse
     {
         $validator = Validator::make($request->all(), [
-            'origin' => 'required|string|url:http,https|max:2048',
+            'origin' => 'required|string|url:http,https|max:255',
             'description' => 'nullable|string|max:255',
             'abilities' => 'sometimes|array|min:1',
             'abilities.*' => 'in:read,create,update',

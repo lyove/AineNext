@@ -411,6 +411,7 @@ export default function APIAccessSettings({ project, tokens: initialTokens, whit
                                         value={newOriginUrl}
                                         onChange={(e) => setNewOriginUrl(e.target.value)}
                                         placeholder="https://example.com"
+                                        maxLength={255}
                                         disabled={!!editingOrigin}
                                     />
                                     {editingOrigin && (
