@@ -11,7 +11,7 @@ test('theme settings page is displayed', function () {
 
     $response = $this
         ->actingAs($user)
-        ->get('/settings/theme');
+        ->get('/admin/settings/theme');
 
     $response->assertOk();
 });
@@ -25,7 +25,7 @@ test('theme roundness is applied in document head', function () {
 
     $response = $this
         ->actingAs($user)
-        ->get('/settings/theme');
+        ->get('/admin/settings/theme');
 
     $response
         ->assertOk()
@@ -55,7 +55,7 @@ CSS;
 
     $response = $this
         ->actingAs($user)
-        ->post('/settings/theme', [
+        ->post('/admin/settings/theme', [
             'font_family' => 'inter',
             'theme_radius' => '2xl',
             'theme_css' => $themeCss,
@@ -63,7 +63,7 @@ CSS;
 
     $response
         ->assertSessionHasNoErrors()
-        ->assertRedirect('/settings/theme');
+        ->assertRedirect('/admin/settings/theme');
 
     $settings = AppSetting::query()->latest('id')->first();
 
@@ -81,7 +81,7 @@ test('theme settings can apply a preset from json file', function () {
 
     $response = $this
         ->actingAs($user)
-        ->post('/settings/theme', [
+        ->post('/admin/settings/theme', [
             'font_family' => 'inter',
             'theme_radius' => 'lg',
             'preset_key' => 'violet-bloom',
@@ -90,7 +90,7 @@ test('theme settings can apply a preset from json file', function () {
 
     $response
         ->assertSessionHasNoErrors()
-        ->assertRedirect('/settings/theme');
+        ->assertRedirect('/admin/settings/theme');
 
     $settings = AppSetting::query()->latest('id')->first();
 
@@ -107,15 +107,15 @@ test('theme settings rejects css without supported tokens', function () {
 
     $response = $this
         ->actingAs($user)
-        ->from('/settings/theme')
-        ->post('/settings/theme', [
+        ->from('/admin/settings/theme')
+        ->post('/admin/settings/theme', [
             'font_family' => 'inter',
             'theme_css' => '.demo { color: red; }',
         ]);
 
     $response
         ->assertSessionHasErrors('theme_css')
-        ->assertRedirect('/settings/theme');
+        ->assertRedirect('/admin/settings/theme');
 });
 
 test('theme settings can be reset to defaults', function () {
@@ -134,13 +134,13 @@ test('theme settings can be reset to defaults', function () {
 
     $response = $this
         ->actingAs($user)
-        ->post('/settings/theme', [
+        ->post('/admin/settings/theme', [
             'clear_theme' => true,
         ]);
 
     $response
         ->assertSessionHasNoErrors()
-        ->assertRedirect('/settings/theme');
+        ->assertRedirect('/admin/settings/theme');
 
     $settings = AppSetting::query()->latest('id')->first();
     expect($settings?->theme_tokens)->toBeNull();
@@ -153,21 +153,21 @@ test('theme settings reject unsupported font family', function () {
 
     $response = $this
         ->actingAs($user)
-        ->from('/settings/theme')
-        ->post('/settings/theme', [
+        ->from('/admin/settings/theme')
+        ->post('/admin/settings/theme', [
             'font_family' => 'unknown-font',
             'theme_css' => ':root { --background: oklch(0.9940 0 0); }',
         ]);
 
     $response
         ->assertSessionHasErrors('font_family')
-        ->assertRedirect('/settings/theme');
+        ->assertRedirect('/admin/settings/theme');
 });
 
 test('theme settings can store roundness independently of presets', function () {
     $user = User::factory()->create();
 
-    $this->actingAs($user)->post('/settings/theme', [
+    $this->actingAs($user)->post('/admin/settings/theme', [
         'font_family' => 'inter',
         'theme_radius' => 'none',
         'preset_key' => 'violet-bloom',
@@ -178,7 +178,7 @@ test('theme settings can store roundness independently of presets', function () 
     expect($settings?->theme_radius)->toBe('none');
     expect($settings?->theme_tokens['light']['radius'] ?? null)->toBe('0px');
 
-    $this->actingAs($user)->post('/settings/theme', [
+    $this->actingAs($user)->post('/admin/settings/theme', [
         'font_family' => 'inter',
         'theme_radius' => 'xl',
         'clear_theme' => true,
@@ -194,8 +194,8 @@ test('theme settings reject unsupported roundness', function () {
 
     $response = $this
         ->actingAs($user)
-        ->from('/settings/theme')
-        ->post('/settings/theme', [
+        ->from('/admin/settings/theme')
+        ->post('/admin/settings/theme', [
             'font_family' => 'inter',
             'theme_radius' => 'pill',
             'theme_css' => ':root { --background: oklch(0.9940 0 0); }',
@@ -203,7 +203,7 @@ test('theme settings reject unsupported roundness', function () {
 
     $response
         ->assertSessionHasErrors('theme_radius')
-        ->assertRedirect('/settings/theme');
+        ->assertRedirect('/admin/settings/theme');
 });
 
 test('custom theme is preserved when switching preset and back to custom', function () {
@@ -221,19 +221,19 @@ test('custom theme is preserved when switching preset and back to custom', funct
 }
 CSS;
 
-    $this->actingAs($user)->post('/settings/theme', [
+    $this->actingAs($user)->post('/admin/settings/theme', [
         'font_family' => 'inter',
         'preset_key' => 'custom',
         'theme_css' => $customCss,
     ])->assertSessionHasNoErrors();
 
-    $this->actingAs($user)->post('/settings/theme', [
+    $this->actingAs($user)->post('/admin/settings/theme', [
         'font_family' => 'inter',
         'preset_key' => 'violet-bloom',
         'theme_css' => '',
     ])->assertSessionHasNoErrors();
 
-    $this->actingAs($user)->post('/settings/theme', [
+    $this->actingAs($user)->post('/admin/settings/theme', [
         'font_family' => 'inter',
         'preset_key' => 'custom',
         'theme_css' => $customCss,

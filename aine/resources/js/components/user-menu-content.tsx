@@ -40,7 +40,7 @@ export function UserMenuContent({ user }: UserMenuContentProps) {
 
             <DropdownMenuGroup>
                 <DropdownMenuItem asChild>
-                    <Link className="block w-full" href={route('profile.edit')} as="button" onClick={cleanup}>
+                    <Link className="block w-full" href={route('account.profile')} as="button" onClick={cleanup}>
                         <UserIcon className="mr-2" />
                         Account
                     </Link>

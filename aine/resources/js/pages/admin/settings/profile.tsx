@@ -15,7 +15,7 @@ import { Separator } from '@/components/ui/separator';
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Profile settings',
-        href: '/admin/settings/profile',
+        href: '/admin/account/profile',
     },
 ];
 
@@ -35,7 +35,7 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
 
-        patch(route('profile.update'), {
+        patch(route('account.profile.update'), {
             preserveScroll: true,
         });
     };

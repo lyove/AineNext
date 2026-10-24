@@ -10,7 +10,7 @@ test('app settings page is displayed', function () {
 
     $response = $this
         ->actingAs($user)
-        ->get('/settings/app');
+        ->get('/admin/settings/app');
 
     $response->assertOk();
 });
@@ -20,11 +20,11 @@ test('app settings can store branding fields', function () {
 
     $response = $this
         ->actingAs($user)
-        ->post('/settings/app', [
+        ->post('/admin/settings/app', [
             'app_name' => 'Aine',
         ]);
 
     $response
         ->assertSessionHasNoErrors()
-        ->assertRedirect('/settings/app');
+        ->assertRedirect('/admin/settings/app');
 });

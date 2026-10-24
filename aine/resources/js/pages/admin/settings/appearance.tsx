@@ -10,7 +10,7 @@ import SettingsLayout from '@/layouts/settings/layout';
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Appearance settings',
-        href: '/admin/settings/appearance',
+        href: '/admin/account/appearance',
     },
 ];
 

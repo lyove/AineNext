@@ -278,20 +278,25 @@ Route::middleware(['auth', 'verified'])->prefix('admin/ai')->name('ai.')->group(
     Route::delete('/conversations/{conversationId}', [AiChatController::class, 'destroyConversation'])->name('conversations.destroy');
 });
 
-// Global (app-wide) settings: profile, password, appearance, app branding, AI and theme.
+// Global (app-wide) settings: account, appearance, app branding, AI and theme.
 Route::middleware('auth')->prefix('admin')->group(function () {
-    Route::redirect('settings', 'settings/profile');
+    // Backwards-compatible redirects from the old /settings/* URLs.
+    Route::redirect('settings', 'account/profile');
+    Route::redirect('settings/profile', 'account/profile');
+    Route::redirect('settings/password', 'account/password');
+    Route::redirect('settings/appearance', 'account/appearance');
 
-    Route::get('settings/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('settings/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('settings/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    // Account (self-service)
+    Route::get('account/profile', [ProfileController::class, 'edit'])->name('account.profile');
+    Route::patch('account/profile', [ProfileController::class, 'update'])->name('account.profile.update');
+    Route::delete('account/profile', [ProfileController::class, 'destroy'])->name('account.profile.destroy');
 
-    Route::get('settings/password', [PasswordController::class, 'edit'])->name('password.edit');
-    Route::put('settings/password', [PasswordController::class, 'update'])->name('password.update');
+    Route::get('account/password', [PasswordController::class, 'edit'])->name('account.password');
+    Route::put('account/password', [PasswordController::class, 'update'])->name('account.password.update');
 
-    Route::get('settings/appearance', function () {
+    Route::get('account/appearance', function () {
         return Inertia::render('admin/settings/appearance');
-    })->name('appearance');
+    })->name('account.appearance');
 
     // App settings (branding)
     Route::get('settings/app', [AppSettingsController::class, 'edit'])->name('settings.app.edit');
