@@ -13,15 +13,15 @@ const sidebarNavItems: NavItem[] = [
         icon: null,
     },
     {
-        title: 'AI',
-        href: '/admin/settings/ai',
-        icon: null,
-    },
-    {
         title: 'Theme',
         href: '/admin/settings/theme',
         icon: null,
     },
+    {
+        title: 'AI',
+        href: '/admin/settings/ai',
+        icon: null,
+    }
 ];
 
 export default function AppSettingsLayout({ children }: PropsWithChildren) {
