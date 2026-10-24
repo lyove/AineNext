@@ -4,23 +4,24 @@ import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
+import { Settings, Palette, Sparkles } from 'lucide-react';
 import { type PropsWithChildren } from 'react';
 
 const sidebarNavItems: NavItem[] = [
     {
         title: 'General',
         href: '/admin/settings/app',
-        icon: null,
+        icon: Settings,
     },
     {
         title: 'Theme',
         href: '/admin/settings/theme',
-        icon: null,
+        icon: Palette,
     },
     {
         title: 'AI',
         href: '/admin/settings/ai',
-        icon: null,
+        icon: Sparkles,
     }
 ];
 
@@ -51,7 +52,8 @@ export default function AppSettingsLayout({ children }: PropsWithChildren) {
                                     [sidebarItemActiveClass]: currentPath === item.href,
                                 })}
                             >
-                                <Link href={item.href}>
+                                <Link href={item.href} className="flex items-center gap-2">
+                                    {item.icon && <item.icon className="h-4 w-4 shrink-0" />}
                                     {item.title}
                                 </Link>
                             </Button>

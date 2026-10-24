@@ -281,10 +281,10 @@ Route::middleware(['auth', 'verified'])->prefix('admin/ai')->name('ai.')->group(
 // Global (app-wide) settings: account, appearance, app branding, AI and theme.
 Route::middleware('auth')->prefix('admin')->group(function () {
     // Backwards-compatible redirects from the old /settings/* URLs.
-    Route::redirect('settings', 'account/profile');
-    Route::redirect('settings/profile', 'account/profile');
-    Route::redirect('settings/password', 'account/password');
-    Route::redirect('settings/appearance', 'account/appearance');
+    Route::redirect('settings', 'account/profile', 301);
+    Route::redirect('settings/profile', 'account/profile', 301);
+    Route::redirect('settings/password', 'account/password', 301);
+    Route::redirect('settings/appearance', 'account/appearance', 301);
 
     // Account (self-service)
     Route::get('account/profile', [ProfileController::class, 'edit'])->name('account.profile');

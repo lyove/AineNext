@@ -516,7 +516,7 @@ class ManageSchema implements Tool
         return json_encode([
             'success' => "Collection \"{$name}\" and all its content deleted.",
             'action' => 'navigate',
-            'url' => "/projects/{$collection->project_id}",
+            'url' => "/admin/projects/{$collection->project_id}",
         ]);
     }
 

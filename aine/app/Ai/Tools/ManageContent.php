@@ -228,7 +228,7 @@ class ManageContent implements Tool
             'message' => 'Entry created as draft.',
             'entry' => $this->formatEntry($entry->fresh(), $fields),
             'action' => 'navigate',
-            'url' => "/projects/{$project->id}/collections/{$collection->id}",
+            'url' => "/admin/projects/{$project->id}/collections/{$collection->id}",
         ]);
     }
 

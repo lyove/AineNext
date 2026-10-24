@@ -16,15 +16,15 @@ class NavigateTo implements Tool
     public static function availablePages(): array
     {
         return [
-            'dashboard' => '/',
-            'app settings' => '/settings/app',
-            'ai settings' => '/settings/ai',
-            'profile settings' => '/account/profile',
-            'password settings' => '/account/password',
-            'appearance settings' => '/account/appearance',
-            'user management - users' => '/user-management/users',
-            'user management - roles' => '/user-management/roles',
-            'user management - permissions' => '/user-management/permissions',
+            'dashboard' => '/admin',
+            'app settings' => '/admin/settings/app',
+            'ai settings' => '/admin/settings/ai',
+            'profile settings' => '/admin/account/profile',
+            'password settings' => '/admin/account/password',
+            'appearance settings' => '/admin/account/appearance',
+            'user management - users' => '/admin/user-management/users',
+            'user management - roles' => '/admin/user-management/roles',
+            'user management - permissions' => '/admin/user-management/permissions',
         ];
     }
 
@@ -34,19 +34,19 @@ class NavigateTo implements Tool
     public static function projectPages(): array
     {
         return [
-            'project' => '/projects/{id}',
-            'collections' => '/projects/{id}',
-            'collection' => '/projects/{id}/collections/{collection_id}',
-            'collection settings' => '/projects/{id}/collections/{collection_id}/edit',
-            'content create' => '/projects/{id}/collections/{collection_id}/content/create',
-            'content edit' => '/projects/{id}/collections/{collection_id}/content/{entry_id}/edit',
-            'project settings' => '/projects/{id}/settings',
-            'localization' => '/projects/{id}/settings/localization',
-            'user access' => '/projects/{id}/settings/user-access',
-            'api access' => '/projects/{id}/settings/api-access',
-            'webhooks' => '/projects/{id}/settings/webhooks',
-            'export import' => '/projects/{id}/settings/export-import',
-            'assets' => '/projects/{id}/assets',
+            'project' => '/admin/projects/{id}',
+            'collections' => '/admin/projects/{id}',
+            'collection' => '/admin/projects/{id}/collections/{collection_id}',
+            'collection settings' => '/admin/projects/{id}/collections/{collection_id}/edit',
+            'content create' => '/admin/projects/{id}/collections/{collection_id}/content/create',
+            'content edit' => '/admin/projects/{id}/collections/{collection_id}/content/{entry_id}/edit',
+            'project settings' => '/admin/projects/{id}/settings',
+            'localization' => '/admin/projects/{id}/settings/localization',
+            'user access' => '/admin/projects/{id}/settings/user-access',
+            'api access' => '/admin/projects/{id}/settings/api-access',
+            'webhooks' => '/admin/projects/{id}/settings/webhooks',
+            'export import' => '/admin/projects/{id}/settings/export-import',
+            'assets' => '/admin/projects/{id}/assets',
         ];
     }
 

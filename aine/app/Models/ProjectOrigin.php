@@ -14,6 +14,10 @@ class ProjectOrigin extends Model
         'description',
     ];
 
+    protected $attributes = [
+        'abilities' => '["read"]',
+    ];
+
     protected $casts = [
         'abilities' => 'array',
         'is_active' => 'boolean',

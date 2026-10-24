@@ -113,7 +113,7 @@ class CreateSchema implements Tool
                 'name' => $collection->name,
                 'slug' => $collection->slug,
                 'fields_created' => $fieldsCreated,
-                'project_url' => "/projects/{$project->id}",
+                'project_url' => "/admin/projects/{$project->id}",
                 'message' => "Collection \"{$collection->name}\" created with {$fieldsCreated} fields. Use collection_id {$collection->id} for relation fields.",
                 'action' => 'reload',
             ];

@@ -44,7 +44,7 @@ class SearchProjects implements Tool
 
             $result = [
                 'name' => $project->name,
-                'url' => "/projects/{$project->id}",
+                'url' => "/admin/projects/{$project->id}",
                 'created' => $project->created_at->diffForHumans(),
             ];
 
@@ -67,7 +67,7 @@ class SearchProjects implements Tool
                 'total' => $total,
                 'projects' => $projects->map(fn ($p) => [
                     'name' => $p->name,
-                    'url' => "/projects/{$p->id}",
+                    'url' => "/admin/projects/{$p->id}",
                 ])->values(),
             ]);
         }
@@ -88,7 +88,7 @@ class SearchProjects implements Tool
 
             return json_encode([
                 'action' => 'navigate',
-                'url' => "/projects/{$p->id}",
+                'url' => "/admin/projects/{$p->id}",
                 'name' => $p->name,
                 'total' => $results->count(),
             ]);
@@ -98,7 +98,7 @@ class SearchProjects implements Tool
             'total' => $results->count(),
             'projects' => $results->map(fn ($p) => [
                 'name' => $p->name,
-                'url' => "/projects/{$p->id}",
+                'url' => "/admin/projects/{$p->id}",
             ])->values(),
         ]);
     }

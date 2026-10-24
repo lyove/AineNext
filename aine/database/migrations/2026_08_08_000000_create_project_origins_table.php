@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('project_id')->constrained()->cascadeOnDelete();
             $table->string('origin', 2048);
-            $table->json('abilities')->default('["read"]');
+            $table->json('abilities');
             $table->boolean('is_active')->default(true);
             $table->string('description')->nullable();
             $table->timestamps();

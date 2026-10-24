@@ -33,7 +33,6 @@ export default function APIAccessSettings({ project, tokens: initialTokens, whit
     const can = usePage().props.userCan as UserCan;
 
     const [tokens, setTokens] = useState(initialTokens);
-    // const [publicApi, setPublicApi] = useState<boolean>(project.public_api);
     const [whitelist, setWhitelist] = useState<ProjectOrigin[]>(initialWhitelist);
 
     const [showTokenDialog, setShowTokenDialog] = useState(false);

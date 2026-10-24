@@ -154,7 +154,7 @@ class CreateProject implements Tool
                 'default_locale' => $project->default_locale,
                 'collections' => $collectionsCreated,
                 'action' => 'navigate',
-                'url' => "/projects/{$project->id}",
+                'url' => "/admin/projects/{$project->id}",
             ];
         });
 

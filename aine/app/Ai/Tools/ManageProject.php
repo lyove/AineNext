@@ -71,7 +71,7 @@ class ManageProject implements Tool
             'locales' => $project->locales,
             'public_api' => $project->public_api,
             'collections' => $collections,
-            'url' => "/projects/{$project->id}",
+            'url' => "/admin/projects/{$project->id}",
         ]);
     }
 
