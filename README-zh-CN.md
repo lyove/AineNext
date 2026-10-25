@@ -2,9 +2,9 @@
 
 > 基于 **Laravel 13** + **React 19** + **Inertia.js 2** 构建的无头（Headless）内容管理系统。
 
-AineNext 是一款商业、可自托管的无头 CMS。你可以在现代化的 React 管理后台中，通过**项目（Project）**、**内容集合（Collection）**和**字段（Field）**来定义内容模型，再通过 **REST API**（或官方 Starter 模板）在任何前端中消费这些内容。内置多语言内容、素材库、版本历史、终端用户认证、出站 Webhook、AI 辅助以及细粒度的角色/权限管理。
+AineNext 是一款开源、可自托管的无头 CMS。你可以在现代化的 React 管理后台中，通过**项目（Project）**、**内容集合（Collection）**和**字段（Field）**来定义内容模型，再通过 **REST API**（或官方 Starter 模板）在任何前端中消费这些内容。内置多语言内容、素材库、版本历史、终端用户认证、出站 Webhook、AI 辅助以及细粒度的角色/权限管理。
 
-- **许可证**：商业专有
+- **许可证**：MIT
 - **版本**：1.0.0
 
 ---
@@ -382,3 +382,11 @@ npm run types               # tsc --noEmit
 - 站点根目录指向 `ainenext/public/`（标准 Laravel 部署形态）。
 - 生产环境建议使用 MySQL；设置 `APP_ENV=production`、`APP_DEBUG=false`。
 - API Token 只能在服务端保存，切勿放入浏览器端打包产物（参见模板 README）。
+
+---
+
+## 许可证
+
+AineNext 采用 [MIT 许可证](LICENSE) 开源发布：允许任何人使用、复制、修改、合并、发布、分发、再授权和销售本软件，具体条件见 [LICENSE](LICENSE) 文件全文。
+
+Copyright (c) 2026 Lyove

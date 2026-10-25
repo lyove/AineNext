@@ -7,10 +7,14 @@ use App\Http\Controllers\Api\CollectionController;
 use App\Http\Controllers\Api\ContentController;
 use App\Http\Controllers\Api\ContentVersionController;
 use App\Http\Controllers\Api\FieldAdminController;
+use App\Http\Controllers\Api\OpenApiController;
 use App\Http\Controllers\Api\ProjectController;
 use App\Http\Controllers\Api\ProjectLocaleController;
 use App\Http\Controllers\Api\WebhookController;
 use Illuminate\Support\Facades\Route;
+
+Route::get('/docs.json', [OpenApiController::class, 'generate'])->name('api.docs.json');
+Route::get('/docs', [OpenApiController::class, 'ui'])->name('api.docs');
 
 Route::middleware(['project', 'throttle:api'])->group(function () {
     Route::get('/', [ProjectController::class, 'show'])->middleware('project.ability:read');

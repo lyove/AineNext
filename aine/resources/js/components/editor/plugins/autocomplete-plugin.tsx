@@ -160,7 +160,7 @@ export function AutocompletePlugin(): JSX.Element | null {
             }
           })
           .catch((e) => {
-            // console.error(e)
+            console.error(e);
           })
         lastMatch = match
       })
@@ -345,7 +345,6 @@ const DICTIONARY = [
   "subscribe",
   "everything",
   "production",
-  "commercial",
   "advertising",
   "treatment",
   "newsletter",
@@ -1778,7 +1777,6 @@ const DICTIONARY = [
   "princeton",
   "spirituality",
   "meanwhile",
-  "proprietary",
   "childrens",
   "thumbzilla",
   "porcelain",

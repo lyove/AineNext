@@ -2,9 +2,8 @@
 
 > A headless CMS built with **Laravel 13**, **React 19** and **Inertia.js 2**.
 
-AineNext is a commercial, self-hosted headless content management system. You model content with **projects**, **collections** and **fields** in a modern React admin panel, then consume it from any frontend through a **REST API** (or one of the official starter templates). It ships with multi-locale content, an asset library, versioning, end-user authentication, outbound webhooks, AI assistance, and fine-grained role/permission management.
+AineNext is an open-source, self-hosted headless content management system. You model content with **projects**, **collections** and **fields** in a modern React admin panel, then consume it from any frontend through a **REST API** (or one of the official starter templates). It ships with multi-locale content, an asset library, versioning, end-user authentication, outbound webhooks, AI assistance, and fine-grained role/permission management.
 
-- **License**: Proprietary
 - **Version**: 1.0.0
 
 ---
@@ -382,3 +381,11 @@ npm run types               # tsc --noEmit
 - Serve the site from `ainenext/public/` (the standard Laravel document root).
 - Use MySQL for production databases; set `APP_ENV=production`, `APP_DEBUG=false`.
 - Keep API tokens server-side only; never expose them in browser bundles (see templates README).
+
+---
+
+## License
+
+AineNext is open-source software released under the [MIT License](LICENSE). You may use, copy, modify, merge, publish, distribute, sublicense, and sell copies of the software, subject to the conditions in the [LICENSE](LICENSE) file.
+
+Copyright (c) 2026 Lyove

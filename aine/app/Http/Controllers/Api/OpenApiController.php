@@ -18,8 +18,8 @@ use OpenApi\Generator;
  *     ),
  *
  *     @OA\License(
- *         name="Proprietary",
- *         url="https://domain.com/license"
+ *         name="MIT",
+ *         url="https://opensource.org/licenses/MIT"
  *     )
  * )
  *

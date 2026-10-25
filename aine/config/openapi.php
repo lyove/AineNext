@@ -16,8 +16,8 @@ return [
     'version' => env('OPENAPI_VERSION', env('APP_VERSION', '1.0.0')),
     'contact_email' => env('OPENAPI_CONTACT_EMAIL', 'support@domain.com'),
     'contact_name' => env('OPENAPI_CONTACT_NAME', 'API Support'),
-    'license_name' => env('OPENAPI_LICENSE_NAME', 'Proprietary'),
-    'license_url' => env('OPENAPI_LICENSE_URL', 'https://domain.com/license'),
+    'license_name' => env('OPENAPI_LICENSE_NAME', 'MIT'),
+    'license_url' => env('OPENAPI_LICENSE_URL', 'https://opensource.org/licenses/MIT'),
 
     /*
     |--------------------------------------------------------------------------

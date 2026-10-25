@@ -22,7 +22,7 @@
         "aine",
         "ainenext"
     ],
-    "license": "Proprietary",
+    "license": "MIT",
     "require": {
         "php": "^8.4",
         "doctrine/annotations": "^2.0",
