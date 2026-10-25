@@ -27,7 +27,7 @@ createInertiaApp({
     setup({ el, App, props }) {
         const root = createRoot(el);
 
-        syncBrandingFromPage(props.initialPage.props as SharedData);
+        syncBrandingFromPage(props.initialPage.props as unknown as SharedData);
 
         root.render(
             <AiChatProvider>
@@ -42,7 +42,7 @@ createInertiaApp({
 });
 
 router.on('navigate', (event) => {
-    syncBrandingFromPage(event.detail.page.props as SharedData);
+    syncBrandingFromPage(event.detail.page.props as unknown as SharedData);
 });
 
 // This will set light / dark mode on load...
