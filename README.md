@@ -177,7 +177,6 @@ The seeder creates:
 | 笔记 (Notes) | `note` | 5 | 10 | zh |
 | 网址导航 (Navigation) | `navigation` | 4 | 13 | zh |
 
-> ⚠️ Change the default admin password before any shared/production use.
 
 ### 4. Build or serve the frontend
 
