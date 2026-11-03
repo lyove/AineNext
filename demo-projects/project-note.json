@@ -1,0 +1,432 @@
+{
+    "format": "ainenext",
+    "version": 1,
+    "type": "project",
+    "asset_scope": "none",
+    "name": "笔记",
+    "description": "云笔记、记事本与备忘录应用——用结构化的方式记录灵感、待办与日常。",
+    "default_locale": "zh",
+    "locales": [
+        "zh",
+        "en"
+    ],
+    "public_api": true,
+    "collections": [
+        {
+            "name": "Pages",
+            "slug": "pages",
+            "is_singleton": false,
+            "fields": [
+                {
+                    "type": "text",
+                    "label": "Title",
+                    "name": "title",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                },
+                {
+                    "type": "slug",
+                    "label": "Path",
+                    "name": "slug",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {
+                        "slug": {
+                            "field": "title",
+                            "readonly": true
+                        }
+                    },
+                    "validations": []
+                },
+                {
+                    "type": "richtext",
+                    "label": "Content",
+                    "name": "content",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                },
+                {
+                    "type": "media",
+                    "label": "Image",
+                    "name": "image",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {
+                        "media": {
+                            "type": 1
+                        }
+                    },
+                    "validations": []
+                }
+            ]
+        },
+        {
+            "name": "Posts",
+            "slug": "posts",
+            "is_singleton": false,
+            "fields": [
+                {
+                    "type": "text",
+                    "label": "Title",
+                    "name": "title",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                },
+                {
+                    "type": "slug",
+                    "label": "Path",
+                    "name": "slug",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {
+                        "slug": {
+                            "field": "title",
+                            "readonly": true
+                        }
+                    },
+                    "validations": []
+                },
+                {
+                    "type": "longtext",
+                    "label": "Excerpt",
+                    "name": "excerpt",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                },
+                {
+                    "type": "richtext",
+                    "label": "Content",
+                    "name": "content",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                },
+                {
+                    "type": "media",
+                    "label": "Featured Image",
+                    "name": "featured-image",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {
+                        "media": {
+                            "type": 1
+                        }
+                    },
+                    "validations": []
+                },
+                {
+                    "type": "relation",
+                    "label": "Category",
+                    "name": "category",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {
+                        "relation": {
+                            "type": 1,
+                            "collection": "categories"
+                        }
+                    },
+                    "validations": []
+                },
+                {
+                    "type": "relation",
+                    "label": "Tags",
+                    "name": "tags",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {
+                        "relation": {
+                            "type": 2,
+                            "collection": "tags"
+                        }
+                    },
+                    "validations": []
+                },
+                {
+                    "type": "boolean",
+                    "label": "Slider",
+                    "name": "slider",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                },
+                {
+                    "type": "boolean",
+                    "label": "Featured",
+                    "name": "featured",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                },
+                {
+                    "type": "boolean",
+                    "label": "Recommended",
+                    "name": "recommended",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                }
+            ]
+        },
+        {
+            "name": "Categories",
+            "slug": "categories",
+            "is_singleton": false,
+            "fields": [
+                {
+                    "type": "text",
+                    "label": "Title",
+                    "name": "title",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                },
+                {
+                    "type": "slug",
+                    "label": "Path",
+                    "name": "slug",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {
+                        "slug": {
+                            "field": "title",
+                            "readonly": true
+                        }
+                    },
+                    "validations": []
+                },
+                {
+                    "type": "media",
+                    "label": "Image",
+                    "name": "image",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {
+                        "media": {
+                            "type": 1
+                        }
+                    },
+                    "validations": []
+                },
+                {
+                    "type": "longtext",
+                    "label": "Description",
+                    "name": "description",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                }
+            ]
+        },
+        {
+            "name": "Tags",
+            "slug": "tags",
+            "is_singleton": false,
+            "fields": [
+                {
+                    "type": "text",
+                    "label": "Tag",
+                    "name": "tag",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                }
+            ]
+        },
+        {
+            "name": "Globals",
+            "slug": "globals",
+            "is_singleton": false,
+            "fields": [
+                {
+                    "type": "slug",
+                    "label": "Label",
+                    "name": "label",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {
+                        "slug": {
+                            "field": null
+                        }
+                    },
+                    "validations": []
+                },
+                {
+                    "type": "text",
+                    "label": "Value",
+                    "name": "value",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                }
+            ]
+        }
+    ],
+    "demo_data": [
+        {
+            "collection": "pages",
+            "entries": [
+                {
+                    "id": "e1",
+                    "locale": "zh",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "title": "欢迎",
+                        "slug": "welcome",
+                        "content": "<h1>欢迎使用笔记</h1><p>记录灵感、待办与日常。</p>"
+                    }
+                }
+            ]
+        },
+        {
+            "collection": "posts",
+            "entries": [
+                {
+                    "id": "e2",
+                    "locale": "zh",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "title": "项目灵感",
+                        "slug": "project-idea",
+                        "excerpt": "把 AineNext 用于内部知识库。",
+                        "content": "<p>把 AineNext 用于内部知识库，团队协作编辑文档。</p>",
+                        "slider": false,
+                        "featured": true,
+                        "recommended": true,
+                        "category": [
+                            "e4"
+                        ],
+                        "tags": [
+                            "e6"
+                        ]
+                    }
+                },
+                {
+                    "id": "e3",
+                    "locale": "zh",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "title": "本周计划",
+                        "slug": "weekly-plan",
+                        "excerpt": "完成 API 文档，准备 v1.0 发布。",
+                        "content": "<p>完成 API 文档，准备 v1.0 发布。</p>",
+                        "slider": false,
+                        "featured": false,
+                        "recommended": false,
+                        "category": [
+                            "e5"
+                        ],
+                        "tags": [
+                            "e6",
+                            "e8"
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "collection": "categories",
+            "entries": [
+                {
+                    "id": "e4",
+                    "locale": "zh",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "title": "灵感",
+                        "slug": "ideas",
+                        "description": "一闪而过的灵感。"
+                    }
+                },
+                {
+                    "id": "e5",
+                    "locale": "zh",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "title": "工作",
+                        "slug": "work",
+                        "description": "工作相关的记录。"
+                    }
+                }
+            ]
+        },
+        {
+            "collection": "tags",
+            "entries": [
+                {
+                    "id": "e6",
+                    "locale": "zh",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "tag": "todo"
+                    }
+                },
+                {
+                    "id": "e7",
+                    "locale": "zh",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "tag": "idea"
+                    }
+                },
+                {
+                    "id": "e8",
+                    "locale": "zh",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "tag": "study"
+                    }
+                }
+            ]
+        },
+        {
+            "collection": "globals",
+            "entries": [
+                {
+                    "id": "e9",
+                    "locale": "zh",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "label": "site_name",
+                        "value": "云笔记"
+                    }
+                },
+                {
+                    "id": "e10",
+                    "locale": "zh",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "label": "tagline",
+                        "value": "记录每一次灵感"
+                    }
+                }
+            ]
+        }
+    ],
+    "assets": []
+}

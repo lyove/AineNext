@@ -1,0 +1,544 @@
+{
+    "format": "ainenext",
+    "version": 1,
+    "type": "project",
+    "asset_scope": "none",
+    "name": "网址导航",
+    "description": "网址导航——分类收录常用网站，支持搜索、置顶推荐与私有链接。",
+    "default_locale": "zh",
+    "locales": [
+        "zh"
+    ],
+    "public_api": true,
+    "collections": [
+        {
+            "name": "Links",
+            "slug": "links",
+            "is_singleton": false,
+            "fields": [
+                {
+                    "type": "text",
+                    "label": "Name",
+                    "name": "title",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                },
+                {
+                    "type": "text",
+                    "label": "URL",
+                    "name": "url",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                },
+                {
+                    "type": "longtext",
+                    "label": "Description",
+                    "name": "description",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                },
+                {
+                    "type": "media",
+                    "label": "Icon",
+                    "name": "favicon",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {
+                        "media": {
+                            "type": 1
+                        }
+                    },
+                    "validations": []
+                },
+                {
+                    "type": "relation",
+                    "label": "Category",
+                    "name": "category",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {
+                        "relation": {
+                            "type": 1,
+                            "collection": "categories"
+                        }
+                    },
+                    "validations": []
+                },
+                {
+                    "type": "relation",
+                    "label": "Tags",
+                    "name": "tags",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {
+                        "relation": {
+                            "type": 2,
+                            "collection": "tags"
+                        }
+                    },
+                    "validations": []
+                },
+                {
+                    "type": "number",
+                    "label": "Weight",
+                    "name": "weight",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                },
+                {
+                    "type": "enumeration",
+                    "label": "Link Status",
+                    "name": "link_status",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {
+                        "enumeration": {
+                            "list": [
+                                "unknown",
+                                "ok",
+                                "dead"
+                            ]
+                        }
+                    },
+                    "validations": []
+                },
+                {
+                    "type": "enumeration",
+                    "label": "Click Behavior",
+                    "name": "click_behavior",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {
+                        "enumeration": {
+                            "list": [
+                                "detail",
+                                "direct"
+                            ]
+                        }
+                    },
+                    "validations": []
+                },
+                {
+                    "type": "boolean",
+                    "label": "Featured",
+                    "name": "featured",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                },
+                {
+                    "type": "boolean",
+                    "label": "Private",
+                    "name": "private",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                },
+                {
+                    "type": "number",
+                    "label": "HTTP Code",
+                    "name": "http_code",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                },
+                {
+                    "type": "text",
+                    "label": "Last Checked At",
+                    "name": "last_checked_at",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                }
+            ]
+        },
+        {
+            "name": "Categories",
+            "slug": "categories",
+            "is_singleton": false,
+            "fields": [
+                {
+                    "type": "text",
+                    "label": "Name",
+                    "name": "title",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                },
+                {
+                    "type": "slug",
+                    "label": "Path",
+                    "name": "slug",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {
+                        "slug": {
+                            "field": "title",
+                            "readonly": true
+                        }
+                    },
+                    "validations": []
+                },
+                {
+                    "type": "text",
+                    "label": "Icon",
+                    "name": "icon",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                },
+                {
+                    "type": "color",
+                    "label": "Color",
+                    "name": "color",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                },
+                {
+                    "type": "relation",
+                    "label": "Parent Category",
+                    "name": "parent",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {
+                        "relation": {
+                            "type": 1,
+                            "collection": "categories"
+                        }
+                    },
+                    "validations": []
+                },
+                {
+                    "type": "number",
+                    "label": "Weight",
+                    "name": "weight",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                },
+                {
+                    "type": "boolean",
+                    "label": "Featured",
+                    "name": "featured",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                }
+            ]
+        },
+        {
+            "name": "Tags",
+            "slug": "tags",
+            "is_singleton": false,
+            "fields": [
+                {
+                    "type": "text",
+                    "label": "Tag",
+                    "name": "tag",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                }
+            ]
+        },
+        {
+            "name": "Globals",
+            "slug": "globals",
+            "is_singleton": false,
+            "fields": [
+                {
+                    "type": "slug",
+                    "label": "Label",
+                    "name": "label",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {
+                        "slug": {
+                            "field": null
+                        }
+                    },
+                    "validations": []
+                },
+                {
+                    "type": "text",
+                    "label": "Value",
+                    "name": "value",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                }
+            ]
+        }
+    ],
+    "demo_data": [
+        {
+            "collection": "links",
+            "entries": [
+                {
+                    "id": "e1",
+                    "locale": "zh",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "title": "GitHub",
+                        "url": "https://github.com",
+                        "description": "代码托管平台",
+                        "weight": 1,
+                        "link_status": [
+                            "ok"
+                        ],
+                        "click_behavior": [
+                            "direct"
+                        ],
+                        "featured": true,
+                        "private": false,
+                        "http_code": 200,
+                        "last_checked_at": "2026-10-19",
+                        "category": [
+                            "e6"
+                        ],
+                        "tags": [
+                            "e10"
+                        ]
+                    }
+                },
+                {
+                    "id": "e2",
+                    "locale": "zh",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "title": "Laravel",
+                        "url": "https://laravel.com",
+                        "description": "PHP 框架官网",
+                        "weight": 2,
+                        "link_status": [
+                            "ok"
+                        ],
+                        "click_behavior": [
+                            "direct"
+                        ],
+                        "featured": true,
+                        "private": false,
+                        "http_code": 200,
+                        "last_checked_at": "2026-10-19",
+                        "category": [
+                            "e6"
+                        ],
+                        "tags": [
+                            "e10",
+                            "e11"
+                        ]
+                    }
+                },
+                {
+                    "id": "e3",
+                    "locale": "zh",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "title": "Dribbble",
+                        "url": "https://dribbble.com",
+                        "description": "设计灵感社区",
+                        "weight": 3,
+                        "link_status": [
+                            "unknown"
+                        ],
+                        "click_behavior": [
+                            "direct"
+                        ],
+                        "featured": false,
+                        "private": false,
+                        "category": [
+                            "e7"
+                        ]
+                    }
+                },
+                {
+                    "id": "e4",
+                    "locale": "zh",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "title": "掘金",
+                        "url": "https://juejin.cn",
+                        "description": "技术文章社区",
+                        "weight": 4,
+                        "link_status": [
+                            "ok"
+                        ],
+                        "click_behavior": [
+                            "direct"
+                        ],
+                        "featured": true,
+                        "private": false,
+                        "http_code": 200,
+                        "last_checked_at": "2026-10-19",
+                        "category": [
+                            "e8"
+                        ],
+                        "tags": [
+                            "e10"
+                        ]
+                    }
+                },
+                {
+                    "id": "e5",
+                    "locale": "zh",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "title": "Notion",
+                        "url": "https://notion.so",
+                        "description": "笔记与协作工具",
+                        "weight": 5,
+                        "link_status": [
+                            "unknown"
+                        ],
+                        "click_behavior": [
+                            "detail"
+                        ],
+                        "featured": false,
+                        "private": true,
+                        "category": [
+                            "e9"
+                        ],
+                        "tags": [
+                            "e11"
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "collection": "categories",
+            "entries": [
+                {
+                    "id": "e6",
+                    "locale": "zh",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "title": "开发工具",
+                        "slug": "dev-tools",
+                        "icon": "🔧",
+                        "color": "#2563eb",
+                        "weight": 1,
+                        "featured": true
+                    }
+                },
+                {
+                    "id": "e7",
+                    "locale": "zh",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "title": "设计资源",
+                        "slug": "design",
+                        "icon": "🎨",
+                        "color": "#db2777",
+                        "weight": 2,
+                        "featured": true
+                    }
+                },
+                {
+                    "id": "e8",
+                    "locale": "zh",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "title": "学习社区",
+                        "slug": "learning",
+                        "icon": "📚",
+                        "color": "#059669",
+                        "weight": 3,
+                        "featured": false
+                    }
+                },
+                {
+                    "id": "e9",
+                    "locale": "zh",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "title": "效率办公",
+                        "slug": "productivity",
+                        "icon": "⚡",
+                        "color": "#d97706",
+                        "weight": 4,
+                        "featured": false
+                    }
+                }
+            ]
+        },
+        {
+            "collection": "tags",
+            "entries": [
+                {
+                    "id": "e10",
+                    "locale": "zh",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "tag": "常用"
+                    }
+                },
+                {
+                    "id": "e11",
+                    "locale": "zh",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "tag": "推荐"
+                    }
+                }
+            ]
+        },
+        {
+            "collection": "globals",
+            "entries": [
+                {
+                    "id": "e12",
+                    "locale": "zh",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "label": "site_name",
+                        "value": "网址导航"
+                    }
+                },
+                {
+                    "id": "e13",
+                    "locale": "zh",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "label": "tagline",
+                        "value": "收藏每一个好网站"
+                    }
+                }
+            ]
+        }
+    ],
+    "assets": []
+}

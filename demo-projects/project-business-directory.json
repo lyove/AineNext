@@ -1,0 +1,588 @@
+{
+    "format": "ainenext",
+    "version": 1,
+    "type": "project",
+    "asset_scope": "none",
+    "name": "Business Directory",
+    "description": "完整的商家目录——分类、标签、地点、点评、Logo 与相册。",
+    "default_locale": "en",
+    "locales": [
+        "en",
+        "zh"
+    ],
+    "public_api": true,
+    "collections": [
+        {
+            "name": "Listings",
+            "slug": "listings",
+            "is_singleton": false,
+            "fields": [
+                {
+                    "type": "text",
+                    "label": "Business Name",
+                    "name": "title",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                },
+                {
+                    "type": "slug",
+                    "label": "Path",
+                    "name": "slug",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {
+                        "slug": {
+                            "field": "title",
+                            "readonly": true
+                        }
+                    },
+                    "validations": []
+                },
+                {
+                    "type": "text",
+                    "label": "Website",
+                    "name": "website",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                },
+                {
+                    "type": "longtext",
+                    "label": "Description",
+                    "name": "description",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                },
+                {
+                    "type": "relation",
+                    "label": "Category",
+                    "name": "category",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {
+                        "relation": {
+                            "type": 1,
+                            "collection": "categories"
+                        }
+                    },
+                    "validations": []
+                },
+                {
+                    "type": "relation",
+                    "label": "Tags",
+                    "name": "tags",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {
+                        "relation": {
+                            "type": 2,
+                            "collection": "tags"
+                        }
+                    },
+                    "validations": []
+                },
+                {
+                    "type": "relation",
+                    "label": "Location",
+                    "name": "location",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {
+                        "relation": {
+                            "type": 1,
+                            "collection": "locations"
+                        }
+                    },
+                    "validations": []
+                },
+                {
+                    "type": "media",
+                    "label": "Logo",
+                    "name": "logo",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {
+                        "media": {
+                            "type": 1
+                        }
+                    },
+                    "validations": []
+                },
+                {
+                    "type": "media",
+                    "label": "Gallery",
+                    "name": "gallery",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {
+                        "media": {
+                            "type": 2
+                        }
+                    },
+                    "validations": []
+                },
+                {
+                    "type": "text",
+                    "label": "Phone",
+                    "name": "phone",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                },
+                {
+                    "type": "email",
+                    "label": "Email",
+                    "name": "email",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                },
+                {
+                    "type": "longtext",
+                    "label": "Address",
+                    "name": "address",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                },
+                {
+                    "type": "longtext",
+                    "label": "Opening Hours",
+                    "name": "opening-hours",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                },
+                {
+                    "type": "enumeration",
+                    "label": "Price Range",
+                    "name": "price-range",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {
+                        "enumeration": {
+                            "list": [
+                                "$",
+                                "$$",
+                                "$$$",
+                                "$$$$"
+                            ]
+                        }
+                    },
+                    "validations": []
+                },
+                {
+                    "type": "boolean",
+                    "label": "Featured",
+                    "name": "featured",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                }
+            ]
+        },
+        {
+            "name": "Categories",
+            "slug": "categories",
+            "is_singleton": false,
+            "fields": [
+                {
+                    "type": "text",
+                    "label": "Title",
+                    "name": "title",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                },
+                {
+                    "type": "slug",
+                    "label": "Path",
+                    "name": "slug",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {
+                        "slug": {
+                            "field": "title",
+                            "readonly": true
+                        }
+                    },
+                    "validations": []
+                },
+                {
+                    "type": "longtext",
+                    "label": "Description",
+                    "name": "description",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                }
+            ]
+        },
+        {
+            "name": "Tags",
+            "slug": "tags",
+            "is_singleton": false,
+            "fields": [
+                {
+                    "type": "text",
+                    "label": "Tag",
+                    "name": "tag",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                }
+            ]
+        },
+        {
+            "name": "Locations",
+            "slug": "locations",
+            "is_singleton": false,
+            "fields": [
+                {
+                    "type": "text",
+                    "label": "Name",
+                    "name": "name",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                },
+                {
+                    "type": "slug",
+                    "label": "Path",
+                    "name": "slug",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {
+                        "slug": {
+                            "field": "name",
+                            "readonly": true
+                        }
+                    },
+                    "validations": []
+                }
+            ]
+        },
+        {
+            "name": "Reviews",
+            "slug": "reviews",
+            "is_singleton": false,
+            "fields": [
+                {
+                    "type": "text",
+                    "label": "Name",
+                    "name": "name",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                },
+                {
+                    "type": "number",
+                    "label": "Rating",
+                    "name": "rating",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                },
+                {
+                    "type": "longtext",
+                    "label": "Review",
+                    "name": "review",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                },
+                {
+                    "type": "relation",
+                    "label": "Listing",
+                    "name": "listing",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {
+                        "relation": {
+                            "type": 1,
+                            "collection": "listings"
+                        }
+                    },
+                    "validations": []
+                }
+            ]
+        },
+        {
+            "name": "Globals",
+            "slug": "globals",
+            "is_singleton": false,
+            "fields": [
+                {
+                    "type": "slug",
+                    "label": "Label",
+                    "name": "label",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {
+                        "slug": {
+                            "field": null
+                        }
+                    },
+                    "validations": []
+                },
+                {
+                    "type": "text",
+                    "label": "Value",
+                    "name": "value",
+                    "description": null,
+                    "placeholder": null,
+                    "options": {},
+                    "validations": []
+                }
+            ]
+        }
+    ],
+    "demo_data": [
+        {
+            "collection": "listings",
+            "entries": [
+                {
+                    "id": "e1",
+                    "locale": "en",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "title": "Golden Dragon",
+                        "slug": "golden-dragon",
+                        "website": "https://goldendragon.example",
+                        "description": "Award-winning Chinese restaurant in the heart of the city.",
+                        "phone": "+1 555 0100",
+                        "email": "hello@goldendragon.example",
+                        "address": "128 Main Street",
+                        "opening-hours": "Mon–Sun 11:00–22:00",
+                        "price-range": [
+                            "$$"
+                        ],
+                        "featured": true,
+                        "category": [
+                            "e3"
+                        ],
+                        "location": [
+                            "e10"
+                        ],
+                        "tags": [
+                            "e7",
+                            "e9"
+                        ]
+                    }
+                },
+                {
+                    "id": "e2",
+                    "locale": "en",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "title": "Harbor View Hotel",
+                        "slug": "harbor-view-hotel",
+                        "website": "https://harborview.example",
+                        "description": "Boutique hotel with panoramic river views.",
+                        "phone": "+1 555 0101",
+                        "email": "stay@harborview.example",
+                        "address": "5 Riverside Road",
+                        "opening-hours": "Reception 24/7",
+                        "price-range": [
+                            "$$$"
+                        ],
+                        "featured": false,
+                        "category": [
+                            "e5"
+                        ],
+                        "location": [
+                            "e11"
+                        ],
+                        "tags": [
+                            "e8"
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "collection": "categories",
+            "entries": [
+                {
+                    "id": "e3",
+                    "locale": "en",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "title": "Restaurants",
+                        "slug": "restaurants",
+                        "description": "Places to eat."
+                    }
+                },
+                {
+                    "id": "e4",
+                    "locale": "en",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "title": "Cafes",
+                        "slug": "cafes",
+                        "description": "Coffee and light bites."
+                    }
+                },
+                {
+                    "id": "e5",
+                    "locale": "en",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "title": "Hotels",
+                        "slug": "hotels",
+                        "description": "Places to stay."
+                    }
+                },
+                {
+                    "id": "e6",
+                    "locale": "en",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "title": "Shops",
+                        "slug": "shops",
+                        "description": "Retail stores."
+                    }
+                }
+            ]
+        },
+        {
+            "collection": "tags",
+            "entries": [
+                {
+                    "id": "e7",
+                    "locale": "en",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "tag": "Family Friendly"
+                    }
+                },
+                {
+                    "id": "e8",
+                    "locale": "en",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "tag": "Outdoor Seating"
+                    }
+                },
+                {
+                    "id": "e9",
+                    "locale": "en",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "tag": "Free WiFi"
+                    }
+                }
+            ]
+        },
+        {
+            "collection": "locations",
+            "entries": [
+                {
+                    "id": "e10",
+                    "locale": "en",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "name": "Downtown",
+                        "slug": "downtown"
+                    }
+                },
+                {
+                    "id": "e11",
+                    "locale": "en",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "name": "Riverside",
+                        "slug": "riverside"
+                    }
+                }
+            ]
+        },
+        {
+            "collection": "reviews",
+            "entries": [
+                {
+                    "id": "e12",
+                    "locale": "en",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "name": "Alice",
+                        "rating": 5,
+                        "review": "The dim sum is fantastic and the staff are lovely.",
+                        "listing": [
+                            "e1"
+                        ]
+                    }
+                },
+                {
+                    "id": "e13",
+                    "locale": "en",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "name": "Bob",
+                        "rating": 4,
+                        "review": "Beautiful rooms with a great view of the river.",
+                        "listing": [
+                            "e2"
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "collection": "globals",
+            "entries": [
+                {
+                    "id": "e14",
+                    "locale": "en",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "label": "site_name",
+                        "value": "Business Directory"
+                    }
+                },
+                {
+                    "id": "e15",
+                    "locale": "en",
+                    "state": "published",
+                    "translation_group_id": null,
+                    "fields": {
+                        "label": "tagline",
+                        "value": "Find the best local businesses"
+                    }
+                }
+            ]
+        }
+    ],
+    "assets": []
+}
