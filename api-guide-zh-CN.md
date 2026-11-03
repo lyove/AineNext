@@ -188,9 +188,13 @@ AineNext 是一个 Headless CMS，通过 RESTful API 对外提供内容管理能
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// ?with=collections,fields 是查询参数（可选项），关联加载，可选值：collections, fields
 const response = await fetch('/api/?with=collections,fields', {
+    // method 是请求方法，本示例固定使用 GET
     method: 'GET',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
     },
 });
@@ -223,9 +227,15 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /files 是固定写法，表示资产（文件）资源
+// ?type=image 是查询参数（可选项），文件类型过滤；示例值 image 需替换为真实值
+// &per_page=10 是查询参数（可选项），每页数量；示例值 10 需替换为真实值
 const response = await fetch('/api/files?type=image&per_page=10', {
+    // method 是请求方法，本示例固定使用 GET
     method: 'GET',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
     },
 });
@@ -253,9 +263,14 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /files 是固定写法，表示资产（文件）资源
+// /asset-uuid-1 是动态值（不是固定写法），表示资产 UUID 或数字 ID；示例值 asset-uuid-1 需替换为真实值
 const response = await fetch('/api/files/asset-uuid-1', {
+    // method 是请求方法，本示例固定使用 GET
     method: 'GET',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
     },
 });
@@ -283,9 +298,15 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /files 是固定写法，表示资产（文件）资源
+// /name 是固定写法，表示按原始文件名查询
+// /cover-photo.jpg 是动态值（不是固定写法），表示原始文件名（含扩展名）；示例值 cover-photo.jpg 需替换为真实值
 const response = await fetch('/api/files/name/cover-photo.jpg', {
+    // method 是请求方法，本示例固定使用 GET
     method: 'GET',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
     },
 });
@@ -313,14 +334,21 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// FormData 是固定写法，用于构造 multipart/form-data 请求体
 const formData = new FormData();
+// file 是固定字段名，上传的文件；右侧为文件变量示例，请替换为实际选择的文件
 formData.append('file', fileInput.files[0]);
 
+// /api 是固定写法，所有接口路径都以它开头
+// /files 是固定写法，表示资产（文件）资源
 const response = await fetch('/api/files', {
+    // method 是请求方法，本示例固定使用 POST
     method: 'POST',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
     },
+    // body 直接传 FormData；浏览器会自动设置 multipart/form-data 的 Content-Type
     body: formData,
 });
 const result = await response.json();
@@ -347,15 +375,25 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// FormData 是固定写法，用于构造 multipart/form-data 请求体
 const formData = new FormData();
+// files[] 是固定字段名，文件数组（1-20 个）；右侧为文件变量示例，请替换为实际选择的文件
 formData.append('files[]', file1);
+// files[] 是固定字段名，文件数组（1-20 个）；右侧为文件变量示例，请替换为实际选择的文件
 formData.append('files[]', file2);
 
+// /api 是固定写法，所有接口路径都以它开头
+// /files 是固定写法，表示资产（文件）资源
+// /bulk 是固定写法，表示批量操作
+// /upload 是固定写法，表示直接上传
 const response = await fetch('/api/files/bulk/upload', {
+    // method 是请求方法，本示例固定使用 POST
     method: 'POST',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
     },
+    // body 直接传 FormData；浏览器会自动设置 multipart/form-data 的 Content-Type
     body: formData,
 });
 const result = await response.json();
@@ -382,13 +420,22 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /files 是固定写法，表示资产（文件）资源
+// /bulk 是固定写法，表示批量操作
+// /metadata 是固定写法，表示固定路径段
 const response = await fetch('/api/files/bulk/metadata', {
+    // method 是请求方法，本示例固定使用 PATCH
     method: 'PATCH',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Content-Type 是固定请求头名，值为 application/json，表示请求体是 JSON
         'Content-Type': 'application/json',
     },
+    // body 是请求体：JSON.stringify 会把下面的对象序列化为 JSON 字符串；请求头需要 Content-Type: application/json
     body: JSON.stringify({
+        // items 是请求体参数，更新项数组（1-50 个）；数组元素包含 uuid（资产 UUID）和要更新的元数据字段（如 alt_text、title、author）；示例值需替换为真实值
         items: [
             { uuid: 'asset-uuid-1', alt_text: 'Updated' },
         ],
@@ -419,14 +466,23 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /files 是固定写法，表示资产（文件）资源
+// /upload-url 是固定写法，表示发起预签名上传
 const response = await fetch('/api/files/upload-url', {
+    // method 是请求方法，本示例固定使用 POST
     method: 'POST',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Content-Type 是固定请求头名，值为 application/json，表示请求体是 JSON
         'Content-Type': 'application/json',
     },
+    // body 是请求体：JSON.stringify 会把下面的对象序列化为 JSON 字符串；请求头需要 Content-Type: application/json
     body: JSON.stringify({
+        // original_filename 是请求体参数，原始文件名；示例值需替换为真实值
         original_filename: 'large-video.mp4',
+        // byte_size 是请求体参数，文件大小（字节）；示例值需替换为真实值
         byte_size: 52428800,
     }),
 });
@@ -454,13 +510,21 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /files 是固定写法，表示资产（文件）资源
+// /upload-finalize 是固定写法，表示完成直接上传
 const response = await fetch('/api/files/upload-finalize', {
+    // method 是请求方法，本示例固定使用 POST
     method: 'POST',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Content-Type 是固定请求头名，值为 application/json，表示请求体是 JSON
         'Content-Type': 'application/json',
     },
+    // body 是请求体：JSON.stringify 会把下面的对象序列化为 JSON 字符串；请求头需要 Content-Type: application/json
     body: JSON.stringify({
+        // asset_uuid 是请求体参数，预分配的资产 UUID；示例值需替换为真实值
         asset_uuid: 'pre-assigned-uuid',
     }),
 });
@@ -490,15 +554,26 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /files 是固定写法，表示资产（文件）资源
+// /multipart 是固定写法，表示分片上传
+// /initiate 是固定写法，表示发起分片上传
 const response = await fetch('/api/files/multipart/initiate', {
+    // method 是请求方法，本示例固定使用 POST
     method: 'POST',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Content-Type 是固定请求头名，值为 application/json，表示请求体是 JSON
         'Content-Type': 'application/json',
     },
+    // body 是请求体：JSON.stringify 会把下面的对象序列化为 JSON 字符串；请求头需要 Content-Type: application/json
     body: JSON.stringify({
+        // original_filename 是请求体参数，原始文件名；示例值需替换为真实值
         original_filename: 'large-video.mp4',
+        // mime_type 是请求体参数，MIME 类型；示例值需替换为真实值
         mime_type: 'video/mp4',
+        // byte_size 是请求体参数，文件大小（字节）；示例值需替换为真实值
         byte_size: 104857600,
     }),
 });
@@ -527,14 +602,24 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /files 是固定写法，表示资产（文件）资源
+// /multipart 是固定写法，表示分片上传
+// /part-url 是固定写法，表示获取分片上传 URL
 const response = await fetch('/api/files/multipart/part-url', {
+    // method 是请求方法，本示例固定使用 POST
     method: 'POST',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Content-Type 是固定请求头名，值为 application/json，表示请求体是 JSON
         'Content-Type': 'application/json',
     },
+    // body 是请求体：JSON.stringify 会把下面的对象序列化为 JSON 字符串；请求头需要 Content-Type: application/json
     body: JSON.stringify({
+        // upload_id 是请求体参数，上传 ID；示例值需替换为真实值
         upload_id: 'upload-id-xxx',
+        // part_number 是请求体参数，分片序号（1-10000）；示例值需替换为真实值
         part_number: 1,
     }),
 });
@@ -563,14 +648,24 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /files 是固定写法，表示资产（文件）资源
+// /multipart 是固定写法，表示分片上传
+// /complete 是固定写法，表示完成分片上传
 const response = await fetch('/api/files/multipart/complete', {
+    // method 是请求方法，本示例固定使用 POST
     method: 'POST',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Content-Type 是固定请求头名，值为 application/json，表示请求体是 JSON
         'Content-Type': 'application/json',
     },
+    // body 是请求体：JSON.stringify 会把下面的对象序列化为 JSON 字符串；请求头需要 Content-Type: application/json
     body: JSON.stringify({
+        // upload_id 是请求体参数，上传 ID；示例值需替换为真实值
         upload_id: 'upload-id-xxx',
+        // parts 是请求体参数，分片信息数组；数组元素为分片信息（part_number 与 etag）；示例值需替换为真实值
         parts: [
             { part_number: 1, etag: '"etag1"' },
             { part_number: 2, etag: '"etag2"' },
@@ -602,9 +697,13 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /collections 是固定写法，表示集合管理资源
 const response = await fetch('/api/collections', {
+    // method 是请求方法，本示例固定使用 GET
     method: 'GET',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
     },
 });
@@ -632,9 +731,14 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /collections 是固定写法，表示集合管理资源
+// /posts 是动态值（不是固定写法），表示集合 UUID 或 slug；示例值 posts 需替换为真实值
 const response = await fetch('/api/collections/posts', {
+    // method 是请求方法，本示例固定使用 GET
     method: 'GET',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
     },
 });
@@ -667,9 +771,16 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /posts 是动态值（不是固定写法），表示集合 UUID 或 slug；示例值 posts 需替换为真实值
+// ?page=1 是查询参数（可选项），页码；示例值 1 需替换为真实值
+// &per_page=10 是查询参数（可选项），每页数量；示例值 10 需替换为真实值
+// &locale=zh 是查询参数（可选项），语言代码；示例值 zh 需替换为真实值
 const response = await fetch('/api/posts?page=1&per_page=10&locale=zh', {
+    // method 是请求方法，本示例固定使用 GET
     method: 'GET',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
     },
 });
@@ -699,9 +810,15 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /posts 是动态值（不是固定写法），表示集合 UUID 或 slug；示例值 posts 需替换为真实值
+// /entry-uuid-1 是动态值（不是固定写法），表示内容条目 UUID；示例值 entry-uuid-1 需替换为真实值
+// ?locale=zh 是查询参数（可选项），语言代码；示例值 zh 需替换为真实值
 const response = await fetch('/api/posts/entry-uuid-1?locale=zh', {
+    // method 是请求方法，本示例固定使用 GET
     method: 'GET',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
     },
 });
@@ -731,16 +848,26 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /posts 是动态值（不是固定写法），表示集合 UUID 或 slug；示例值 posts 需替换为真实值
 const response = await fetch('/api/posts', {
+    // method 是请求方法，本示例固定使用 POST
     method: 'POST',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Content-Type 是固定请求头名，值为 application/json，表示请求体是 JSON
         'Content-Type': 'application/json',
     },
+    // body 是请求体：JSON.stringify 会把下面的对象序列化为 JSON 字符串；请求头需要 Content-Type: application/json
     body: JSON.stringify({
+        // locale 是请求体参数，语言代码；示例值需替换为真实值
         locale: 'zh',
+        // fields 是请求体参数，字段数据；其内部键（如 title、content）是集合字段的 name 示例值，真实键取决于集合的字段定义；示例值需替换为真实值
         fields: {
+            // title 是集合字段的 name 示例值（不是固定写法），实际字段名由集合的字段定义决定
             title: '新文章',
+            // content 是集合字段的 name 示例值（不是固定写法），实际字段名由集合的字段定义决定
             content: '文章内容...',
         },
     }),
@@ -771,14 +898,23 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /posts 是动态值（不是固定写法），表示集合 UUID 或 slug；示例值 posts 需替换为真实值
+// /entry-uuid-1 是动态值（不是固定写法），表示内容条目 UUID；示例值 entry-uuid-1 需替换为真实值
 const response = await fetch('/api/posts/entry-uuid-1', {
+    // method 是请求方法，本示例固定使用 PATCH
     method: 'PATCH',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Content-Type 是固定请求头名，值为 application/json，表示请求体是 JSON
         'Content-Type': 'application/json',
     },
+    // body 是请求体：JSON.stringify 会把下面的对象序列化为 JSON 字符串；请求头需要 Content-Type: application/json
     body: JSON.stringify({
+        // fields 是请求体参数，字段数据；其内部键（如 title、content）是集合字段的 name 示例值，真实键取决于集合的字段定义；示例值需替换为真实值
         fields: {
+            // title 是集合字段的 name 示例值（不是固定写法），实际字段名由集合的字段定义决定
             title: '更新后的标题',
         },
     }),
@@ -808,9 +944,15 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /posts 是动态值（不是固定写法），表示集合 UUID 或 slug；示例值 posts 需替换为真实值
+// /entry-uuid-1 是动态值（不是固定写法），表示内容条目 UUID；示例值 entry-uuid-1 需替换为真实值
+// /publish 是固定写法，表示发布内容
 const response = await fetch('/api/posts/entry-uuid-1/publish', {
+    // method 是请求方法，本示例固定使用 POST
     method: 'POST',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
     },
 });
@@ -839,9 +981,15 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /posts 是动态值（不是固定写法），表示集合 UUID 或 slug；示例值 posts 需替换为真实值
+// /entry-uuid-1 是动态值（不是固定写法），表示内容条目 UUID；示例值 entry-uuid-1 需替换为真实值
+// /unpublish 是固定写法，表示取消发布
 const response = await fetch('/api/posts/entry-uuid-1/unpublish', {
+    // method 是请求方法，本示例固定使用 POST
     method: 'POST',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
     },
 });
@@ -872,13 +1020,22 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /bulk 是固定写法，表示批量操作
+// /posts 是动态值（不是固定写法），表示集合 UUID 或 slug；示例值 posts 需替换为真实值
+// /entries 是固定写法，表示批量内容条目
 const response = await fetch('/api/bulk/posts/entries', {
+    // method 是请求方法，本示例固定使用 POST
     method: 'POST',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Content-Type 是固定请求头名，值为 application/json，表示请求体是 JSON
         'Content-Type': 'application/json',
     },
+    // body 是请求体：JSON.stringify 会把下面的对象序列化为 JSON 字符串；请求头需要 Content-Type: application/json
     body: JSON.stringify({
+        // entries 是请求体参数，内容条目数组；数组元素为单个条目对象：uuid 是条目 UUID，fields 是字段数据（内部键为集合字段 name）；示例值需替换为真实值
         entries: [
             { locale: 'zh', fields: { title: '文章1' } },
             { locale: 'zh', fields: { title: '文章2' } },
@@ -910,13 +1067,22 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /bulk 是固定写法，表示批量操作
+// /posts 是动态值（不是固定写法），表示集合 UUID 或 slug；示例值 posts 需替换为真实值
+// /entries 是固定写法，表示批量内容条目
 const response = await fetch('/api/bulk/posts/entries', {
+    // method 是请求方法，本示例固定使用 PATCH
     method: 'PATCH',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Content-Type 是固定请求头名，值为 application/json，表示请求体是 JSON
         'Content-Type': 'application/json',
     },
+    // body 是请求体：JSON.stringify 会把下面的对象序列化为 JSON 字符串；请求头需要 Content-Type: application/json
     body: JSON.stringify({
+        // entries 是请求体参数，更新项数组；数组元素为单个条目对象：uuid 是条目 UUID，fields 是字段数据（内部键为集合字段 name）；示例值需替换为真实值
         entries: [
             { uuid: 'entry-uuid-1', fields: { title: '更新标题1' } },
             { uuid: 'entry-uuid-2', fields: { title: '更新标题2' } },
@@ -950,9 +1116,15 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /posts 是动态值（不是固定写法），表示集合 UUID 或 slug；示例值 posts 需替换为真实值
+// /entry-uuid-1 是动态值（不是固定写法），表示内容条目 UUID；示例值 entry-uuid-1 需替换为真实值
+// /versions 是固定写法，表示内容版本子资源
 const response = await fetch('/api/posts/entry-uuid-1/versions', {
+    // method 是请求方法，本示例固定使用 GET
     method: 'GET',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
     },
 });
@@ -982,9 +1154,16 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /posts 是动态值（不是固定写法），表示集合 UUID 或 slug；示例值 posts 需替换为真实值
+// /entry-uuid-1 是动态值（不是固定写法），表示内容条目 UUID；示例值 entry-uuid-1 需替换为真实值
+// /versions 是固定写法，表示内容版本子资源
+// /2 是动态值（不是固定写法），表示版本号；示例值 2 需替换为真实值
 const response = await fetch('/api/posts/entry-uuid-1/versions/2', {
+    // method 是请求方法，本示例固定使用 GET
     method: 'GET',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
     },
 });
@@ -1014,9 +1193,17 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /posts 是动态值（不是固定写法），表示集合 UUID 或 slug；示例值 posts 需替换为真实值
+// /entry-uuid-1 是动态值（不是固定写法），表示内容条目 UUID；示例值 entry-uuid-1 需替换为真实值
+// /versions 是固定写法，表示内容版本子资源
+// /2 是动态值（不是固定写法），表示目标版本号；示例值 2 需替换为真实值
+// /revert 是固定写法，表示回滚版本
 const response = await fetch('/api/posts/entry-uuid-1/versions/2/revert', {
+    // method 是请求方法，本示例固定使用 POST
     method: 'POST',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
     },
 });
@@ -1047,13 +1234,23 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /posts 是动态值（不是固定写法），表示集合 UUID 或 slug；示例值 posts 需替换为真实值
+// /entry-uuid-1 是动态值（不是固定写法），表示内容条目 UUID；示例值 entry-uuid-1 需替换为真实值
+// /versions 是固定写法，表示内容版本子资源
+// /2 是动态值（不是固定写法），表示版本号；示例值 2 需替换为真实值
 const response = await fetch('/api/posts/entry-uuid-1/versions/2', {
+    // method 是请求方法，本示例固定使用 PATCH
     method: 'PATCH',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Content-Type 是固定请求头名，值为 application/json，表示请求体是 JSON
         'Content-Type': 'application/json',
     },
+    // body 是请求体：JSON.stringify 会把下面的对象序列化为 JSON 字符串；请求头需要 Content-Type: application/json
     body: JSON.stringify({
+        // label 是请求体参数，版本标签；示例值需替换为真实值
         label: '重要版本',
     }),
 });
@@ -1139,10 +1336,15 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// ?with=collections,fields 是查询参数（可选项），关联加载，可选值：collections, fields，多个用逗号分隔
 const response = await fetch('/api/?with=collections,fields', {
+    // method 是请求方法，本示例固定使用 GET
     method: 'GET',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
 });
@@ -1212,13 +1414,22 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /project 是固定写法，表示项目配置资源
+// /locales 是固定写法，表示项目语言配置
 const response = await fetch('/api/project/locales', {
+    // method 是请求方法，本示例固定使用 POST
     method: 'POST',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer 1|abcDefGhIjK...',
+        // Content-Type 是固定请求头名，值为 application/json，表示请求体是 JSON
         'Content-Type': 'application/json',
     },
+    // body 是请求体：JSON.stringify 会把下面的对象序列化为 JSON 字符串；请求头需要 Content-Type: application/json
+    // locale 是请求体参数，语言代码，如 fr, ja, zh；示例值需替换为真实值
     body: JSON.stringify({ locale: 'fr' }),
 });
 const result = await response.json();
@@ -1263,13 +1474,23 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /project 是固定写法，表示项目配置资源
+// /locales 是固定写法，表示项目语言配置
+// /default 是固定写法，表示默认语言（固定特殊值）
 const response = await fetch('/api/project/locales/default', {
+    // method 是请求方法，本示例固定使用 PUT
     method: 'PUT',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer 1|abcDefGhIjK...',
+        // Content-Type 是固定请求头名，值为 application/json，表示请求体是 JSON
         'Content-Type': 'application/json',
     },
+    // body 是请求体：JSON.stringify 会把下面的对象序列化为 JSON 字符串；请求头需要 Content-Type: application/json
+    // locale 是请求体参数，语言代码，必须在项目已配置的语言列表中；示例值需替换为真实值
     body: JSON.stringify({ locale: 'zh' }),
 });
 const result = await response.json();
@@ -1303,10 +1524,17 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /project 是固定写法，表示项目配置资源
+// /locales 是固定写法，表示项目语言配置
+// /fr 是动态值（不是固定写法），表示要删除的语言代码；示例值 fr 需替换为真实值
 const response = await fetch('/api/project/locales/fr', {
+    // method 是请求方法，本示例固定使用 DELETE
     method: 'DELETE',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
 });
@@ -1366,10 +1594,18 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /files 是固定写法，表示资产（文件）资源
+// ?type=image 是查询参数（可选项），文件类型过滤，如 image, video, document, audio；示例值 image 需替换为真实值
+// &search=cover 是查询参数（可选项），搜索关键词，匹配文件名；示例值 cover 需替换为真实值
+// &per_page=10 是查询参数（可选项），每页数量，默认 20；示例值 10 需替换为真实值
 const response = await fetch('/api/files?type=image&search=cover&per_page=10', {
+    // method 是请求方法，本示例固定使用 GET
     method: 'GET',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
 });
@@ -1428,10 +1664,16 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /files 是固定写法，表示资产（文件）资源
+// /asset-uuid-1 是动态值（不是固定写法），表示资产 UUID 或数字 ID；示例值 asset-uuid-1 需替换为真实值
 const response = await fetch('/api/files/asset-uuid-1', {
+    // method 是请求方法，本示例固定使用 GET
     method: 'GET',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
 });
@@ -1460,10 +1702,17 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /files 是固定写法，表示资产（文件）资源
+// /name 是固定写法，表示按原始文件名查询
+// /cover-photo.jpg 是动态值（不是固定写法），表示原始文件名（含扩展名）；示例值 cover-photo.jpg 需替换为真实值
 const response = await fetch('/api/files/name/cover-photo.jpg', {
+    // method 是请求方法，本示例固定使用 GET
     method: 'GET',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
 });
@@ -1500,15 +1749,23 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// FormData 是固定写法，用于构造 multipart/form-data 请求体
 const formData = new FormData();
+// file 是固定字段名，上传的文件；右侧为文件变量示例，请替换为实际选择的文件
 formData.append('file', fileInput.files[0]);
 
+// /api 是固定写法，所有接口路径都以它开头
+// /files 是固定写法，表示资产（文件）资源
 const response = await fetch('/api/files', {
+    // method 是请求方法，本示例固定使用 POST
     method: 'POST',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
+    // body 直接传 FormData；浏览器会自动设置 multipart/form-data 的 Content-Type
     body: formData,
 });
 const result = await response.json();
@@ -1543,16 +1800,27 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// FormData 是固定写法，用于构造 multipart/form-data 请求体
 const formData = new FormData();
+// files[] 是固定字段名，文件数组（1-20 个）；右侧为文件变量示例，请替换为实际选择的文件
 formData.append('files[]', file1);
+// files[] 是固定字段名，文件数组（1-20 个）；右侧为文件变量示例，请替换为实际选择的文件
 formData.append('files[]', file2);
 
+// /api 是固定写法，所有接口路径都以它开头
+// /files 是固定写法，表示资产（文件）资源
+// /bulk 是固定写法，表示批量操作
+// /upload 是固定写法，表示直接上传
 const response = await fetch('/api/files/bulk/upload', {
+    // method 是请求方法，本示例固定使用 POST
     method: 'POST',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
+    // body 直接传 FormData；浏览器会自动设置 multipart/form-data 的 Content-Type
     body: formData,
 });
 const result = await response.json();
@@ -1591,14 +1859,24 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /files 是固定写法，表示资产（文件）资源
+// /bulk 是固定写法，表示批量操作
+// /metadata 是固定写法，表示固定路径段
 const response = await fetch('/api/files/bulk/metadata', {
+    // method 是请求方法，本示例固定使用 PATCH
     method: 'PATCH',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer 1|abcDefGhIjK...',
+        // Content-Type 是固定请求头名，值为 application/json，表示请求体是 JSON
         'Content-Type': 'application/json',
     },
+    // body 是请求体：JSON.stringify 会把下面的对象序列化为 JSON 字符串；请求头需要 Content-Type: application/json
     body: JSON.stringify({
+        // items 是请求体参数，更新项数组（1-50 个）；数组元素包含 uuid（资产 UUID）和要更新的元数据字段（如 alt_text、title、author）；示例值需替换为真实值
         items: [
             { uuid: 'asset-uuid-1', alt_text: 'Updated', title: 'Cover' },
             { uuid: 'asset-uuid-2', author: 'Photographer' },
@@ -1637,16 +1915,27 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /files 是固定写法，表示资产（文件）资源
+// /upload-url 是固定写法，表示发起预签名上传
 const response = await fetch('/api/files/upload-url', {
+    // method 是请求方法，本示例固定使用 POST
     method: 'POST',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer 1|abcDefGhIjK...',
+        // Content-Type 是固定请求头名，值为 application/json，表示请求体是 JSON
         'Content-Type': 'application/json',
     },
+    // body 是请求体：JSON.stringify 会把下面的对象序列化为 JSON 字符串；请求头需要 Content-Type: application/json
     body: JSON.stringify({
+        // original_filename 是请求体参数，原始文件名（含扩展名）；示例值需替换为真实值
         original_filename: 'large-video.mp4',
+        // client_mime_type 是请求体参数，MIME 类型；示例值需替换为真实值
         client_mime_type: 'video/mp4',
+        // byte_size 是请求体参数，文件大小（字节）；示例值需替换为真实值
         byte_size: 52428800,
     }),
 });
@@ -1667,44 +1956,32 @@ console.log(result);
 | 参数 | 位置 | 类型 | 必填 | 说明 |
 |------|------|------|------|------|
 | `project-id` | Header | string | 是 | 项目 UUID |
-| `Authorization` | Header | string | 是 | Bearer Tok
-... [ACP display truncated; original 66193 bytes] ...
-改密码
+| `Authorization` | Header | string | 是 | Bearer Token |
+| `asset_uuid` | Body | string | 是 | 预分配的资产 UUID |
 
-**接口：** `POST /api/auth/change-password`  
-**权限：** JWT  
-**作用：** 修改当前用户密码。
-
-**入参：**
-
-| 参数 | 位置 | 类型 | 必填 | 说明 |
-|------|------|------|------|------|
-| `project-id` | Header | string | 是 | 项目 UUID |
-| `Authorization` | Header | string | 是 | `Bearer <jwt_access_token>` |
-| `current_password` | Body | string | 是 | 当前密码 |
-| `password` | Body | string | 是 | 新密码 |
-| `password_confirmation` | Body | string | 是 | 确认新密码 |
-
-**出参：**
-
-| 字段 | 类型 | 说明 |
-|------|------|------|
-| `message` | string | 操作结果消息 |
+**出参：** 返回资产对象，字段同 A.3.2。
 
 **调用示例：**
 
 ```javascript
-const response = await fetch('/api/auth/change-password', {
+// /api 是固定写法，所有接口路径都以它开头
+// /files 是固定写法，表示资产（文件）资源
+// /upload-finalize 是固定写法，表示完成直接上传
+const response = await fetch('/api/files/upload-finalize', {
+    // method 是请求方法，本示例固定使用 POST
     method: 'POST',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
-        'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGc...',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
+        'Authorization': 'Bearer 1|abcDefGhIjK...',
+        // Content-Type 是固定请求头名，值为 application/json，表示请求体是 JSON
         'Content-Type': 'application/json',
     },
+    // body 是请求体：JSON.stringify 会把下面的对象序列化为 JSON 字符串；请求头需要 Content-Type: application/json
     body: JSON.stringify({
-        current_password: 'oldpass',
-        password: 'newpass123',
-        password_confirmation: 'newpass123',
+        // asset_uuid 是请求体参数，预分配的资产 UUID；示例值需替换为真实值
+        asset_uuid: 'pre-assigned-uuid',
     }),
 });
 const result = await response.json();
@@ -1739,16 +2016,28 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /files 是固定写法，表示资产（文件）资源
+// /multipart 是固定写法，表示分片上传
+// /initiate 是固定写法，表示发起分片上传
 const response = await fetch('/api/files/multipart/initiate', {
+    // method 是请求方法，本示例固定使用 POST
     method: 'POST',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer 1|abcDefGhIjK...',
+        // Content-Type 是固定请求头名，值为 application/json，表示请求体是 JSON
         'Content-Type': 'application/json',
     },
+    // body 是请求体：JSON.stringify 会把下面的对象序列化为 JSON 字符串；请求头需要 Content-Type: application/json
     body: JSON.stringify({
+        // original_filename 是请求体参数，原始文件名；示例值需替换为真实值
         original_filename: 'large-video.mp4',
+        // mime_type 是请求体参数，MIME 类型；示例值需替换为真实值
         mime_type: 'video/mp4',
+        // byte_size 是请求体参数，文件大小（字节）；示例值需替换为真实值
         byte_size: 104857600,
     }),
 });
@@ -1782,15 +2071,26 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /files 是固定写法，表示资产（文件）资源
+// /multipart 是固定写法，表示分片上传
+// /part-url 是固定写法，表示获取分片上传 URL
 const response = await fetch('/api/files/multipart/part-url', {
+    // method 是请求方法，本示例固定使用 POST
     method: 'POST',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer 1|abcDefGhIjK...',
+        // Content-Type 是固定请求头名，值为 application/json，表示请求体是 JSON
         'Content-Type': 'application/json',
     },
+    // body 是请求体：JSON.stringify 会把下面的对象序列化为 JSON 字符串；请求头需要 Content-Type: application/json
     body: JSON.stringify({
+        // upload_id 是请求体参数，上传 ID；示例值需替换为真实值
         upload_id: 'upload-id-xxx',
+        // part_number 是请求体参数，分片序号（1-10000）；示例值需替换为真实值
         part_number: 1,
     }),
 });
@@ -1826,15 +2126,26 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /files 是固定写法，表示资产（文件）资源
+// /multipart 是固定写法，表示分片上传
+// /complete 是固定写法，表示完成分片上传
 const response = await fetch('/api/files/multipart/complete', {
+    // method 是请求方法，本示例固定使用 POST
     method: 'POST',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer 1|abcDefGhIjK...',
+        // Content-Type 是固定请求头名，值为 application/json，表示请求体是 JSON
         'Content-Type': 'application/json',
     },
+    // body 是请求体：JSON.stringify 会把下面的对象序列化为 JSON 字符串；请求头需要 Content-Type: application/json
     body: JSON.stringify({
+        // upload_id 是请求体参数，上传 ID；示例值需替换为真实值
         upload_id: 'upload-id-xxx',
+        // parts 是请求体参数，分片信息数组；数组元素为分片信息（part_number 与 etag）；示例值需替换为真实值
         parts: [
             { part_number: 1, etag: '"etag1"' },
             { part_number: 2, etag: '"etag2"' },
@@ -1870,10 +2181,16 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /files 是固定写法，表示资产（文件）资源
+// /asset-uuid-1 是动态值（不是固定写法），表示资产 UUID 或数字 ID；示例值 asset-uuid-1 需替换为真实值
 const response = await fetch('/api/files/asset-uuid-1', {
+    // method 是请求方法，本示例固定使用 DELETE
     method: 'DELETE',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
 });
@@ -1911,10 +2228,15 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /collections 是固定写法，表示集合管理资源
 const response = await fetch('/api/collections', {
+    // method 是请求方法，本示例固定使用 GET
     method: 'GET',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
 });
@@ -1943,14 +2265,17 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /collections 是固定写法，表示集合管理资源
+// /posts 是动态值（不是固定写法），表示集合 UUID 或 slug；示例值 posts 需替换为真实值
 const response = await fetch('/api/collections/posts', {
+    // method 是请求方法，本示例固定使用 GET
     method: 'GET',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
-        'Authoriz
-... [ACP display truncated; original 49758 bytes] ...
-0',
-        'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGc...',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
+        'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
 });
 const result = await response.json();
@@ -1980,16 +2305,26 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /collections 是固定写法，表示集合管理资源
 const response = await fetch('/api/collections', {
+    // method 是请求方法，本示例固定使用 POST
     method: 'POST',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer 1|abcDefGhIjK...',
+        // Content-Type 是固定请求头名，值为 application/json，表示请求体是 JSON
         'Content-Type': 'application/json',
     },
+    // body 是请求体：JSON.stringify 会把下面的对象序列化为 JSON 字符串；请求头需要 Content-Type: application/json
     body: JSON.stringify({
+        // name 是请求体参数，集合名称；示例值需替换为真实值
         name: 'Posts',
+        // slug 是请求体参数，集合 slug；示例值需替换为真实值
         slug: 'posts',
+        // is_singleton 是请求体参数，是否为单例集合；示例值需替换为真实值
         is_singleton: false,
     }),
 });
@@ -2020,14 +2355,23 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /collections 是固定写法，表示集合管理资源
+// /posts 是动态值（不是固定写法），表示集合 UUID 或 slug；示例值 posts 需替换为真实值
 const response = await fetch('/api/collections/posts', {
+    // method 是请求方法，本示例固定使用 PUT
     method: 'PUT',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer 1|abcDefGhIjK...',
+        // Content-Type 是固定请求头名，值为 application/json，表示请求体是 JSON
         'Content-Type': 'application/json',
     },
+    // body 是请求体：JSON.stringify 会把下面的对象序列化为 JSON 字符串；请求头需要 Content-Type: application/json
     body: JSON.stringify({
+        // name 是请求体参数，集合名称；示例值需替换为真实值
         name: 'Blog Posts',
     }),
 });
@@ -2060,10 +2404,16 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /collections 是固定写法，表示集合管理资源
+// /posts 是动态值（不是固定写法），表示集合 UUID 或 slug；示例值 posts 需替换为真实值
 const response = await fetch('/api/collections/posts', {
+    // method 是请求方法，本示例固定使用 DELETE
     method: 'DELETE',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
 });
@@ -2096,14 +2446,23 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /collections 是固定写法，表示集合管理资源
+// /reorder 是固定写法，表示重排顺序
 const response = await fetch('/api/collections/reorder', {
+    // method 是请求方法，本示例固定使用 POST
     method: 'POST',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer 1|abcDefGhIjK...',
+        // Content-Type 是固定请求头名，值为 application/json，表示请求体是 JSON
         'Content-Type': 'application/json',
     },
+    // body 是请求体：JSON.stringify 会把下面的对象序列化为 JSON 字符串；请求头需要 Content-Type: application/json
     body: JSON.stringify({
+        // order 是请求体参数，集合 UUID 数组（按顺序）；数组元素为集合 UUID，按目标顺序排列；示例值需替换为真实值
         order: ['col-uuid-1', 'col-uuid-2', 'col-uuid-3'],
     }),
 });
@@ -2144,17 +2503,30 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /collections 是固定写法，表示集合管理资源
+// /posts 是动态值（不是固定写法），表示集合 UUID 或 slug；示例值 posts 需替换为真实值
+// /fields 是固定写法，表示字段子资源
 const response = await fetch('/api/collections/posts/fields', {
+    // method 是请求方法，本示例固定使用 POST
     method: 'POST',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer 1|abcDefGhIjK...',
+        // Content-Type 是固定请求头名，值为 application/json，表示请求体是 JSON
         'Content-Type': 'application/json',
     },
+    // body 是请求体：JSON.stringify 会把下面的对象序列化为 JSON 字符串；请求头需要 Content-Type: application/json
     body: JSON.stringify({
+        // name 是请求体参数，字段名称；示例值需替换为真实值
         name: 'title',
+        // label 是请求体参数，字段标签；示例值需替换为真实值
         label: 'Title',
+        // type 是请求体参数，字段类型；示例值需替换为真实值
         type: 'text',
+        // required 是请求体参数，是否必填；示例值需替换为真实值
         required: true,
     }),
 });
@@ -2186,31 +2558,26 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /collections 是固定写法，表示集合管理资源
+// /posts 是动态值（不是固定写法），表示集合 UUID 或 slug；示例值 posts 需替换为真实值
+// /fields 是固定写法，表示字段子资源
+// /field-uuid-1 是动态值（不是固定写法），表示字段 UUID；示例值 field-uuid-1 需替换为真实值
 const response = await fetch('/api/collections/posts/fields/field-uuid-1', {
+    // method 是请求方法，本示例固定使用 PUT
     method: 'PUT',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
-    
-... [ACP display truncated; original 37203 bytes] ...
-t-id` | Header | string | 是 | 项目 UUID |
-| `Authorization` | Header | string | 是 | Bearer Token |
-
-**出参：**
-
-| 字段 | 类型 | 说明 |
-|------|------|------|
-| `data.valid` | boolean | 密钥是否有效 |
-| `data.abilities` | array | 密钥权限列表 |
-
-**调用示例：**
-
-```javascript
-const response = await fetch('/api/auth/api-keys/introspect', {
-    method: 'POST',
-    headers: {
-        'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer 1|abcDefGhIjK...',
+        // Content-Type 是固定请求头名，值为 application/json，表示请求体是 JSON
+        'Content-Type': 'application/json',
     },
+    // body 是请求体：JSON.stringify 会把下面的对象序列化为 JSON 字符串；请求头需要 Content-Type: application/json
+    // label 是请求体参数，字段标签；示例值需替换为真实值
+    // required 是请求体参数，是否必填；示例值需替换为真实值
+    body: JSON.stringify({ label: '文章标题', required: true }),
 });
 const result = await response.json();
 console.log(result);
@@ -2242,10 +2609,18 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /collections 是固定写法，表示集合管理资源
+// /posts 是动态值（不是固定写法），表示集合 UUID 或 slug；示例值 posts 需替换为真实值
+// /fields 是固定写法，表示字段子资源
+// /field-uuid-1 是动态值（不是固定写法），表示字段 UUID；示例值 field-uuid-1 需替换为真实值
 const response = await fetch('/api/collections/posts/fields/field-uuid-1', {
+    // method 是请求方法，本示例固定使用 DELETE
     method: 'DELETE',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
 });
@@ -2279,14 +2654,25 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /collections 是固定写法，表示集合管理资源
+// /posts 是动态值（不是固定写法），表示集合 UUID 或 slug；示例值 posts 需替换为真实值
+// /fields 是固定写法，表示字段子资源
+// /reorder 是固定写法，表示重排顺序
 const response = await fetch('/api/collections/posts/fields/reorder', {
+    // method 是请求方法，本示例固定使用 POST
     method: 'POST',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer 1|abcDefGhIjK...',
+        // Content-Type 是固定请求头名，值为 application/json，表示请求体是 JSON
         'Content-Type': 'application/json',
     },
+    // body 是请求体：JSON.stringify 会把下面的对象序列化为 JSON 字符串；请求头需要 Content-Type: application/json
     body: JSON.stringify({
+        // order 是请求体参数，字段 UUID 数组（按顺序）；数组元素为集合 UUID，按目标顺序排列；示例值需替换为真实值
         order: ['field-uuid-1', 'field-uuid-2', 'field-uuid-3'],
     }),
 });
@@ -2328,10 +2714,18 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /posts 是动态值（不是固定写法），表示集合 UUID 或 slug；示例值 posts 需替换为真实值
+// ?page=1 是查询参数（可选项），页码；示例值 1 需替换为真实值
+// &per_page=10 是查询参数（可选项），每页数量；示例值 10 需替换为真实值
+// &locale=zh 是查询参数（可选项），语言代码；示例值 zh 需替换为真实值
 const response = await fetch('/api/posts?page=1&per_page=10&locale=zh', {
+    // method 是请求方法，本示例固定使用 GET
     method: 'GET',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
 });
@@ -2362,10 +2756,17 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /posts 是动态值（不是固定写法），表示集合 UUID 或 slug；示例值 posts 需替换为真实值
+// /entry-uuid-1 是动态值（不是固定写法），表示内容条目 UUID；示例值 entry-uuid-1 需替换为真实值
+// ?locale=zh 是查询参数（可选项），语言代码；示例值 zh 需替换为真实值
 const response = await fetch('/api/posts/entry-uuid-1?locale=zh', {
+    // method 是请求方法，本示例固定使用 GET
     method: 'GET',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
 });
@@ -2396,17 +2797,28 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /posts 是动态值（不是固定写法），表示集合 UUID 或 slug；示例值 posts 需替换为真实值
 const response = await fetch('/api/posts', {
+    // method 是请求方法，本示例固定使用 POST
     method: 'POST',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer 1|abcDefGhIjK...',
+        // Content-Type 是固定请求头名，值为 application/json，表示请求体是 JSON
         'Content-Type': 'application/json',
     },
+    // body 是请求体：JSON.stringify 会把下面的对象序列化为 JSON 字符串；请求头需要 Content-Type: application/json
     body: JSON.stringify({
+        // locale 是请求体参数，语言代码；示例值需替换为真实值
         locale: 'zh',
+        // fields 是请求体参数，字段数据；其内部键（如 title、content）是集合字段的 name 示例值，真实键取决于集合的字段定义；示例值需替换为真实值
         fields: {
+            // title 是集合字段的 name 示例值（不是固定写法），实际字段名由集合的字段定义决定
             title: '新文章',
+            // content 是集合字段的 name 示例值（不是固定写法），实际字段名由集合的字段定义决定
             content: '文章内容...',
         },
     }),
@@ -2438,15 +2850,25 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /posts 是动态值（不是固定写法），表示集合 UUID 或 slug；示例值 posts 需替换为真实值
+// /entry-uuid-1 是动态值（不是固定写法），表示内容条目 UUID；示例值 entry-uuid-1 需替换为真实值
 const response = await fetch('/api/posts/entry-uuid-1', {
+    // method 是请求方法，本示例固定使用 PATCH
     method: 'PATCH',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer 1|abcDefGhIjK...',
+        // Content-Type 是固定请求头名，值为 application/json，表示请求体是 JSON
         'Content-Type': 'application/json',
     },
+    // body 是请求体：JSON.stringify 会把下面的对象序列化为 JSON 字符串；请求头需要 Content-Type: application/json
     body: JSON.stringify({
+        // fields 是请求体参数，字段数据；其内部键（如 title、content）是集合字段的 name 示例值，真实键取决于集合的字段定义；示例值需替换为真实值
         fields: {
+            // title 是集合字段的 name 示例值（不是固定写法），实际字段名由集合的字段定义决定
             title: '更新后的标题',
         },
     }),
@@ -2481,10 +2903,16 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /posts 是动态值（不是固定写法），表示集合 UUID 或 slug；示例值 posts 需替换为真实值
+// /entry-uuid-1 是动态值（不是固定写法），表示内容条目 UUID；示例值 entry-uuid-1 需替换为真实值
 const response = await fetch('/api/posts/entry-uuid-1', {
+    // method 是请求方法，本示例固定使用 DELETE
     method: 'DELETE',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
 });
@@ -2518,10 +2946,17 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /posts 是动态值（不是固定写法），表示集合 UUID 或 slug；示例值 posts 需替换为真实值
+// /entry-uuid-1 是动态值（不是固定写法），表示内容条目 UUID；示例值 entry-uuid-1 需替换为真实值
+// /publish 是固定写法，表示发布内容
 const response = await fetch('/api/posts/entry-uuid-1/publish', {
+    // method 是请求方法，本示例固定使用 POST
     method: 'POST',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
 });
@@ -2555,10 +2990,17 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /posts 是动态值（不是固定写法），表示集合 UUID 或 slug；示例值 posts 需替换为真实值
+// /entry-uuid-1 是动态值（不是固定写法），表示内容条目 UUID；示例值 entry-uuid-1 需替换为真实值
+// /unpublish 是固定写法，表示取消发布
 const response = await fetch('/api/posts/entry-uuid-1/unpublish', {
+    // method 是请求方法，本示例固定使用 POST
     method: 'POST',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
 });
@@ -2592,10 +3034,17 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /posts 是动态值（不是固定写法），表示集合 UUID 或 slug；示例值 posts 需替换为真实值
+// /entry-uuid-1 是动态值（不是固定写法），表示内容条目 UUID；示例值 entry-uuid-1 需替换为真实值
+// /discard-draft 是固定写法，表示丢弃草稿
 const response = await fetch('/api/posts/entry-uuid-1/discard-draft', {
+    // method 是请求方法，本示例固定使用 POST
     method: 'POST',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
 });
@@ -2630,14 +3079,24 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /posts 是动态值（不是固定写法），表示集合 UUID 或 slug；示例值 posts 需替换为真实值
+// /entry-uuid-1 是动态值（不是固定写法），表示内容条目 UUID；示例值 entry-uuid-1 需替换为真实值
+// /link-translation 是固定写法，表示关联翻译
 const response = await fetch('/api/posts/entry-uuid-1/link-translation', {
+    // method 是请求方法，本示例固定使用 POST
     method: 'POST',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer 1|abcDefGhIjK...',
+        // Content-Type 是固定请求头名，值为 application/json，表示请求体是 JSON
         'Content-Type': 'application/json',
     },
+    // body 是请求体：JSON.stringify 会把下面的对象序列化为 JSON 字符串；请求头需要 Content-Type: application/json
     body: JSON.stringify({
+        // translation_uuid 是请求体参数，翻译条目 UUID；示例值需替换为真实值
         translation_uuid: 'entry-uuid-2',
     }),
 });
@@ -2673,14 +3132,24 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /bulk 是固定写法，表示批量操作
+// /posts 是动态值（不是固定写法），表示集合 UUID 或 slug；示例值 posts 需替换为真实值
+// /entries 是固定写法，表示批量内容条目
 const response = await fetch('/api/bulk/posts/entries', {
+    // method 是请求方法，本示例固定使用 POST
     method: 'POST',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer 1|abcDefGhIjK...',
+        // Content-Type 是固定请求头名，值为 application/json，表示请求体是 JSON
         'Content-Type': 'application/json',
     },
+    // body 是请求体：JSON.stringify 会把下面的对象序列化为 JSON 字符串；请求头需要 Content-Type: application/json
     body: JSON.stringify({
+        // entries 是请求体参数，内容条目数组；数组元素为单个条目对象：uuid 是条目 UUID，fields 是字段数据（内部键为集合字段 name）；示例值需替换为真实值
         entries: [
             { locale: 'zh', fields: { title: '文章1' } },
             { locale: 'zh', fields: { title: '文章2' } },
@@ -2717,14 +3186,24 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /bulk 是固定写法，表示批量操作
+// /posts 是动态值（不是固定写法），表示集合 UUID 或 slug；示例值 posts 需替换为真实值
+// /entries 是固定写法，表示批量内容条目
 const response = await fetch('/api/bulk/posts/entries', {
+    // method 是请求方法，本示例固定使用 PATCH
     method: 'PATCH',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer 1|abcDefGhIjK...',
+        // Content-Type 是固定请求头名，值为 application/json，表示请求体是 JSON
         'Content-Type': 'application/json',
     },
+    // body 是请求体：JSON.stringify 会把下面的对象序列化为 JSON 字符串；请求头需要 Content-Type: application/json
     body: JSON.stringify({
+        // entries 是请求体参数，更新项数组；数组元素为单个条目对象：uuid 是条目 UUID，fields 是字段数据（内部键为集合字段 name）；示例值需替换为真实值
         entries: [
             { uuid: 'entry-uuid-1', fields: { title: '更新标题1' } },
             { uuid: 'entry-uuid-2', fields: { title: '更新标题2' } },
@@ -2761,14 +3240,24 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /bulk 是固定写法，表示批量操作
+// /posts 是动态值（不是固定写法），表示集合 UUID 或 slug；示例值 posts 需替换为真实值
+// /entries 是固定写法，表示批量内容条目
 const response = await fetch('/api/bulk/posts/entries', {
+    // method 是请求方法，本示例固定使用 DELETE
     method: 'DELETE',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer 1|abcDefGhIjK...',
+        // Content-Type 是固定请求头名，值为 application/json，表示请求体是 JSON
         'Content-Type': 'application/json',
     },
+    // body 是请求体：JSON.stringify 会把下面的对象序列化为 JSON 字符串；请求头需要 Content-Type: application/json
     body: JSON.stringify({
+        // uuids 是请求体参数，条目 UUID 数组；数组元素为内容条目 UUID；示例值需替换为真实值
         uuids: ['entry-uuid-1', 'entry-uuid-2'],
     }),
 });
@@ -2806,10 +3295,17 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /posts 是动态值（不是固定写法），表示集合 UUID 或 slug；示例值 posts 需替换为真实值
+// /entry-uuid-1 是动态值（不是固定写法），表示内容条目 UUID；示例值 entry-uuid-1 需替换为真实值
+// /versions 是固定写法，表示内容版本子资源
 const response = await fetch('/api/posts/entry-uuid-1/versions', {
+    // method 是请求方法，本示例固定使用 GET
     method: 'GET',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
 });
@@ -2845,10 +3341,18 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /posts 是动态值（不是固定写法），表示集合 UUID 或 slug；示例值 posts 需替换为真实值
+// /entry-uuid-1 是动态值（不是固定写法），表示内容条目 UUID；示例值 entry-uuid-1 需替换为真实值
+// /versions 是固定写法，表示内容版本子资源
+// /2 是动态值（不是固定写法），表示版本号；示例值 2 需替换为真实值
 const response = await fetch('/api/posts/entry-uuid-1/versions/2', {
+    // method 是请求方法，本示例固定使用 GET
     method: 'GET',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
 });
@@ -2883,10 +3387,19 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /posts 是动态值（不是固定写法），表示集合 UUID 或 slug；示例值 posts 需替换为真实值
+// /entry-uuid-1 是动态值（不是固定写法），表示内容条目 UUID；示例值 entry-uuid-1 需替换为真实值
+// /versions 是固定写法，表示内容版本子资源
+// /2 是动态值（不是固定写法），表示目标版本号；示例值 2 需替换为真实值
+// /revert 是固定写法，表示回滚版本
 const response = await fetch('/api/posts/entry-uuid-1/versions/2/revert', {
+    // method 是请求方法，本示例固定使用 POST
     method: 'POST',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
 });
@@ -2922,14 +3435,25 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /posts 是动态值（不是固定写法），表示集合 UUID 或 slug；示例值 posts 需替换为真实值
+// /entry-uuid-1 是动态值（不是固定写法），表示内容条目 UUID；示例值 entry-uuid-1 需替换为真实值
+// /versions 是固定写法，表示内容版本子资源
+// /2 是动态值（不是固定写法），表示版本号；示例值 2 需替换为真实值
 const response = await fetch('/api/posts/entry-uuid-1/versions/2', {
+    // method 是请求方法，本示例固定使用 PATCH
     method: 'PATCH',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer 1|abcDefGhIjK...',
+        // Content-Type 是固定请求头名，值为 application/json，表示请求体是 JSON
         'Content-Type': 'application/json',
     },
+    // body 是请求体：JSON.stringify 会把下面的对象序列化为 JSON 字符串；请求头需要 Content-Type: application/json
     body: JSON.stringify({
+        // label 是请求体参数，版本标签；示例值需替换为真实值
         label: '重要版本',
     }),
 });
@@ -2966,10 +3490,15 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /webhooks 是固定写法，表示Webhook 资源
 const response = await fetch('/api/webhooks', {
+    // method 是请求方法，本示例固定使用 GET
     method: 'GET',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
 });
@@ -2999,15 +3528,24 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /webhooks 是固定写法，表示Webhook 资源
 const response = await fetch('/api/webhooks', {
+    // method 是请求方法，本示例固定使用 POST
     method: 'POST',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer 1|abcDefGhIjK...',
+        // Content-Type 是固定请求头名，值为 application/json，表示请求体是 JSON
         'Content-Type': 'application/json',
     },
+    // body 是请求体：JSON.stringify 会把下面的对象序列化为 JSON 字符串；请求头需要 Content-Type: application/json
     body: JSON.stringify({
+        // url 是请求体参数，回调 URL；示例值需替换为真实值
         url: 'https://mysite.com/webhook',
+        // events 是请求体参数，监听的事件列表；数组元素为事件名，如 entry.created；示例值需替换为真实值
         events: ['entry.created', 'entry.updated'],
     }),
 });
@@ -3036,10 +3574,16 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /webhooks 是固定写法，表示Webhook 资源
+// /webhook-uuid-1 是动态值（不是固定写法），表示Webhook UUID；示例值 webhook-uuid-1 需替换为真实值
 const response = await fetch('/api/webhooks/webhook-uuid-1', {
+    // method 是请求方法，本示例固定使用 GET
     method: 'GET',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
 });
@@ -3074,10 +3618,17 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /webhooks 是固定写法，表示Webhook 资源
+// /webhook-uuid-1 是动态值（不是固定写法），表示Webhook UUID；示例值 webhook-uuid-1 需替换为真实值
+// /logs 是固定写法，表示Webhook 日志
 const response = await fetch('/api/webhooks/webhook-uuid-1/logs', {
+    // method 是请求方法，本示例固定使用 GET
     method: 'GET',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
 });
@@ -3108,14 +3659,23 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /webhooks 是固定写法，表示Webhook 资源
+// /webhook-uuid-1 是动态值（不是固定写法），表示Webhook UUID；示例值 webhook-uuid-1 需替换为真实值
 const response = await fetch('/api/webhooks/webhook-uuid-1', {
+    // method 是请求方法，本示例固定使用 PUT
     method: 'PUT',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer 1|abcDefGhIjK...',
+        // Content-Type 是固定请求头名，值为 application/json，表示请求体是 JSON
         'Content-Type': 'application/json',
     },
+    // body 是请求体：JSON.stringify 会把下面的对象序列化为 JSON 字符串；请求头需要 Content-Type: application/json
     body: JSON.stringify({
+        // url 是请求体参数，回调 URL；示例值需替换为真实值
         url: 'https://mysite.com/new-webhook',
     }),
 });
@@ -3148,10 +3708,16 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /webhooks 是固定写法，表示Webhook 资源
+// /webhook-uuid-1 是动态值（不是固定写法），表示Webhook UUID；示例值 webhook-uuid-1 需替换为真实值
 const response = await fetch('/api/webhooks/webhook-uuid-1', {
+    // method 是请求方法，本示例固定使用 DELETE
     method: 'DELETE',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
 });
@@ -3186,10 +3752,17 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /auth 是固定写法，表示认证资源
+// /api-keys 是固定写法，表示API 密钥资源
+// /introspect 是固定写法，表示校验 API 密钥
 const response = await fetch('/api/auth/api-keys/introspect', {
+    // method 是请求方法，本示例固定使用 POST
     method: 'POST',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
 });
@@ -3230,16 +3803,27 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /auth 是固定写法，表示认证资源
+// /signup 是固定写法，表示用户注册
 const response = await fetch('/api/auth/signup', {
+    // method 是请求方法，本示例固定使用 POST
     method: 'POST',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Content-Type 是固定请求头名，值为 application/json，表示请求体是 JSON
         'Content-Type': 'application/json',
     },
+    // body 是请求体：JSON.stringify 会把下面的对象序列化为 JSON 字符串；请求头需要 Content-Type: application/json
     body: JSON.stringify({
+        // name 是请求体参数，用户名称；示例值需替换为真实值
         name: 'John Doe',
+        // email 是请求体参数，邮箱地址；示例值需替换为真实值
         email: 'john@example.com',
+        // password 是请求体参数，密码；示例值需替换为真实值
         password: 'password123',
+        // password_confirmation 是请求体参数，确认密码；示例值需替换为真实值
         password_confirmation: 'password123',
     }),
 });
@@ -3268,14 +3852,23 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /auth 是固定写法，表示认证资源
+// /login 是固定写法，表示用户登录
 const response = await fetch('/api/auth/login', {
+    // method 是请求方法，本示例固定使用 POST
     method: 'POST',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Content-Type 是固定请求头名，值为 application/json，表示请求体是 JSON
         'Content-Type': 'application/json',
     },
+    // body 是请求体：JSON.stringify 会把下面的对象序列化为 JSON 字符串；请求头需要 Content-Type: application/json
     body: JSON.stringify({
+        // email 是请求体参数，邮箱地址；示例值需替换为真实值
         email: 'john@example.com',
+        // password 是请求体参数，密码；示例值需替换为真实值
         password: 'password123',
     }),
 });
@@ -3303,13 +3896,21 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /auth 是固定写法，表示认证资源
+// /refresh 是固定写法，表示刷新令牌
 const response = await fetch('/api/auth/refresh', {
+    // method 是请求方法，本示例固定使用 POST
     method: 'POST',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Content-Type 是固定请求头名，值为 application/json，表示请求体是 JSON
         'Content-Type': 'application/json',
     },
+    // body 是请求体：JSON.stringify 会把下面的对象序列化为 JSON 字符串；请求头需要 Content-Type: application/json
     body: JSON.stringify({
+        // refresh_token 是请求体参数，刷新令牌；示例值需替换为真实值
         refresh_token: 'eyJ0eXAiOiJKV1QiLCJhbGc...',
     }),
 });
@@ -3341,13 +3942,22 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /auth 是固定写法，表示认证资源
+// /verify-email 是固定写法，表示邮箱验证
+// /resend 是固定写法，表示重发验证邮件
 const response = await fetch('/api/auth/verify-email/resend', {
+    // method 是请求方法，本示例固定使用 POST
     method: 'POST',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Content-Type 是固定请求头名，值为 application/json，表示请求体是 JSON
         'Content-Type': 'application/json',
     },
+    // body 是请求体：JSON.stringify 会把下面的对象序列化为 JSON 字符串；请求头需要 Content-Type: application/json
     body: JSON.stringify({
+        // email 是请求体参数，邮箱地址；示例值需替换为真实值
         email: 'john@example.com',
     }),
 });
@@ -3379,13 +3989,22 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /auth 是固定写法，表示认证资源
+// /verify-email 是固定写法，表示邮箱验证
+// /confirm 是固定写法，表示确认验证
 const response = await fetch('/api/auth/verify-email/confirm', {
+    // method 是请求方法，本示例固定使用 POST
     method: 'POST',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Content-Type 是固定请求头名，值为 application/json，表示请求体是 JSON
         'Content-Type': 'application/json',
     },
+    // body 是请求体：JSON.stringify 会把下面的对象序列化为 JSON 字符串；请求头需要 Content-Type: application/json
     body: JSON.stringify({
+        // token 是请求体参数，验证令牌；示例值需替换为真实值
         token: 'verification-token-xxx',
     }),
 });
@@ -3421,10 +4040,16 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /auth 是固定写法，表示认证资源
+// /me 是固定写法，表示当前用户
 const response = await fetch('/api/auth/me', {
+    // method 是请求方法，本示例固定使用 GET
     method: 'GET',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGc...',
     },
 });
@@ -3456,10 +4081,16 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /auth 是固定写法，表示认证资源
+// /logout 是固定写法，表示登出当前会话
 const response = await fetch('/api/auth/logout', {
+    // method 是请求方法，本示例固定使用 POST
     method: 'POST',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGc...',
     },
 });
@@ -3491,10 +4122,16 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /auth 是固定写法，表示认证资源
+// /logout-all 是固定写法，表示登出全部会话
 const response = await fetch('/api/auth/logout-all', {
+    // method 是请求方法，本示例固定使用 POST
     method: 'POST',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGc...',
     },
 });
@@ -3531,10 +4168,16 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /auth 是固定写法，表示认证资源
+// /api-keys 是固定写法，表示API 密钥资源
 const response = await fetch('/api/auth/api-keys', {
+    // method 是请求方法，本示例固定使用 GET
     method: 'GET',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGc...',
     },
 });
@@ -3571,15 +4214,25 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /auth 是固定写法，表示认证资源
+// /api-keys 是固定写法，表示API 密钥资源
 const response = await fetch('/api/auth/api-keys', {
+    // method 是请求方法，本示例固定使用 POST
     method: 'POST',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGc...',
+        // Content-Type 是固定请求头名，值为 application/json，表示请求体是 JSON
         'Content-Type': 'application/json',
     },
+    // body 是请求体：JSON.stringify 会把下面的对象序列化为 JSON 字符串；请求头需要 Content-Type: application/json
     body: JSON.stringify({
+        // name 是请求体参数，密钥名称；示例值需替换为真实值
         name: 'My API Key',
+        // abilities 是请求体参数，权限列表；数组元素为权限名，如 read、create；示例值需替换为真实值
         abilities: ['read', 'create'],
     }),
 });
@@ -3612,10 +4265,18 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /auth 是固定写法，表示认证资源
+// /api-keys 是固定写法，表示API 密钥资源
+// /1 是动态值（不是固定写法），表示API 密钥 ID；示例值 1 需替换为真实值
+// /revoke 是固定写法，表示撤销密钥
 const response = await fetch('/api/auth/api-keys/1/revoke', {
+    // method 是请求方法，本示例固定使用 POST
     method: 'POST',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGc...',
     },
 });
@@ -3650,16 +4311,27 @@ console.log(result);
 **调用示例：**
 
 ```javascript
+// /api 是固定写法，所有接口路径都以它开头
+// /auth 是固定写法，表示认证资源
+// /change-password 是固定写法，表示修改密码
 const response = await fetch('/api/auth/change-password', {
+    // method 是请求方法，本示例固定使用 POST
     method: 'POST',
     headers: {
+        // project-id 是固定请求头名，值必须是项目 UUID；示例值 550e8400-e29b-41d4-a716-446655440000 需替换为真实项目 UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization 是固定请求头名，值必须是访问令牌；Bearer 后面的内容为示例 Token，需替换为真实 Token
         'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGc...',
+        // Content-Type 是固定请求头名，值为 application/json，表示请求体是 JSON
         'Content-Type': 'application/json',
     },
+    // body 是请求体：JSON.stringify 会把下面的对象序列化为 JSON 字符串；请求头需要 Content-Type: application/json
     body: JSON.stringify({
+        // current_password 是请求体参数，当前密码；示例值需替换为真实值
         current_password: 'oldpass',
+        // password 是请求体参数，新密码；示例值需替换为真实值
         password: 'newpass123',
+        // password_confirmation 是请求体参数，确认新密码；示例值需替换为真实值
         password_confirmation: 'newpass123',
     }),
 });
@@ -3689,9 +4361,12 @@ console.log(result);
 
 ```javascript
 // 直接在 HTML 中使用
+// src 是文件公开访问地址：/uploads 是固定前缀，后面的路径为动态值（uuid 为占位示例，image.jpg 为示例文件名）
 <img src="/uploads/projects/uuid/assets/uuid/image.jpg" />
 
 // 通过 fetch 获取
+// /uploads 是固定写法，表示上传文件的公开访问路径
+// /projects/uuid/assets/uuid/image.jpg 是动态值（不是固定写法），表示文件的存储路径；其中 uuid 是路径标识的占位示例，image.jpg 是示例文件名，需替换为真实路径
 const blob = await fetch('/uploads/projects/uuid/assets/uuid/image.jpg')
     .then(r => r.blob());
 ```

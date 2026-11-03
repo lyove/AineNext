@@ -190,9 +190,13 @@ AineNext is a Headless CMS that provides content management capabilities through
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// ?with=collections,fields is an optional query parameter: eager loading: collections, fields
 const response = await fetch('/api/?with=collections,fields', {
+    // method is the HTTP method; this example always uses GET
     method: 'GET',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
     },
 });
@@ -225,9 +229,15 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /files is a fixed path segment (assets resource)
+// ?type=image is an optional query parameter: file type filter; replace the example value image
+// &per_page=10 is an optional query parameter: items per page; replace the example value 10
 const response = await fetch('/api/files?type=image&per_page=10', {
+    // method is the HTTP method; this example always uses GET
     method: 'GET',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
     },
 });
@@ -255,9 +265,14 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /files is a fixed path segment (assets resource)
+// /asset-uuid-1 is a dynamic value (not a fixed path); it is the asset UUID or numeric ID; replace the example value asset-uuid-1 with a real one
 const response = await fetch('/api/files/asset-uuid-1', {
+    // method is the HTTP method; this example always uses GET
     method: 'GET',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
     },
 });
@@ -285,9 +300,15 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /files is a fixed path segment (assets resource)
+// /name is a fixed path segment (lookup by original filename)
+// /cover-photo.jpg is a dynamic value (not a fixed path); it is the original filename (with extension); replace the example value cover-photo.jpg with a real one
 const response = await fetch('/api/files/name/cover-photo.jpg', {
+    // method is the HTTP method; this example always uses GET
     method: 'GET',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
     },
 });
@@ -315,14 +336,21 @@ console.log(result);
 **Example:**
 
 ```javascript
+// FormData is the fixed way to build a multipart/form-data request body
 const formData = new FormData();
+// file is a fixed field name: File to upload; replace the right side with the actual file
 formData.append('file', fileInput.files[0]);
 
+// /api is the fixed API prefix shared by every endpoint
+// /files is a fixed path segment (assets resource)
 const response = await fetch('/api/files', {
+    // method is the HTTP method; this example always uses POST
     method: 'POST',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
     },
+    // body passes the FormData directly; the browser sets the multipart/form-data Content-Type automatically
     body: formData,
 });
 const result = await response.json();
@@ -349,15 +377,25 @@ console.log(result);
 **Example:**
 
 ```javascript
+// FormData is the fixed way to build a multipart/form-data request body
 const formData = new FormData();
+// files[] is a fixed field name: File array (1-20); replace the right side with the actual file
 formData.append('files[]', file1);
+// files[] is a fixed field name: File array (1-20); replace the right side with the actual file
 formData.append('files[]', file2);
 
+// /api is the fixed API prefix shared by every endpoint
+// /files is a fixed path segment (assets resource)
+// /bulk is a fixed path segment (bulk operations)
+// /upload is a fixed path segment (direct upload)
 const response = await fetch('/api/files/bulk/upload', {
+    // method is the HTTP method; this example always uses POST
     method: 'POST',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
     },
+    // body passes the FormData directly; the browser sets the multipart/form-data Content-Type automatically
     body: formData,
 });
 const result = await response.json();
@@ -384,13 +422,22 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /files is a fixed path segment (assets resource)
+// /bulk is a fixed path segment (bulk operations)
+// /metadata is a fixed path segment (fixed path segment)
 const response = await fetch('/api/files/bulk/metadata', {
+    // method is the HTTP method; this example always uses PATCH
     method: 'PATCH',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Content-Type is a fixed header name; application/json means the request body is JSON
         'Content-Type': 'application/json',
     },
+    // body is the request body: JSON.stringify serializes the object below into JSON; the request needs Content-Type: application/json
     body: JSON.stringify({
+        // items is a request body parameter: update items (1-50); each array item contains uuid (asset UUID) and metadata fields to update (such as alt_text, title, author); replace the example value
         items: [
             { uuid: 'asset-uuid-1', alt_text: 'Updated' },
         ],
@@ -421,14 +468,23 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /files is a fixed path segment (assets resource)
+// /upload-url is a fixed path segment (initiate pre-signed upload)
 const response = await fetch('/api/files/upload-url', {
+    // method is the HTTP method; this example always uses POST
     method: 'POST',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Content-Type is a fixed header name; application/json means the request body is JSON
         'Content-Type': 'application/json',
     },
+    // body is the request body: JSON.stringify serializes the object below into JSON; the request needs Content-Type: application/json
     body: JSON.stringify({
+        // original_filename is a request body parameter: original filename; replace the example value
         original_filename: 'large-video.mp4',
+        // byte_size is a request body parameter: file size in bytes; replace the example value
         byte_size: 52428800,
     }),
 });
@@ -456,12 +512,20 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /files is a fixed path segment (assets resource)
+// /upload-finalize is a fixed path segment (finalize direct upload)
 const response = await fetch('/api/files/upload-finalize', {
+    // method is the HTTP method; this example always uses POST
     method: 'POST',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Content-Type is a fixed header name; application/json means the request body is JSON
         'Content-Type': 'application/json',
     },
+    // body is the request body: JSON.stringify serializes the object below into JSON; the request needs Content-Type: application/json
+    // asset_uuid is a request body parameter: pre-allocated asset UUID; replace the example value
     body: JSON.stringify({ asset_uuid: 'pre-assigned-uuid' }),
 });
 const result = await response.json();
@@ -490,15 +554,26 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /files is a fixed path segment (assets resource)
+// /multipart is a fixed path segment (multipart upload)
+// /initiate is a fixed path segment (initiate multipart upload)
 const response = await fetch('/api/files/multipart/initiate', {
+    // method is the HTTP method; this example always uses POST
     method: 'POST',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Content-Type is a fixed header name; application/json means the request body is JSON
         'Content-Type': 'application/json',
     },
+    // body is the request body: JSON.stringify serializes the object below into JSON; the request needs Content-Type: application/json
     body: JSON.stringify({
+        // original_filename is a request body parameter: original filename; replace the example value
         original_filename: 'large-video.mp4',
+        // mime_type is a request body parameter: mIME type; replace the example value
         mime_type: 'video/mp4',
+        // byte_size is a request body parameter: file size in bytes; replace the example value
         byte_size: 104857600,
     }),
 });
@@ -527,12 +602,22 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /files is a fixed path segment (assets resource)
+// /multipart is a fixed path segment (multipart upload)
+// /part-url is a fixed path segment (get multipart part URL)
 const response = await fetch('/api/files/multipart/part-url', {
+    // method is the HTTP method; this example always uses POST
     method: 'POST',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Content-Type is a fixed header name; application/json means the request body is JSON
         'Content-Type': 'application/json',
     },
+    // body is the request body: JSON.stringify serializes the object below into JSON; the request needs Content-Type: application/json
+    // upload_id is a request body parameter: upload ID; replace the example value
+    // part_number is a request body parameter: part number (1-10000); replace the example value
     body: JSON.stringify({ upload_id: 'upload-id-xxx', part_number: 1 }),
 });
 const result = await response.json();
@@ -560,14 +645,24 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /files is a fixed path segment (assets resource)
+// /multipart is a fixed path segment (multipart upload)
+// /complete is a fixed path segment (complete multipart upload)
 const response = await fetch('/api/files/multipart/complete', {
+    // method is the HTTP method; this example always uses POST
     method: 'POST',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Content-Type is a fixed header name; application/json means the request body is JSON
         'Content-Type': 'application/json',
     },
+    // body is the request body: JSON.stringify serializes the object below into JSON; the request needs Content-Type: application/json
     body: JSON.stringify({
+        // upload_id is a request body parameter: upload ID; replace the example value
         upload_id: 'upload-id-xxx',
+        // parts is a request body parameter: parts info array; each array item is part information (part_number and etag); replace the example value
         parts: [
             { part_number: 1, etag: '"etag1"' },
             { part_number: 2, etag: '"etag2"' },
@@ -599,9 +694,13 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /collections is a fixed path segment (collections resource)
 const response = await fetch('/api/collections', {
+    // method is the HTTP method; this example always uses GET
     method: 'GET',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
     },
 });
@@ -629,9 +728,14 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /collections is a fixed path segment (collections resource)
+// /posts is a dynamic value (not a fixed path); it is the collection UUID or slug; replace the example value posts with a real one
 const response = await fetch('/api/collections/posts', {
+    // method is the HTTP method; this example always uses GET
     method: 'GET',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
     },
 });
@@ -664,9 +768,16 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /posts is a dynamic value (not a fixed path); it is the collection UUID or slug; replace the example value posts with a real one
+// ?page=1 is an optional query parameter: page number; replace the example value 1
+// &per_page=10 is an optional query parameter: items per page; replace the example value 10
+// &locale=zh is an optional query parameter: locale code; replace the example value zh
 const response = await fetch('/api/posts?page=1&per_page=10&locale=zh', {
+    // method is the HTTP method; this example always uses GET
     method: 'GET',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
     },
 });
@@ -696,9 +807,15 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /posts is a dynamic value (not a fixed path); it is the collection UUID or slug; replace the example value posts with a real one
+// /entry-uuid-1 is a dynamic value (not a fixed path); it is the entry UUID; replace the example value entry-uuid-1 with a real one
+// ?locale=zh is an optional query parameter: locale code; replace the example value zh
 const response = await fetch('/api/posts/entry-uuid-1?locale=zh', {
+    // method is the HTTP method; this example always uses GET
     method: 'GET',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
     },
 });
@@ -728,16 +845,26 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /posts is a dynamic value (not a fixed path); it is the collection UUID or slug; replace the example value posts with a real one
 const response = await fetch('/api/posts', {
+    // method is the HTTP method; this example always uses POST
     method: 'POST',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Content-Type is a fixed header name; application/json means the request body is JSON
         'Content-Type': 'application/json',
     },
+    // body is the request body: JSON.stringify serializes the object below into JSON; the request needs Content-Type: application/json
     body: JSON.stringify({
+        // locale is a request body parameter: locale code; replace the example value
         locale: 'zh',
+        // fields is a request body parameter: field data; the inner keys (such as title and content) are example field names and depend on the collection schema; replace the example value
         fields: {
+            // title is an example field name (not fixed); the actual key depends on the collection schema
             title: 'New Article',
+            // content is an example field name (not fixed); the actual key depends on the collection schema
             content: 'Article content...',
         },
     }),
@@ -768,14 +895,23 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /posts is a dynamic value (not a fixed path); it is the collection UUID or slug; replace the example value posts with a real one
+// /entry-uuid-1 is a dynamic value (not a fixed path); it is the entry UUID; replace the example value entry-uuid-1 with a real one
 const response = await fetch('/api/posts/entry-uuid-1', {
+    // method is the HTTP method; this example always uses PATCH
     method: 'PATCH',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Content-Type is a fixed header name; application/json means the request body is JSON
         'Content-Type': 'application/json',
     },
+    // body is the request body: JSON.stringify serializes the object below into JSON; the request needs Content-Type: application/json
     body: JSON.stringify({
+        // fields is a request body parameter: field data; the inner keys (such as title and content) are example field names and depend on the collection schema; replace the example value
         fields: {
+            // title is an example field name (not fixed); the actual key depends on the collection schema
             title: 'Updated Title',
         },
     }),
@@ -805,9 +941,15 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /posts is a dynamic value (not a fixed path); it is the collection UUID or slug; replace the example value posts with a real one
+// /entry-uuid-1 is a dynamic value (not a fixed path); it is the entry UUID; replace the example value entry-uuid-1 with a real one
+// /publish is a fixed path segment (publish entry)
 const response = await fetch('/api/posts/entry-uuid-1/publish', {
+    // method is the HTTP method; this example always uses POST
     method: 'POST',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
     },
 });
@@ -836,9 +978,15 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /posts is a dynamic value (not a fixed path); it is the collection UUID or slug; replace the example value posts with a real one
+// /entry-uuid-1 is a dynamic value (not a fixed path); it is the entry UUID; replace the example value entry-uuid-1 with a real one
+// /unpublish is a fixed path segment (unpublish entry)
 const response = await fetch('/api/posts/entry-uuid-1/unpublish', {
+    // method is the HTTP method; this example always uses POST
     method: 'POST',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
     },
 });
@@ -869,13 +1017,22 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /bulk is a fixed path segment (bulk operations)
+// /posts is a dynamic value (not a fixed path); it is the collection UUID or slug; replace the example value posts with a real one
+// /entries is a fixed path segment (bulk content entries)
 const response = await fetch('/api/bulk/posts/entries', {
+    // method is the HTTP method; this example always uses POST
     method: 'POST',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Content-Type is a fixed header name; application/json means the request body is JSON
         'Content-Type': 'application/json',
     },
+    // body is the request body: JSON.stringify serializes the object below into JSON; the request needs Content-Type: application/json
     body: JSON.stringify({
+        // entries is a request body parameter: entries array; each array item is a single entry object: uuid is the entry UUID and fields is the field data (inner keys are collection field names); replace the example value
         entries: [
             { locale: 'zh', fields: { title: 'Article 1' } },
             { locale: 'zh', fields: { title: 'Article 2' } },
@@ -907,13 +1064,22 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /bulk is a fixed path segment (bulk operations)
+// /posts is a dynamic value (not a fixed path); it is the collection UUID or slug; replace the example value posts with a real one
+// /entries is a fixed path segment (bulk content entries)
 const response = await fetch('/api/bulk/posts/entries', {
+    // method is the HTTP method; this example always uses PATCH
     method: 'PATCH',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Content-Type is a fixed header name; application/json means the request body is JSON
         'Content-Type': 'application/json',
     },
+    // body is the request body: JSON.stringify serializes the object below into JSON; the request needs Content-Type: application/json
     body: JSON.stringify({
+        // entries is a request body parameter: update items array; each array item is a single entry object: uuid is the entry UUID and fields is the field data (inner keys are collection field names); replace the example value
         entries: [
             { uuid: 'entry-uuid-1', fields: { title: 'Updated 1' } },
             { uuid: 'entry-uuid-2', fields: { title: 'Updated 2' } },
@@ -947,9 +1113,15 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /posts is a dynamic value (not a fixed path); it is the collection UUID or slug; replace the example value posts with a real one
+// /entry-uuid-1 is a dynamic value (not a fixed path); it is the entry UUID; replace the example value entry-uuid-1 with a real one
+// /versions is a fixed path segment (content versions sub-resource)
 const response = await fetch('/api/posts/entry-uuid-1/versions', {
+    // method is the HTTP method; this example always uses GET
     method: 'GET',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
     },
 });
@@ -979,9 +1151,16 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /posts is a dynamic value (not a fixed path); it is the collection UUID or slug; replace the example value posts with a real one
+// /entry-uuid-1 is a dynamic value (not a fixed path); it is the entry UUID; replace the example value entry-uuid-1 with a real one
+// /versions is a fixed path segment (content versions sub-resource)
+// /2 is a dynamic value (not a fixed path); it is the version number; replace the example value 2 with a real one
 const response = await fetch('/api/posts/entry-uuid-1/versions/2', {
+    // method is the HTTP method; this example always uses GET
     method: 'GET',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
     },
 });
@@ -1011,9 +1190,17 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /posts is a dynamic value (not a fixed path); it is the collection UUID or slug; replace the example value posts with a real one
+// /entry-uuid-1 is a dynamic value (not a fixed path); it is the entry UUID; replace the example value entry-uuid-1 with a real one
+// /versions is a fixed path segment (content versions sub-resource)
+// /2 is a dynamic value (not a fixed path); it is the target version number; replace the example value 2 with a real one
+// /revert is a fixed path segment (revert version)
 const response = await fetch('/api/posts/entry-uuid-1/versions/2/revert', {
+    // method is the HTTP method; this example always uses POST
     method: 'POST',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
     },
 });
@@ -1044,13 +1231,23 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /posts is a dynamic value (not a fixed path); it is the collection UUID or slug; replace the example value posts with a real one
+// /entry-uuid-1 is a dynamic value (not a fixed path); it is the entry UUID; replace the example value entry-uuid-1 with a real one
+// /versions is a fixed path segment (content versions sub-resource)
+// /2 is a dynamic value (not a fixed path); it is the version number; replace the example value 2 with a real one
 const response = await fetch('/api/posts/entry-uuid-1/versions/2', {
+    // method is the HTTP method; this example always uses PATCH
     method: 'PATCH',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Content-Type is a fixed header name; application/json means the request body is JSON
         'Content-Type': 'application/json',
     },
+    // body is the request body: JSON.stringify serializes the object below into JSON; the request needs Content-Type: application/json
     body: JSON.stringify({
+        // label is a request body parameter: version label; replace the example value
         label: 'Important Version',
     }),
 });
@@ -1131,10 +1328,15 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// ?with=collections,fields is an optional query parameter: eager loading: collections, fields (comma-separated)
 const response = await fetch('/api/?with=collections,fields', {
+    // method is the HTTP method; this example always uses GET
     method: 'GET',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
 });
@@ -1165,13 +1367,22 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /project is a fixed path segment (project configuration)
+// /locales is a fixed path segment (project locales)
 const response = await fetch('/api/project/locales', {
+    // method is the HTTP method; this example always uses POST
     method: 'POST',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer 1|abcDefGhIjK...',
+        // Content-Type is a fixed header name; application/json means the request body is JSON
         'Content-Type': 'application/json',
     },
+    // body is the request body: JSON.stringify serializes the object below into JSON; the request needs Content-Type: application/json
+    // locale is a request body parameter: locale code (e.g. fr, ja, zh); replace the example value
     body: JSON.stringify({ locale: 'fr' }),
 });
 const result = await response.json();
@@ -1199,13 +1410,23 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /project is a fixed path segment (project configuration)
+// /locales is a fixed path segment (project locales)
+// /default is a fixed path segment (default locale (fixed special value))
 const response = await fetch('/api/project/locales/default', {
+    // method is the HTTP method; this example always uses PUT
     method: 'PUT',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer 1|abcDefGhIjK...',
+        // Content-Type is a fixed header name; application/json means the request body is JSON
         'Content-Type': 'application/json',
     },
+    // body is the request body: JSON.stringify serializes the object below into JSON; the request needs Content-Type: application/json
+    // locale is a request body parameter: locale code (must exist in project); replace the example value
     body: JSON.stringify({ locale: 'zh' }),
 });
 const result = await response.json();
@@ -1233,10 +1454,17 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /project is a fixed path segment (project configuration)
+// /locales is a fixed path segment (project locales)
+// /fr is a dynamic value (not a fixed path); it is the locale code to delete; replace the example value fr with a real one
 const response = await fetch('/api/project/locales/fr', {
+    // method is the HTTP method; this example always uses DELETE
     method: 'DELETE',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
 });
@@ -1270,10 +1498,17 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /files is a fixed path segment (assets resource)
+// ?type=image is an optional query parameter: file type: image, video, document, audio; replace the example value image
+// &per_page=10 is an optional query parameter: items per page (default 20); replace the example value 10
 const response = await fetch('/api/files?type=image&per_page=10', {
+    // method is the HTTP method; this example always uses GET
     method: 'GET',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
 });
@@ -1302,10 +1537,16 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /files is a fixed path segment (assets resource)
+// /asset-uuid-1 is a dynamic value (not a fixed path); it is the asset UUID or numeric ID; replace the example value asset-uuid-1 with a real one
 const response = await fetch('/api/files/asset-uuid-1', {
+    // method is the HTTP method; this example always uses GET
     method: 'GET',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
 });
@@ -1334,10 +1575,17 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /files is a fixed path segment (assets resource)
+// /name is a fixed path segment (lookup by original filename)
+// /cover-photo.jpg is a dynamic value (not a fixed path); it is the original filename (with extension); replace the example value cover-photo.jpg with a real one
 const response = await fetch('/api/files/name/cover-photo.jpg', {
+    // method is the HTTP method; this example always uses GET
     method: 'GET',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
 });
@@ -1366,14 +1614,22 @@ console.log(result);
 **Example:**
 
 ```javascript
+// FormData is the fixed way to build a multipart/form-data request body
 const formData = new FormData();
+// file is a fixed field name: File to upload; replace the right side with the actual file
 formData.append('file', fileInput.files[0]);
+// /api is the fixed API prefix shared by every endpoint
+// /files is a fixed path segment (assets resource)
 const response = await fetch('/api/files', {
+    // method is the HTTP method; this example always uses POST
     method: 'POST',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
+    // body passes the FormData directly; the browser sets the multipart/form-data Content-Type automatically
     body: formData,
 });
 const result = await response.json();
@@ -1401,15 +1657,26 @@ console.log(result);
 **Example:**
 
 ```javascript
+// FormData is the fixed way to build a multipart/form-data request body
 const formData = new FormData();
+// files[] is a fixed field name: File array (1-20); replace the right side with the actual file
 formData.append('files[]', file1);
+// files[] is a fixed field name: File array (1-20); replace the right side with the actual file
 formData.append('files[]', file2);
+// /api is the fixed API prefix shared by every endpoint
+// /files is a fixed path segment (assets resource)
+// /bulk is a fixed path segment (bulk operations)
+// /upload is a fixed path segment (direct upload)
 const response = await fetch('/api/files/bulk/upload', {
+    // method is the HTTP method; this example always uses POST
     method: 'POST',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
+    // body passes the FormData directly; the browser sets the multipart/form-data Content-Type automatically
     body: formData,
 });
 const result = await response.json();
@@ -1440,14 +1707,24 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /files is a fixed path segment (assets resource)
+// /bulk is a fixed path segment (bulk operations)
+// /metadata is a fixed path segment (fixed path segment)
 const response = await fetch('/api/files/bulk/metadata', {
+    // method is the HTTP method; this example always uses PATCH
     method: 'PATCH',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer 1|abcDefGhIjK...',
+        // Content-Type is a fixed header name; application/json means the request body is JSON
         'Content-Type': 'application/json',
     },
+    // body is the request body: JSON.stringify serializes the object below into JSON; the request needs Content-Type: application/json
     body: JSON.stringify({
+        // items is a request body parameter: update items (1-50); each array item contains uuid (asset UUID) and metadata fields to update (such as alt_text, title, author); replace the example value
         items: [
             { uuid: 'asset-uuid-1', alt_text: 'Updated', title: 'Cover' },
         ],
@@ -1480,16 +1757,27 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /files is a fixed path segment (assets resource)
+// /upload-url is a fixed path segment (initiate pre-signed upload)
 const response = await fetch('/api/files/upload-url', {
+    // method is the HTTP method; this example always uses POST
     method: 'POST',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer 1|abcDefGhIjK...',
+        // Content-Type is a fixed header name; application/json means the request body is JSON
         'Content-Type': 'application/json',
     },
+    // body is the request body: JSON.stringify serializes the object below into JSON; the request needs Content-Type: application/json
     body: JSON.stringify({
+        // original_filename is a request body parameter: original filename; replace the example value
         original_filename: 'large-video.mp4',
+        // client_mime_type is a request body parameter: mIME type; replace the example value
         client_mime_type: 'video/mp4',
+        // byte_size is a request body parameter: file size in bytes; replace the example value
         byte_size: 52428800,
     }),
 });
@@ -1518,13 +1806,22 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /files is a fixed path segment (assets resource)
+// /upload-finalize is a fixed path segment (finalize direct upload)
 const response = await fetch('/api/files/upload-finalize', {
+    // method is the HTTP method; this example always uses POST
     method: 'POST',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer 1|abcDefGhIjK...',
+        // Content-Type is a fixed header name; application/json means the request body is JSON
         'Content-Type': 'application/json',
     },
+    // body is the request body: JSON.stringify serializes the object below into JSON; the request needs Content-Type: application/json
+    // asset_uuid is a request body parameter: pre-allocated asset UUID; replace the example value
     body: JSON.stringify({ asset_uuid: 'pre-assigned-uuid' }),
 });
 const result = await response.json();
@@ -1554,16 +1851,28 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /files is a fixed path segment (assets resource)
+// /multipart is a fixed path segment (multipart upload)
+// /initiate is a fixed path segment (initiate multipart upload)
 const response = await fetch('/api/files/multipart/initiate', {
+    // method is the HTTP method; this example always uses POST
     method: 'POST',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer 1|abcDefGhIjK...',
+        // Content-Type is a fixed header name; application/json means the request body is JSON
         'Content-Type': 'application/json',
     },
+    // body is the request body: JSON.stringify serializes the object below into JSON; the request needs Content-Type: application/json
     body: JSON.stringify({
+        // original_filename is a request body parameter: original filename; replace the example value
         original_filename: 'large-video.mp4',
+        // mime_type is a request body parameter: mIME type; replace the example value
         mime_type: 'video/mp4',
+        // byte_size is a request body parameter: file size in bytes; replace the example value
         byte_size: 104857600,
     }),
 });
@@ -1593,13 +1902,24 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /files is a fixed path segment (assets resource)
+// /multipart is a fixed path segment (multipart upload)
+// /part-url is a fixed path segment (get multipart part URL)
 const response = await fetch('/api/files/multipart/part-url', {
+    // method is the HTTP method; this example always uses POST
     method: 'POST',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer 1|abcDefGhIjK...',
+        // Content-Type is a fixed header name; application/json means the request body is JSON
         'Content-Type': 'application/json',
     },
+    // body is the request body: JSON.stringify serializes the object below into JSON; the request needs Content-Type: application/json
+    // upload_id is a request body parameter: upload ID; replace the example value
+    // part_number is a request body parameter: part number (1-10000); replace the example value
     body: JSON.stringify({ upload_id: 'upload-id-xxx', part_number: 1 }),
 });
 const result = await response.json();
@@ -1628,15 +1948,26 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /files is a fixed path segment (assets resource)
+// /multipart is a fixed path segment (multipart upload)
+// /complete is a fixed path segment (complete multipart upload)
 const response = await fetch('/api/files/multipart/complete', {
+    // method is the HTTP method; this example always uses POST
     method: 'POST',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer 1|abcDefGhIjK...',
+        // Content-Type is a fixed header name; application/json means the request body is JSON
         'Content-Type': 'application/json',
     },
+    // body is the request body: JSON.stringify serializes the object below into JSON; the request needs Content-Type: application/json
     body: JSON.stringify({
+        // upload_id is a request body parameter: upload ID; replace the example value
         upload_id: 'upload-id-xxx',
+        // parts is a request body parameter: parts info array; each array item is part information (part_number and etag); replace the example value
         parts: [
             { part_number: 1, etag: '"etag1"' },
             { part_number: 2, etag: '"etag2"' },
@@ -1668,10 +1999,16 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /files is a fixed path segment (assets resource)
+// /asset-uuid-1 is a dynamic value (not a fixed path); it is the asset UUID or numeric ID; replace the example value asset-uuid-1 with a real one
 const response = await fetch('/api/files/asset-uuid-1', {
+    // method is the HTTP method; this example always uses DELETE
     method: 'DELETE',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
 });
@@ -1701,10 +2038,15 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /collections is a fixed path segment (collections resource)
 const response = await fetch('/api/collections', {
+    // method is the HTTP method; this example always uses GET
     method: 'GET',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
 });
@@ -1733,10 +2075,16 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /collections is a fixed path segment (collections resource)
+// /posts is a dynamic value (not a fixed path); it is the collection UUID or slug; replace the example value posts with a real one
 const response = await fetch('/api/collections/posts', {
+    // method is the HTTP method; this example always uses GET
     method: 'GET',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
 });
@@ -1767,13 +2115,22 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /collections is a fixed path segment (collections resource)
 const response = await fetch('/api/collections', {
+    // method is the HTTP method; this example always uses POST
     method: 'POST',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer 1|abcDefGhIjK...',
+        // Content-Type is a fixed header name; application/json means the request body is JSON
         'Content-Type': 'application/json',
     },
+    // body is the request body: JSON.stringify serializes the object below into JSON; the request needs Content-Type: application/json
+    // name is a request body parameter: collection name; replace the example value
+    // slug is a request body parameter: collection slug; replace the example value
     body: JSON.stringify({ name: 'Posts', slug: 'posts' }),
 });
 const result = await response.json();
@@ -1803,13 +2160,22 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /collections is a fixed path segment (collections resource)
+// /posts is a dynamic value (not a fixed path); it is the collection UUID or slug; replace the example value posts with a real one
 const response = await fetch('/api/collections/posts', {
+    // method is the HTTP method; this example always uses PUT
     method: 'PUT',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer 1|abcDefGhIjK...',
+        // Content-Type is a fixed header name; application/json means the request body is JSON
         'Content-Type': 'application/json',
     },
+    // body is the request body: JSON.stringify serializes the object below into JSON; the request needs Content-Type: application/json
+    // name is a request body parameter: collection name; replace the example value
     body: JSON.stringify({ name: 'Blog Posts' }),
 });
 const result = await response.json();
@@ -1837,10 +2203,16 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /collections is a fixed path segment (collections resource)
+// /posts is a dynamic value (not a fixed path); it is the collection UUID or slug; replace the example value posts with a real one
 const response = await fetch('/api/collections/posts', {
+    // method is the HTTP method; this example always uses DELETE
     method: 'DELETE',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
 });
@@ -1869,13 +2241,22 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /collections is a fixed path segment (collections resource)
+// /reorder is a fixed path segment (reorder)
 const response = await fetch('/api/collections/reorder', {
+    // method is the HTTP method; this example always uses POST
     method: 'POST',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer 1|abcDefGhIjK...',
+        // Content-Type is a fixed header name; application/json means the request body is JSON
         'Content-Type': 'application/json',
     },
+    // body is the request body: JSON.stringify serializes the object below into JSON; the request needs Content-Type: application/json
+    // order is a request body parameter: collection UUIDs array (in order); each array item is a collection UUID in the desired order; replace the example value
     body: JSON.stringify({ order: ['col-uuid-1', 'col-uuid-2'] }),
 });
 const result = await response.json();
@@ -1909,13 +2290,26 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /collections is a fixed path segment (collections resource)
+// /posts is a dynamic value (not a fixed path); it is the collection UUID or slug; replace the example value posts with a real one
+// /fields is a fixed path segment (fields sub-resource)
 const response = await fetch('/api/collections/posts/fields', {
+    // method is the HTTP method; this example always uses POST
     method: 'POST',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer 1|abcDefGhIjK...',
+        // Content-Type is a fixed header name; application/json means the request body is JSON
         'Content-Type': 'application/json',
     },
+    // body is the request body: JSON.stringify serializes the object below into JSON; the request needs Content-Type: application/json
+    // name is a request body parameter: field name; replace the example value
+    // label is a request body parameter: field label; replace the example value
+    // type is a request body parameter: field type; replace the example value
+    // required is a request body parameter: whether required; replace the example value
     body: JSON.stringify({ name: 'title', label: 'Title', type: 'text', required: true }),
 });
 const result = await response.json();
@@ -1946,13 +2340,25 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /collections is a fixed path segment (collections resource)
+// /posts is a dynamic value (not a fixed path); it is the collection UUID or slug; replace the example value posts with a real one
+// /fields is a fixed path segment (fields sub-resource)
+// /field-uuid-1 is a dynamic value (not a fixed path); it is the field UUID; replace the example value field-uuid-1 with a real one
 const response = await fetch('/api/collections/posts/fields/field-uuid-1', {
+    // method is the HTTP method; this example always uses PUT
     method: 'PUT',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer 1|abcDefGhIjK...',
+        // Content-Type is a fixed header name; application/json means the request body is JSON
         'Content-Type': 'application/json',
     },
+    // body is the request body: JSON.stringify serializes the object below into JSON; the request needs Content-Type: application/json
+    // label is a request body parameter: field label; replace the example value
+    // required is a request body parameter: whether required; replace the example value
     body: JSON.stringify({ label: 'Article Title', required: true }),
 });
 const result = await response.json();
@@ -1981,10 +2387,18 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /collections is a fixed path segment (collections resource)
+// /posts is a dynamic value (not a fixed path); it is the collection UUID or slug; replace the example value posts with a real one
+// /fields is a fixed path segment (fields sub-resource)
+// /field-uuid-1 is a dynamic value (not a fixed path); it is the field UUID; replace the example value field-uuid-1 with a real one
 const response = await fetch('/api/collections/posts/fields/field-uuid-1', {
+    // method is the HTTP method; this example always uses DELETE
     method: 'DELETE',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
 });
@@ -2014,13 +2428,24 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /collections is a fixed path segment (collections resource)
+// /posts is a dynamic value (not a fixed path); it is the collection UUID or slug; replace the example value posts with a real one
+// /fields is a fixed path segment (fields sub-resource)
+// /reorder is a fixed path segment (reorder)
 const response = await fetch('/api/collections/posts/fields/reorder', {
+    // method is the HTTP method; this example always uses POST
     method: 'POST',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer 1|abcDefGhIjK...',
+        // Content-Type is a fixed header name; application/json means the request body is JSON
         'Content-Type': 'application/json',
     },
+    // body is the request body: JSON.stringify serializes the object below into JSON; the request needs Content-Type: application/json
+    // order is a request body parameter: field UUIDs array (in order); each array item is a collection UUID in the desired order; replace the example value
     body: JSON.stringify({ order: ['field-uuid-1', 'field-uuid-2'] }),
 });
 const result = await response.json();
@@ -2053,10 +2478,18 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /posts is a dynamic value (not a fixed path); it is the collection UUID or slug; replace the example value posts with a real one
+// ?page=1 is an optional query parameter: page number; replace the example value 1
+// &per_page=10 is an optional query parameter: items per page; replace the example value 10
+// &locale=zh is an optional query parameter: locale code; replace the example value zh
 const response = await fetch('/api/posts?page=1&per_page=10&locale=zh', {
+    // method is the HTTP method; this example always uses GET
     method: 'GET',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
 });
@@ -2087,10 +2520,17 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /posts is a dynamic value (not a fixed path); it is the collection UUID or slug; replace the example value posts with a real one
+// /entry-uuid-1 is a dynamic value (not a fixed path); it is the entry UUID; replace the example value entry-uuid-1 with a real one
+// ?locale=zh is an optional query parameter: locale code; replace the example value zh
 const response = await fetch('/api/posts/entry-uuid-1?locale=zh', {
+    // method is the HTTP method; this example always uses GET
     method: 'GET',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
 });
@@ -2121,13 +2561,24 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /posts is a dynamic value (not a fixed path); it is the collection UUID or slug; replace the example value posts with a real one
 const response = await fetch('/api/posts', {
+    // method is the HTTP method; this example always uses POST
     method: 'POST',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer 1|abcDefGhIjK...',
+        // Content-Type is a fixed header name; application/json means the request body is JSON
         'Content-Type': 'application/json',
     },
+    // body is the request body: JSON.stringify serializes the object below into JSON; the request needs Content-Type: application/json
+    // locale is a request body parameter: locale code; replace the example value
+    // fields is a request body parameter: field data; the inner keys (such as title and content) are example field names and depend on the collection schema; replace the example value
+    // title is an example field name (not fixed); the actual key depends on the collection schema
+    // content is an example field name (not fixed); the actual key depends on the collection schema
     body: JSON.stringify({ locale: 'zh', fields: { title: 'New Article', content: '...' } }),
 });
 const result = await response.json();
@@ -2157,13 +2608,23 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /posts is a dynamic value (not a fixed path); it is the collection UUID or slug; replace the example value posts with a real one
+// /entry-uuid-1 is a dynamic value (not a fixed path); it is the entry UUID; replace the example value entry-uuid-1 with a real one
 const response = await fetch('/api/posts/entry-uuid-1', {
+    // method is the HTTP method; this example always uses PATCH
     method: 'PATCH',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer 1|abcDefGhIjK...',
+        // Content-Type is a fixed header name; application/json means the request body is JSON
         'Content-Type': 'application/json',
     },
+    // body is the request body: JSON.stringify serializes the object below into JSON; the request needs Content-Type: application/json
+    // fields is a request body parameter: field data; the inner keys (such as title and content) are example field names and depend on the collection schema; replace the example value
+    // title is an example field name (not fixed); the actual key depends on the collection schema
     body: JSON.stringify({ fields: { title: 'Updated Title' } }),
 });
 const result = await response.json();
@@ -2192,10 +2653,16 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /posts is a dynamic value (not a fixed path); it is the collection UUID or slug; replace the example value posts with a real one
+// /entry-uuid-1 is a dynamic value (not a fixed path); it is the entry UUID; replace the example value entry-uuid-1 with a real one
 const response = await fetch('/api/posts/entry-uuid-1', {
+    // method is the HTTP method; this example always uses DELETE
     method: 'DELETE',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
 });
@@ -2225,10 +2692,17 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /posts is a dynamic value (not a fixed path); it is the collection UUID or slug; replace the example value posts with a real one
+// /entry-uuid-1 is a dynamic value (not a fixed path); it is the entry UUID; replace the example value entry-uuid-1 with a real one
+// /publish is a fixed path segment (publish entry)
 const response = await fetch('/api/posts/entry-uuid-1/publish', {
+    // method is the HTTP method; this example always uses POST
     method: 'POST',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
 });
@@ -2258,10 +2732,17 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /posts is a dynamic value (not a fixed path); it is the collection UUID or slug; replace the example value posts with a real one
+// /entry-uuid-1 is a dynamic value (not a fixed path); it is the entry UUID; replace the example value entry-uuid-1 with a real one
+// /unpublish is a fixed path segment (unpublish entry)
 const response = await fetch('/api/posts/entry-uuid-1/unpublish', {
+    // method is the HTTP method; this example always uses POST
     method: 'POST',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
 });
@@ -2291,10 +2772,17 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /posts is a dynamic value (not a fixed path); it is the collection UUID or slug; replace the example value posts with a real one
+// /entry-uuid-1 is a dynamic value (not a fixed path); it is the entry UUID; replace the example value entry-uuid-1 with a real one
+// /discard-draft is a fixed path segment (discard draft)
 const response = await fetch('/api/posts/entry-uuid-1/discard-draft', {
+    // method is the HTTP method; this example always uses POST
     method: 'POST',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
 });
@@ -2325,13 +2813,23 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /posts is a dynamic value (not a fixed path); it is the collection UUID or slug; replace the example value posts with a real one
+// /entry-uuid-1 is a dynamic value (not a fixed path); it is the entry UUID; replace the example value entry-uuid-1 with a real one
+// /link-translation is a fixed path segment (link translation)
 const response = await fetch('/api/posts/entry-uuid-1/link-translation', {
+    // method is the HTTP method; this example always uses POST
     method: 'POST',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer 1|abcDefGhIjK...',
+        // Content-Type is a fixed header name; application/json means the request body is JSON
         'Content-Type': 'application/json',
     },
+    // body is the request body: JSON.stringify serializes the object below into JSON; the request needs Content-Type: application/json
+    // translation_uuid is a request body parameter: translation entry UUID; replace the example value
     body: JSON.stringify({ translation_uuid: 'entry-uuid-2' }),
 });
 const result = await response.json();
@@ -2362,14 +2860,24 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /bulk is a fixed path segment (bulk operations)
+// /posts is a dynamic value (not a fixed path); it is the collection UUID or slug; replace the example value posts with a real one
+// /entries is a fixed path segment (bulk content entries)
 const response = await fetch('/api/bulk/posts/entries', {
+    // method is the HTTP method; this example always uses POST
     method: 'POST',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer 1|abcDefGhIjK...',
+        // Content-Type is a fixed header name; application/json means the request body is JSON
         'Content-Type': 'application/json',
     },
+    // body is the request body: JSON.stringify serializes the object below into JSON; the request needs Content-Type: application/json
     body: JSON.stringify({
+        // entries is a request body parameter: entries array; each array item is a single entry object: uuid is the entry UUID and fields is the field data (inner keys are collection field names); replace the example value
         entries: [
             { locale: 'zh', fields: { title: 'Article 1' } },
             { locale: 'zh', fields: { title: 'Article 2' } },
@@ -2402,14 +2910,24 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /bulk is a fixed path segment (bulk operations)
+// /posts is a dynamic value (not a fixed path); it is the collection UUID or slug; replace the example value posts with a real one
+// /entries is a fixed path segment (bulk content entries)
 const response = await fetch('/api/bulk/posts/entries', {
+    // method is the HTTP method; this example always uses PATCH
     method: 'PATCH',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer 1|abcDefGhIjK...',
+        // Content-Type is a fixed header name; application/json means the request body is JSON
         'Content-Type': 'application/json',
     },
+    // body is the request body: JSON.stringify serializes the object below into JSON; the request needs Content-Type: application/json
     body: JSON.stringify({
+        // entries is a request body parameter: update items array; each array item is a single entry object: uuid is the entry UUID and fields is the field data (inner keys are collection field names); replace the example value
         entries: [
             { uuid: 'entry-uuid-1', fields: { title: 'Updated 1' } },
             { uuid: 'entry-uuid-2', fields: { title: 'Updated 2' } },
@@ -2442,13 +2960,23 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /bulk is a fixed path segment (bulk operations)
+// /posts is a dynamic value (not a fixed path); it is the collection UUID or slug; replace the example value posts with a real one
+// /entries is a fixed path segment (bulk content entries)
 const response = await fetch('/api/bulk/posts/entries', {
+    // method is the HTTP method; this example always uses DELETE
     method: 'DELETE',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer 1|abcDefGhIjK...',
+        // Content-Type is a fixed header name; application/json means the request body is JSON
         'Content-Type': 'application/json',
     },
+    // body is the request body: JSON.stringify serializes the object below into JSON; the request needs Content-Type: application/json
+    // uuids is a request body parameter: entry UUIDs array; each array item is a content entry UUID; replace the example value
     body: JSON.stringify({ uuids: ['entry-uuid-1', 'entry-uuid-2'] }),
 });
 const result = await response.json();
@@ -2479,10 +3007,17 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /posts is a dynamic value (not a fixed path); it is the collection UUID or slug; replace the example value posts with a real one
+// /entry-uuid-1 is a dynamic value (not a fixed path); it is the entry UUID; replace the example value entry-uuid-1 with a real one
+// /versions is a fixed path segment (content versions sub-resource)
 const response = await fetch('/api/posts/entry-uuid-1/versions', {
+    // method is the HTTP method; this example always uses GET
     method: 'GET',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
 });
@@ -2513,10 +3048,18 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /posts is a dynamic value (not a fixed path); it is the collection UUID or slug; replace the example value posts with a real one
+// /entry-uuid-1 is a dynamic value (not a fixed path); it is the entry UUID; replace the example value entry-uuid-1 with a real one
+// /versions is a fixed path segment (content versions sub-resource)
+// /2 is a dynamic value (not a fixed path); it is the version number; replace the example value 2 with a real one
 const response = await fetch('/api/posts/entry-uuid-1/versions/2', {
+    // method is the HTTP method; this example always uses GET
     method: 'GET',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
 });
@@ -2547,10 +3090,19 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /posts is a dynamic value (not a fixed path); it is the collection UUID or slug; replace the example value posts with a real one
+// /entry-uuid-1 is a dynamic value (not a fixed path); it is the entry UUID; replace the example value entry-uuid-1 with a real one
+// /versions is a fixed path segment (content versions sub-resource)
+// /2 is a dynamic value (not a fixed path); it is the target version number; replace the example value 2 with a real one
+// /revert is a fixed path segment (revert version)
 const response = await fetch('/api/posts/entry-uuid-1/versions/2/revert', {
+    // method is the HTTP method; this example always uses POST
     method: 'POST',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
 });
@@ -2582,13 +3134,24 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /posts is a dynamic value (not a fixed path); it is the collection UUID or slug; replace the example value posts with a real one
+// /entry-uuid-1 is a dynamic value (not a fixed path); it is the entry UUID; replace the example value entry-uuid-1 with a real one
+// /versions is a fixed path segment (content versions sub-resource)
+// /2 is a dynamic value (not a fixed path); it is the version number; replace the example value 2 with a real one
 const response = await fetch('/api/posts/entry-uuid-1/versions/2', {
+    // method is the HTTP method; this example always uses PATCH
     method: 'PATCH',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer 1|abcDefGhIjK...',
+        // Content-Type is a fixed header name; application/json means the request body is JSON
         'Content-Type': 'application/json',
     },
+    // body is the request body: JSON.stringify serializes the object below into JSON; the request needs Content-Type: application/json
+    // label is a request body parameter: version label; replace the example value
     body: JSON.stringify({ label: 'Important Version' }),
 });
 const result = await response.json();
@@ -2617,10 +3180,15 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /webhooks is a fixed path segment (webhooks resource)
 const response = await fetch('/api/webhooks', {
+    // method is the HTTP method; this example always uses GET
     method: 'GET',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
 });
@@ -2650,13 +3218,22 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /webhooks is a fixed path segment (webhooks resource)
 const response = await fetch('/api/webhooks', {
+    // method is the HTTP method; this example always uses POST
     method: 'POST',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer 1|abcDefGhIjK...',
+        // Content-Type is a fixed header name; application/json means the request body is JSON
         'Content-Type': 'application/json',
     },
+    // body is the request body: JSON.stringify serializes the object below into JSON; the request needs Content-Type: application/json
+    // url is a request body parameter: callback URL; replace the example value
+    // events is a request body parameter: events to monitor; each array item is an event name such as entry.created; replace the example value
     body: JSON.stringify({ url: 'https://mysite.com/webhook', events: ['entry.created'] }),
 });
 const result = await response.json();
@@ -2684,10 +3261,16 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /webhooks is a fixed path segment (webhooks resource)
+// /webhook-uuid-1 is a dynamic value (not a fixed path); it is the webhook UUID; replace the example value webhook-uuid-1 with a real one
 const response = await fetch('/api/webhooks/webhook-uuid-1', {
+    // method is the HTTP method; this example always uses GET
     method: 'GET',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
 });
@@ -2716,10 +3299,17 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /webhooks is a fixed path segment (webhooks resource)
+// /webhook-uuid-1 is a dynamic value (not a fixed path); it is the webhook UUID; replace the example value webhook-uuid-1 with a real one
+// /logs is a fixed path segment (webhook logs)
 const response = await fetch('/api/webhooks/webhook-uuid-1/logs', {
+    // method is the HTTP method; this example always uses GET
     method: 'GET',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
 });
@@ -2750,13 +3340,22 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /webhooks is a fixed path segment (webhooks resource)
+// /webhook-uuid-1 is a dynamic value (not a fixed path); it is the webhook UUID; replace the example value webhook-uuid-1 with a real one
 const response = await fetch('/api/webhooks/webhook-uuid-1', {
+    // method is the HTTP method; this example always uses PUT
     method: 'PUT',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer 1|abcDefGhIjK...',
+        // Content-Type is a fixed header name; application/json means the request body is JSON
         'Content-Type': 'application/json',
     },
+    // body is the request body: JSON.stringify serializes the object below into JSON; the request needs Content-Type: application/json
+    // url is a request body parameter: callback URL; replace the example value
     body: JSON.stringify({ url: 'https://mysite.com/new-webhook' }),
 });
 const result = await response.json();
@@ -2784,10 +3383,16 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /webhooks is a fixed path segment (webhooks resource)
+// /webhook-uuid-1 is a dynamic value (not a fixed path); it is the webhook UUID; replace the example value webhook-uuid-1 with a real one
 const response = await fetch('/api/webhooks/webhook-uuid-1', {
+    // method is the HTTP method; this example always uses DELETE
     method: 'DELETE',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
 });
@@ -2817,10 +3422,17 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /auth is a fixed path segment (authentication resource)
+// /api-keys is a fixed path segment (API keys resource)
+// /introspect is a fixed path segment (introspect API key)
 const response = await fetch('/api/auth/api-keys/introspect', {
+    // method is the HTTP method; this example always uses POST
     method: 'POST',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer 1|abcDefGhIjK...',
     },
 });
@@ -2855,16 +3467,27 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /auth is a fixed path segment (authentication resource)
+// /signup is a fixed path segment (sign up)
 const response = await fetch('/api/auth/signup', {
+    // method is the HTTP method; this example always uses POST
     method: 'POST',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Content-Type is a fixed header name; application/json means the request body is JSON
         'Content-Type': 'application/json',
     },
+    // body is the request body: JSON.stringify serializes the object below into JSON; the request needs Content-Type: application/json
     body: JSON.stringify({
+        // name is a request body parameter: user name; replace the example value
         name: 'John Doe',
+        // email is a request body parameter: email address; replace the example value
         email: 'john@example.com',
+        // password is a request body parameter: password; replace the example value
         password: 'password123',
+        // password_confirmation is a request body parameter: confirm password; replace the example value
         password_confirmation: 'password123',
     }),
 });
@@ -2893,14 +3516,23 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /auth is a fixed path segment (authentication resource)
+// /login is a fixed path segment (log in)
 const response = await fetch('/api/auth/login', {
+    // method is the HTTP method; this example always uses POST
     method: 'POST',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Content-Type is a fixed header name; application/json means the request body is JSON
         'Content-Type': 'application/json',
     },
+    // body is the request body: JSON.stringify serializes the object below into JSON; the request needs Content-Type: application/json
     body: JSON.stringify({
+        // email is a request body parameter: email address; replace the example value
         email: 'john@example.com',
+        // password is a request body parameter: password; replace the example value
         password: 'password123',
     }),
 });
@@ -2928,13 +3560,21 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /auth is a fixed path segment (authentication resource)
+// /refresh is a fixed path segment (refresh token)
 const response = await fetch('/api/auth/refresh', {
+    // method is the HTTP method; this example always uses POST
     method: 'POST',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Content-Type is a fixed header name; application/json means the request body is JSON
         'Content-Type': 'application/json',
     },
+    // body is the request body: JSON.stringify serializes the object below into JSON; the request needs Content-Type: application/json
     body: JSON.stringify({
+        // refresh_token is a request body parameter: refresh token; replace the example value
         refresh_token: 'eyJ0eXAiOiJKV1QiLCJhbGc...',
     }),
 });
@@ -2966,13 +3606,22 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /auth is a fixed path segment (authentication resource)
+// /verify-email is a fixed path segment (email verification)
+// /resend is a fixed path segment (resend verification email)
 const response = await fetch('/api/auth/verify-email/resend', {
+    // method is the HTTP method; this example always uses POST
     method: 'POST',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Content-Type is a fixed header name; application/json means the request body is JSON
         'Content-Type': 'application/json',
     },
+    // body is the request body: JSON.stringify serializes the object below into JSON; the request needs Content-Type: application/json
     body: JSON.stringify({
+        // email is a request body parameter: email address; replace the example value
         email: 'john@example.com',
     }),
 });
@@ -3004,13 +3653,22 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /auth is a fixed path segment (authentication resource)
+// /verify-email is a fixed path segment (email verification)
+// /confirm is a fixed path segment (confirm verification)
 const response = await fetch('/api/auth/verify-email/confirm', {
+    // method is the HTTP method; this example always uses POST
     method: 'POST',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Content-Type is a fixed header name; application/json means the request body is JSON
         'Content-Type': 'application/json',
     },
+    // body is the request body: JSON.stringify serializes the object below into JSON; the request needs Content-Type: application/json
     body: JSON.stringify({
+        // token is a request body parameter: verification token; replace the example value
         token: 'verification-token-xxx',
     }),
 });
@@ -3046,10 +3704,16 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /auth is a fixed path segment (authentication resource)
+// /me is a fixed path segment (current user)
 const response = await fetch('/api/auth/me', {
+    // method is the HTTP method; this example always uses GET
     method: 'GET',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGc...',
     },
 });
@@ -3081,10 +3745,16 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /auth is a fixed path segment (authentication resource)
+// /logout is a fixed path segment (log out current session)
 const response = await fetch('/api/auth/logout', {
+    // method is the HTTP method; this example always uses POST
     method: 'POST',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGc...',
     },
 });
@@ -3116,10 +3786,16 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /auth is a fixed path segment (authentication resource)
+// /logout-all is a fixed path segment (log out all sessions)
 const response = await fetch('/api/auth/logout-all', {
+    // method is the HTTP method; this example always uses POST
     method: 'POST',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGc...',
     },
 });
@@ -3156,10 +3832,16 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /auth is a fixed path segment (authentication resource)
+// /api-keys is a fixed path segment (API keys resource)
 const response = await fetch('/api/auth/api-keys', {
+    // method is the HTTP method; this example always uses GET
     method: 'GET',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGc...',
     },
 });
@@ -3196,15 +3878,25 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /auth is a fixed path segment (authentication resource)
+// /api-keys is a fixed path segment (API keys resource)
 const response = await fetch('/api/auth/api-keys', {
+    // method is the HTTP method; this example always uses POST
     method: 'POST',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGc...',
+        // Content-Type is a fixed header name; application/json means the request body is JSON
         'Content-Type': 'application/json',
     },
+    // body is the request body: JSON.stringify serializes the object below into JSON; the request needs Content-Type: application/json
     body: JSON.stringify({
+        // name is a request body parameter: key name; replace the example value
         name: 'My API Key',
+        // abilities is a request body parameter: key abilities; each array item is an ability such as read or create; replace the example value
         abilities: ['read', 'create'],
     }),
 });
@@ -3237,10 +3929,18 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /auth is a fixed path segment (authentication resource)
+// /api-keys is a fixed path segment (API keys resource)
+// /1 is a dynamic value (not a fixed path); it is the aPI key ID; replace the example value 1 with a real one
+// /revoke is a fixed path segment (revoke key)
 const response = await fetch('/api/auth/api-keys/1/revoke', {
+    // method is the HTTP method; this example always uses POST
     method: 'POST',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGc...',
     },
 });
@@ -3275,16 +3975,27 @@ console.log(result);
 **Example:**
 
 ```javascript
+// /api is the fixed API prefix shared by every endpoint
+// /auth is a fixed path segment (authentication resource)
+// /change-password is a fixed path segment (change password)
 const response = await fetch('/api/auth/change-password', {
+    // method is the HTTP method; this example always uses POST
     method: 'POST',
     headers: {
+        // project-id is a fixed header name; the value must be the project UUID. Replace the example UUID
         'project-id': '550e8400-e29b-41d4-a716-446655440000',
+        // Authorization is a fixed header name; the value must be an access token. Replace the example token after Bearer
         'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGc...',
+        // Content-Type is a fixed header name; application/json means the request body is JSON
         'Content-Type': 'application/json',
     },
+    // body is the request body: JSON.stringify serializes the object below into JSON; the request needs Content-Type: application/json
     body: JSON.stringify({
+        // current_password is a request body parameter: current password; replace the example value
         current_password: 'oldpass',
+        // password is a request body parameter: new password; replace the example value
         password: 'newpass123',
+        // password_confirmation is a request body parameter: confirm new password; replace the example value
         password_confirmation: 'newpass123',
     }),
 });
@@ -3314,9 +4025,12 @@ console.log(result);
 
 ```javascript
 // Direct use in HTML
+// src is the public file URL: /uploads is the fixed prefix and the rest is a dynamic path (uuid segments are placeholders and image.jpg is an example filename)
 <img src="/uploads/projects/uuid/assets/uuid/image.jpg" />
 
 // Fetch via JavaScript
+// /uploads is a fixed path segment (public upload access path)
+// /projects/uuid/assets/uuid/image.jpg is a dynamic value (not a fixed path); it is the file storage path. The uuid segments are placeholders and image.jpg is an example filename
 const blob = await fetch('/uploads/projects/uuid/assets/uuid/image.jpg')
     .then(r => r.blob());
 ```

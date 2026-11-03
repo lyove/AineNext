@@ -32,41 +32,29 @@ AineNext 是一款开源、可自托管的无头 CMS。你可以在现代化的 
 
 ## 仓库结构
 
-仓库根目录包含多个部分，**核心应用是 `ainenext/` 文件夹**，其余内容都是围绕它进行支撑或分发的。
+CMS 应用**直接位于仓库根目录**（Laravel 后端 + React/Inertia 管理后台 SPA），不存在嵌套的 `ainenext/` 文件夹 —— 下文所有命令均在仓库根目录执行。
 
 | 路径 | 说明 |
 |---|---|
-| **`ainenext/`** | CMS 应用本体（Laravel 后端 + React/Inertia 管理后台 SPA）。**这是本项目的主体。** |
-| `frontend-templates/` | 生产可用的前端 Starter 模板（Next.js / Nuxt / Astro），通过 API 消费 AineNext 项目内容。 |
-| `README.md` / `README-zh-CN.md` | 项目说明文档（英文 / 中文）。 |
+| `app/` | 应用代码：AI 智能体与工具、HTTP 控制器（Inertia + REST）、模型、服务、任务、中间件 |
+| `bootstrap/` | 框架启动、中间件别名与路由注册 |
+| `config/` | 应用配置，含 openapi.php、project_auth.php、webhooks.php、ai.php |
+| `database/` | 数据库迁移、种子与工厂 |
+| `demo-projects/` | 演示项目 Seeder 使用的示例项目 JSON |
+| `installer/` | Laravel 原生网页安装器（入口 `/install`） |
+| `public/` | Web 根目录（index.php、favicon、logo） |
+| `resources/` | `js/` —— React 19 + TypeScript + Tailwind 4 管理后台 SPA（Inertia 页面）；`views/` —— Blade 视图（含 swagger-ui） |
+| `routes/` | web.php、api.php、admin.php、auth.php、frontend.php、console.php |
+| `storage/` | 日志、缓存与上传文件 |
+| `stubs/` | 代码生成模板 |
+| `tests/` | Pest 功能测试与单元测试 |
+| `components.json` | shadcn/ui 配置 |
+| `composer.json` / `package.json` / `vite.config.ts` | 后端依赖、前端依赖、Vite 构建配置 |
+| `ainenext.sql` | 数据库导出文件 |
+| `api-guide.md` / `api-guide-zh-CN.md` | REST API 指南（英文 / 中文） |
+| `AGENTS.md` | 本仓库的 Agent/AI 编码规范 |
 
-### `ainenext/` 目录速览
-
-```
-aine/
-├── app/
-│   ├── Ai/                    # AI 智能体与工具（Aine 助手、内容生成）
-│   ├── Console/Commands/      # Artisan 命令（ExportProjectTemplate、AuthSecurityGateCheck 等）
-│   ├── Http/Controllers/      # Web（Inertia）+ API（REST）控制器
-│   │   └── Api/               # 公开无头 API 控制器（含 OpenAPI 注解）
-│   ├── Models/                # Eloquent 模型（Project、Collection、Field、ContentEntry、Asset 等）
-│   ├── Services/              # Auth（Project Auth）、Webhooks 等服务
-│   └── Support/               # 如 ContentEntryWebhookNotifier
-├── bootstrap/
-├── config/                    # 应用配置，含 openapi.php、project_auth.php、webhooks.php、ai.php
-├── database/
-│   ├── migrations/            # 数据库迁移（SQLite/MySQL）
-│   └── seeders/               # 用户/角色/权限 + 集合/项目模板种子
-├── public/                    # Web 根目录（index.php、favicon、logo）
-├── resources/
-│   ├── js/                    # React 19 + TypeScript + Tailwind 4 管理后台 SPA（Inertia 页面）
-│   └── views/                 # Blade 视图（含 swagger-ui）
-├── routes/                    # web.php、api.php、auth.php、settings.php、console.php
-├── tests/                     # Pest 功能测试与单元测试
-├── artisan
-├── composer.json
-└── package.json
-```
+前端 Starter 模板（Next.js / Nuxt / Astro）已独立为**单独的 GitHub 仓库**，详见 [前端模板](#前端模板frontend-templates)。
 
 ---
 
@@ -140,8 +128,6 @@ aine/
 ### 1. 安装后端与前端依赖
 
 ```bash
-cd ainenext
-
 composer install
 npm install
 ```
@@ -227,7 +213,7 @@ php artisan queue:listen
 3. **创建集合**（如 `posts`、`products`）并**添加字段**（文本、富文本、素材、关联等）。
 4. **添加内容** —— 创建条目、保存草稿、发布、翻译。
 5. **开放 API** —— 在 *设置 → API 访问* 中开启公共 API 并创建 **API Token**。
-6. 通过 REST API（见下节）在任意前端消费内容，或直接导入 `frontend-templates/` 中的 Starter 模板。
+6. 通过 REST API（见下节）在任意前端消费内容，或使用已独立仓库中的 Starter 模板（见 [前端模板](#前端模板https://github.com/lyove/aine-next-project-frontend-template)）。
 
 实用技巧：可将集合/项目保存为**模板**以便复用结构；也可以直接用 **Aine 助手** 通过对话创建项目/内容结构。
 
@@ -236,6 +222,13 @@ php artisan queue:listen
 ## 无头 REST API
 
 公共 API 位于 `/api` 下，每次请求需要携带两个头：
+
+**接口文档（Swagger UI / OpenAPI）**
+
+- Swagger UI 交互式文档：`/api/docs`
+- 原始 OpenAPI 规范（JSON）：`/api/docs.json`
+
+本地默认环境下完整地址为 `http://localhost:8000/api/docs` 和 `http://localhost:8000/api/docs.json`，其它环境请将域名替换为你部署的地址。
 
 | 请求头 | 值 |
 |---|---|
@@ -302,24 +295,11 @@ curl "https://cms.example.com/api/posts" \
 
 ---
 
-## 前端模板（frontend-templates）
-
-`frontend-templates/` 文件夹包含可直接上线的 Starter 模板，用于消费 Aine 项目内容：
-
-- **Next.js**：`nextjs-meridian-studio`（创意机构）、`nextjs-atlas-group`（多语言官网+博客）、`nextjs-northline-academy`（会员学习平台）、`nextjs-sable-goods`（电商店铺）、`nextjs-ridgeform`（工程承包商）、`nextjs-docs`（文档站）
-- **Nuxt**：`nuxt-cove`（SaaS 营销站）、`nuxt-docs`
-- **Astro**：`astro-marrow`（餐厅）、`astro-docs`
-- **basic-starters/** —— 极简 Next.js / Nuxt / Astro 参考项目，演示 API 对接、BFF 写入、i18n 与终端用户认证
-
-每个模板都是独立应用，请参阅其各自的 `README.md` 与 `.env.example`（典型变量：`AINE_BASE_URL`、`AINE_PROJECT_ID`、`AINE_API_KEY`）。
-
----
-
 ## 网页安装器
 
-AineNext 内置一个 Laravel 原生网页安装器，入口为 `/install` 路由（源码位于 `ainenext/installer/`），全新副本可直接通过浏览器完成安装，无需命令行或 Shell 访问：
+AineNext 内置一个 Laravel 原生网页安装器，入口为 `/install` 路由（源码位于 `installer/`），全新副本可直接通过浏览器完成安装，无需命令行或 Shell 访问：
 
-1. 按标准 Laravel 部署，将站点根目录指向 `ainenext/public`，仅此一种形态。
+1. 按标准 Laravel 部署，将站点根目录指向 `public`，仅此一种形态。
 2. 浏览器访问 `https://你的域名/install`。
 3. 向导会检查服务器环境要求、依据 `.env.example` 写入 `.env`、执行数据库迁移与数据填充，并创建首个管理员账号。
 4. 安装完成后，所有 `/install` 路由自动锁定（返回 404），锁文件为 `storage/app/installed`。
@@ -379,7 +359,7 @@ npm run types               # tsc --noEmit
 ## 部署说明
 
 - 按标准 Laravel 方式部署：`composer install --no-dev --optimize-autoloader`、`npm run build`、`php artisan migrate --force`、`php artisan config:cache` / `route:cache`，并常驻队列 Worker（Webhook、AI、图片处理需要）。
-- 站点根目录指向 `ainenext/public/`（标准 Laravel 部署形态）。
+- 站点根目录指向 `public/`（标准 Laravel 部署形态）。
 - 生产环境建议使用 MySQL；设置 `APP_ENV=production`、`APP_DEBUG=false`。
 - API Token 只能在服务端保存，切勿放入浏览器端打包产物（参见模板 README）。
 

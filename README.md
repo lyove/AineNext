@@ -31,41 +31,29 @@ AineNext is an open-source, self-hosted headless content management system. You 
 
 ## Repository Layout
 
-The repository root contains several pieces. **The main application is `ainenext/`** — everything else in this repo exists to support or distribute it.
+The CMS application lives **directly at the repository root** (Laravel backend + React/Inertia admin SPA). There is no nested `ainenext/` folder — every command in this guide runs from the repository root.
 
 | Path | Description |
 |---|---|
-| **`ainenext/`** | The CMS application itself (Laravel backend + React/Inertia admin SPA). This is the main project. |
-| `frontend-templates/` | Production-ready frontend starter templates (Next.js / Nuxt / Astro) that consume an AineNext project via the API. |
-| `README.md` / `README-zh-CN.md` | Project documentation (English / 中文). |
+| `app/` | Application code: AI agents & tools, HTTP controllers (Inertia + REST), models, services, jobs, middleware |
+| `bootstrap/` | Framework bootstrap, middleware aliases and route registration |
+| `config/` | App config incl. openapi.php, project_auth.php, webhooks.php, ai.php |
+| `database/` | Migrations, seeders and factories |
+| `demo-projects/` | JSON definitions of the sample projects loaded by the demo seeder |
+| `installer/` | Laravel-native web installer served at `/install` |
+| `public/` | Web root (index.php, favicon, logo) |
+| `resources/` | `js/` — React 19 + TypeScript + Tailwind 4 admin SPA (Inertia pages); `views/` — Blade views (incl. swagger-ui) |
+| `routes/` | web.php, api.php, admin.php, auth.php, frontend.php, console.php |
+| `storage/` | Logs, caches and uploaded files |
+| `stubs/` | Code generation stubs |
+| `tests/` | Pest feature & unit tests |
+| `components.json` | shadcn/ui configuration |
+| `composer.json` / `package.json` / `vite.config.ts` | Backend dependencies, frontend dependencies, Vite build config |
+| `ainenext.sql` | Database dump |
+| `api-guide.md` / `api-guide-zh-CN.md` | REST API guide (English / 中文) |
+| `AGENTS.md` | Agent/AI coding guidelines for this repository |
 
-### `ainenext/` at a glance
-
-```
-aine/
-├── app/
-│   ├── Ai/                    # AI agents & tools (Aine Assistant, content generation)
-│   ├── Console/Commands/      # Artisan commands (ExportProjectTemplate, AuthSecurityGateCheck, …)
-│   ├── Http/Controllers/      # Web (Inertia) + API (REST) controllers
-│   │   └── Api/               # Public headless API controllers (OpenAPI annotated)
-│   ├── Models/                # Eloquent models (Project, Collection, Field, ContentEntry, Asset, …)
-│   ├── Services/              # Auth (Project Auth), Webhooks, etc.
-│   └── Support/               # e.g. ContentEntryWebhookNotifier
-├── bootstrap/
-├── config/                    # App config incl. openapi.php, project_auth.php, webhooks.php, ai.php
-├── database/
-│   ├── migrations/            # Schema migrations (SQLite/MySQL)
-│   └── seeders/               # Users/roles/permissions + collection/project templates
-├── public/                    # Web root (index.php, favicon, logo)
-├── resources/
-│   ├── js/                    # React 19 + TypeScript + Tailwind 4 admin SPA (Inertia pages)
-│   └── views/                 # Blade views (incl. swagger-ui)
-├── routes/                    # web.php, api.php, auth.php, settings.php, console.php
-├── tests/                     # Pest feature & unit tests
-├── artisan
-├── composer.json
-└── package.json
-```
+The frontend starter templates (Next.js / Nuxt / Astro) are now maintained in a **separate GitHub repository** — see [Frontend Templates](#frontend-templates-frontend-templates).
 
 ---
 
@@ -139,8 +127,6 @@ aine/
 ### 1. Install backend & frontend dependencies
 
 ```bash
-cd ainenext
-
 composer install
 npm install
 ```
@@ -225,7 +211,7 @@ php artisan queue:listen
 3. **Create collections** (e.g. `posts`, `products`) and add **fields** to them (text, richtext, media, relation, …).
 4. **Add content** — create entries, save drafts, publish, translate.
 5. **Open the API** — under *Settings → API Access*, toggle the public API on and create an **API token**.
-6. **Consume** the content from any frontend with the REST API (see below), or import one of the starter templates in `frontend-templates/`.
+6. **Consume** the content from any frontend with the REST API (see below), or use one of the starter templates from the separate frontend-templates repository (see [Frontend Templates](#frontend-templates-frontend-templates)).
 
 Useful extras: save the collection/project as a **template** to reuse the schema later; use the **Aine Assistant** chat to create projects/schemas by conversation.
 
@@ -234,6 +220,13 @@ Useful extras: save the collection/project as a **template** to reuse the schema
 ## Headless REST API
 
 The public API lives under `/api` and requires two things on every request:
+
+**API documentation (Swagger UI / OpenAPI)**
+
+- Interactive Swagger UI: `/api/docs`
+- Raw OpenAPI spec (JSON): `/api/docs.json`
+
+With the default local setup these resolve to `http://localhost:8000/api/docs` and `http://localhost:8000/api/docs.json`. Replace the base URL with your own domain in other environments.
 
 | Header | Value |
 |---|---|
@@ -302,7 +295,7 @@ Outbound webhooks notify your services about content changes. Configure them und
 
 ## Frontend Templates (frontend-templates)
 
-The `frontend-templates/` folder holds production-ready starters that consume an Aine project:
+The starter templates have moved to their own GitHub repository: **[TODO: replace with the real `frontend-templates` repository URL, e.g. `https://github.com/<owner>/<frontend-templates-repo>`]**. Clone that repository separately — it is no longer part of this codebase. It holds production-ready starters that consume an Aine project:
 
 - **Next.js**: `nextjs-meridian-studio` (agency), `nextjs-atlas-group` (multilingual site + blog), `nextjs-northline-academy` (membership learning hub), `nextjs-sable-goods` (storefront), `nextjs-ridgeform` (contractor), `nextjs-docs` (docs)
 - **Nuxt**: `nuxt-cove` (SaaS marketing), `nuxt-docs`
@@ -315,9 +308,9 @@ Each template is a standalone app — see its own `README.md` and `.env.example`
 
 ## Web Installer
 
-AineNext ships with a Laravel-native web installer at the `/install` route (its source lives under `ainenext/installer/`), so a fresh copy can be set up from the browser — no CLI or shell access required:
+AineNext ships with a Laravel-native web installer at the `/install` route (its source lives under `installer/`), so a fresh copy can be set up from the browser — no CLI or shell access required:
 
-1. Deploy with the document root pointed at `ainenext/public` — the standard Laravel layout, nothing else.
+1. Deploy with the document root pointed at `public` — the standard Laravel layout, nothing else.
 2. Open `https://your-site/install` in the browser.
 3. The wizard checks server requirements, writes `.env` from `.env.example`, runs migrations and seeders, and creates the first admin account.
 4. When it finishes, every `/install` route locks itself (404) via `storage/app/installed`.
@@ -377,7 +370,7 @@ npm run types               # tsc --noEmit
 ## Deployment Notes
 
 - Standard Laravel deployment applies: `composer install --no-dev --optimize-autoloader`, `npm run build`, `php artisan migrate --force`, `php artisan config:cache` / `route:cache`, and a queue worker for webhooks/AI/image processing.
-- Serve the site from `ainenext/public/` (the standard Laravel document root).
+- Serve the site from `public/` (the standard Laravel document root).
 - Use MySQL for production databases; set `APP_ENV=production`, `APP_DEBUG=false`.
 - Keep API tokens server-side only; never expose them in browser bundles (see templates README).
 
